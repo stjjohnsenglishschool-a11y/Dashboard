@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St. John's English School - Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        /* Login Page Styles */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color), #34495e);
+            padding: 60px 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-left i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+
+        .login-left h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .login-left p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 60px 40px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h3 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #7f8c8d;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            height: 50px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            padding: 10px 20px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .input-group-text {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .btn-login {
+            height: 50px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, var(--secondary-color), #5dade2);
+            border: none;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, #5dade2, var(--secondary-color));
+        }
+
+        .login-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .login-info h6 {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .login-info p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            color: #5d6d7e;
+        }
+
+        .login-info strong {
+            color: var(--primary-color);
+        }
+
+        /* Dashboard Styles */
+        .dashboard-wrapper {
+            display: none;
+        }
+
+        .top-navbar {
+            background: linear-gradient(135deg, var(--primary-color), #34495e);
+            color: white;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            z-index: 1030;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .top-navbar .container-fluid {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .school-brand {
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .school-brand i {
+            font-size: 1.8rem;
+            margin-right: 12px;
+            color: var(--secondary-color);
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .notification-icon {
+            position: relative;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .notification-icon:hover {
+            color: var(--secondary-color);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: background 0.3s;
+            color: white;
+            text-decoration: none;
+        }
+
+        .user-profile:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-decoration: none;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 65px;
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - 65px);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            overflow-y: auto;
+            transition: transform 0.3s;
+            z-index: 1020;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 3px;
+        }
+
+        .user-role-badge {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--secondary-color), #5dade2);
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .user-role-badge h6 {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .user-role-badge h5 {
+            margin: 5px 0 0 0;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-link:hover {
+            background: #ecf0f1;
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .menu-link.active {
+            background: var(--secondary-color);
+            color: white;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .menu-link i {
+            width: 25px;
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .menu-arrow {
+            margin-left: auto;
+            transition: transform 0.3s;
+        }
+
+        .menu-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: #f8f9fa;
+            display: none;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+        .submenu-link {
+            display: block;
+            padding: 12px 20px 12px 57px;
+            color: #5d6d7e;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .submenu-link:hover, .submenu-link.active {
+            background: #e8eaf6;
+            color: var(--secondary-color);
+            text-decoration: none;
+            padding-left: 62px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: 65px;
+            padding: 30px;
+            min-height: calc(100vh - 65px);
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+        }
+
+        .metric-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+        }
+
+        .metric-card .card-body {
+            padding: 25px;
+        }
+        
+        .generic-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 10px 0 5px 0;
+        }
+
+        .metric-label {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .metric-change {
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .metric-change.positive { color: #27ae60; }
+        .metric-change.negative { color: #e74c3c; }
+        .metric-change.warning { color: #f39c12; }
+
+        .activity-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-top: 30px;
+        }
+
+        .activity-card .card-header {
+            background: white;
+            border-bottom: 2px solid #ecf0f1;
+            padding: 20px 25px;
+        }
+
+        .activity-card .card-header h5 {
+            margin: 0;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .activity-table { margin: 0; }
+        .activity-table thead th {
+            border-top: none;
+            border-bottom: 2px solid #ecf0f1;
+            color: #5d6d7e;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            padding: 15px;
+        }
+
+        .activity-table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .activity-table tbody tr:hover { background: #f8f9fa; }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge.success { background: #d5f4e6; color: #27ae60; }
+        .status-badge.warning { background: #fff3cd; color: #f39c12; }
+        .status-badge.danger { background: #fadbd8; color: #e74c3c; }
+
+        .mobile-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+            .login-container { flex-direction: column; }
+            .login-left, .login-right { padding: 40px 30px; }
+            .school-brand span { display: none; }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .user-profile span { display: none; }
+            .metric-card { margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-wrapper" id="loginPage">
+        <div class="login-container">
+            <div class="login-left">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>St. John's English School</h2>
+                <p>Welcome to our School Management System. Please login with your credentials to access your dashboard.</p>
+            </div>
+            <div class="login-right">
+                <div class="login-header">
+                    <h3>Login to Dashboard</h3>
+                    <p>Enter your credentials to continue</p>
+                </div>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="username" placeholder="Enter username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-login btn-block mt-4">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Login
+                    </button>
+                </form>
+                <div class="login-info">
+                    <h6><i class="fas fa-info-circle mr-2"></i>Demo Credentials:</h6>
+                    <p><strong>Admin:</strong> Username: Admin | Password: 12345</p>
+                    <p><strong>Teacher:</strong> Username: Teacher | Password: 1234</p>
+                    <p><strong>Student:</strong> Username: Student | Password: 1234</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard-wrapper" id="dashboardPage">
+        <!-- Top Navbar -->
+        <nav class="top-navbar">
+            <div class="container-fluid">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="mobile-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <div class="school-brand">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>St. John's English School</span>
+                    </div>
+                </div>
+                <div class="navbar-right">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                    </div>
+                    <div class="user-profile dropdown">
+                        <div data-toggle="dropdown">
+                            <div class="user-avatar" id="userAvatarNav">A</div>
+                            <span id="userNameNav">Admin User</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </div>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profile</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="user-role-badge">
+                <h6>Logged in as</h6>
+                <h5 id="userRoleDisplay">Administrator</h5>
+            </div>
+            <ul class="sidebar-menu" id="sidebarMenu">
+                <!-- Menu items will be dynamically loaded -->
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h2 id="pageTitle">Dashboard</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumbNav">
+                        <li class="breadcrumb-item active">Home</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div id="dynamicContent">
+                <!-- Content will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // User credentials and roles
+        const users = {
+            'Admin': { password: '12345', role: 'admin', fullName: 'Admin User' },
+            'Teacher': { password: '1234', role: 'teacher', fullName: 'Teacher User' },
+            'Student': { password: '1234', role: 'student', fullName: 'Student User' }
+        };
+
+        let currentUser = null;
+
+        // --- MOCK DATA ---
+
+        // User roles and their module access
+        const userRoles = {
+            admin: {
+                displayName: 'Administrator',
+                modules: [
+                    { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
+                    {
+                        id: 'documents', name: 'Documents', icon: 'fas fa-file-alt', submenu: [
+                            { name: 'Warning Letter', link: '#warning-letter-dash' },
+                            { name: 'Teachers ID Card', link: '#teacher-id-card' },
+                            { name: 'Student ID Card', link: '#student-id-card' },
+                            { name: 'Escort Card', link: '#escort-card' },
+                            { name: 'Salary Slip', link: '#salary-slip' },
+                            { name: 'Report Card', link: '#report-card' },
+                            { name: 'Offer Letter', link: '#offer-letter' }
+                        ]
+                    },
+                    {
+                        id: 'automation', name: 'Automation', icon: 'fas fa-cogs', submenu: [
+                            { name: 'Notice Automation', link: '#notice-automation' },
+                            { name: 'WhatsApp Form Link', link: '#whatsapp-link' }
+                        ]
+                    },
+                    {
+                        id: 'attendance', name: 'Attendance', icon: 'fas fa-calendar-check', submenu: [
+                            { name: 'Student Attendance', link: '#student-attendance' },
+                            { name: 'Teacher Attendance', link: '#teacher-attendance' },
+                            { name: 'Staff Attendance', link: '#staff-attendance' }
+                        ]
+                    },
+                    {
+                        id: 'academic', name: 'Academic', icon: 'fas fa-book', submenu: [
+                            { name: 'Class Work', link: '#class-work' },
+                            { name: 'Home Work', link: '#home-work' }
+                        ]
+                    },
+                    {
+                        id: 'finance', name: 'Finance', icon: 'fas fa-rupee-sign', submenu: [
+                            { name: 'Fees Collection', link: '#fees-collection' },
+                            { name: 'Expense Module', link: '#expense-module' }
+                        ]
+                    },
+                    { id: 'leave', name: 'Leave Management', icon: 'fas fa-user-clock', link: '#leave-application' }
+                ]
+            },
+            teacher: {
+                displayName: 'Teacher',
+                modules: [
+                    { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
+                    { id: 'attendance', name: 'Student Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
+                    { id: 'classwork', name: 'Class Work', icon: 'fas fa-book-open', link: '#class-work' },
+                    { id: 'homework', name: 'Home Work', icon: 'fas fa-home', link: '#home-work' },
+                    { id: 'leave', name: 'Leave Application', icon: 'fas fa-user-clock', link: '#leave-application' }
+                ]
+            },
+            student: {
+                displayName: 'Student',
+                modules: [
+                    { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
+                    { id: 'attendance', name: 'My Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
+                    { id: 'classwork', name: 'Class Work', icon: 'fas fa-book-open', link: '#class-work' },
+                    { id: 'homework', name: 'Home Work', icon: 'fas fa-home', link: '#home-work' }
+                ]
+            }
+        };
+
+        const defaultDashboardMetrics = [
+            { iconClass: 'students fas fa-user-graduate', label: 'Total Students', value: '1,250', change: '+12% since last month', changeClass: 'positive' },
+            { iconClass: 'teachers fas fa-chalkboard-teacher', label: 'Total Teachers', value: '75', change: '+5 new joiners', changeClass: 'positive' },
+            { iconClass: 'attendance fas fa-chart-bar', label: 'Avg. Attendance', value: '88.5%', change: '-1.5% from last week', changeClass: 'negative' },
+            { iconClass: 'fees fas fa-money-check-alt', label: 'Fees Collected', value: '₹5.2L', change: 'Target: ₹7L', changeClass: 'warning' }
+        ];
+
+        const recentActivities = [
+            { date: '2025-10-25', activity: 'New student enrolled in Class V', user: 'Admin', status: 'success' },
+            { date: '2025-10-24', activity: 'Mathematics test marks uploaded', user: 'Teacher User', status: 'success' },
+            { date: '2025-10-24', activity: 'Server maintenance scheduled', user: 'System', status: 'warning' },
+            { date: '2025-10-23', activity: 'Leave request from Teacher M. Singh', user: 'Teacher User', status: 'danger' },
+            { date: '2025-10-23', activity: 'Fees payment received from Roll No 101', user: 'Admin', status: 'success' },
+        ];
+        
+        // Helper function to generate generic cards HTML
+        function generateMetricCardsHtml(cardsData) {
+            let html = '<div class="row">';
+            cardsData.forEach(metric => {
+                // Check if the card should have a clickable link
+                const isClickable = metric.link;
+                const cardClass = isClickable ? 'metric-card clickable-card' : 'metric-card';
+                const cardStyle = isClickable ? 'cursor: pointer;' : '';
+                
+                html += `
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card ${cardClass} ${metric.iconClass ? metric.iconClass.split(' ')[0] : ''}" 
+                             style="${cardStyle}" 
+                             ${isClickable ? `onclick="window.open('${metric.link}', '_blank')"` : ''}>
+                            <div class="card-body">
+                                <div class="generic-card-icon" style="background: ${metric.color || '#95a5a6'};">
+                                    <i class="${metric.icon}"></i>
+                                </div>
+                                <div class="metric-value">${metric.value}</div>
+                                <div class="metric-label">${metric.label}</div>
+                                <div class="metric-change ${metric.changeClass || ''}">${metric.change || 'N/A'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Helper function to generate activities table HTML
+        function generateActivitiesTableHtml(activities) {
+            let rows = '';
+            activities.forEach(activity => {
+                rows += `
+                    <tr>
+                        <td>${activity.date}</td>
+                        <td>${activity.activity}</td>
+                        <td>${activity.user}</td>
+                        <td><span class="status-badge ${activity.status}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
+                    </tr>
+                `;
+            });
+
+            return `
+                <div class="card activity-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-clock mr-2"></i>Recent Activities</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table activity-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>User</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- CONTENT TEMPLATES (All pages with 4 cards minimum) ---
+
+        const contentTemplates = {
+            '#dashboard': {
+                title: 'Dashboard',
+                breadcrumb: ['Home'],
+                content: generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities)
+            },
+            '#warning-letter-dash': {
+                title: 'Warning Letter Dashboard',
+                breadcrumb: ['Documents', 'Warning Letter'],
+                content: generateMetricCardsHtml([
+                    { 
+                        icon: 'fas fa-exclamation-triangle', 
+                        label: 'Issue Warning Letter', 
+                        value: 'Dashboard', 
+                        color: '#e74c3c', 
+                        change: 'Go to Portal', 
+                        changeClass: 'negative',
+                        link: 'https://script.google.com/macros/s/AKfycbyL7VZOZm9tcyQSeRsC7qgU5bj16ZynCTmA1uLsdcPlvA9E4RjhtacskW2bZ1rnfVOi/exec'
+                    }
+                ])
+            },
+            '#teacher-id-card': {
+                title: 'Teachers ID Card',
+                breadcrumb: ['Documents', 'Teachers ID Card'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-chalkboard-teacher', label: 'Total Teachers', value: '75', color: '#2ecc71' },
+                    { icon: 'fas fa-print', label: 'ID Cards Printed', value: '70', color: '#3498db' },
+                    { icon: 'fas fa-hourglass-half', label: 'Pending ID Cards', value: '5', color: '#f39c12' },
+                    { icon: 'fas fa-plus-circle', label: 'Generate New ID', value: 'Action', color: '#1abc9c' }
+                ])
+            },
+            '#student-id-card': {
+                title: 'Student ID Card',
+                breadcrumb: ['Documents', 'Student ID Card'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-user-graduate', label: 'Total Students', value: '1250', color: '#3499db' },
+                    { icon: 'fas fa-id-card', label: 'ID Cards Issued', value: '1200', color: '#e74c3c' },
+                    { icon: 'fas fa-sync-alt', label: 'Renewals Due', value: '15', color: '#f39c12' },
+                    { icon: 'fas fa-edit', label: 'Update Data', value: 'Form', color: '#9b59b6' }
+                ])
+            },
+            '#escort-card': {
+                title: 'Escort Card',
+                breadcrumb: ['Documents', 'Escort Card'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-car-side', label: 'Total Escort Cards', value: '800', color: '#1abc9c' },
+                    { icon: 'fas fa-check-circle', label: 'Verified Cards', value: '780', color: '#2ecc71' },
+                    { icon: 'fas fa-times-circle', label: 'Rejected Cards', value: '10', color: '#e74c3c' },
+                    { icon: 'fas fa-shield-alt', label: 'Security Check', value: 'View Log', color: '#34495e' }
+                ])
+            },
+            '#salary-slip': {
+                title: 'Salary Slip',
+                breadcrumb: ['Documents', 'Salary Slip'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-money-bill-wave', label: 'Total Payroll', value: '₹15L', color: '#27ae60' },
+                    { icon: 'fas fa-calendar-alt', label: 'Last Processed Date', value: 'Oct 25', color: '#f39c12' },
+                    { icon: 'fas fa-file-upload', label: 'Upload Slips', value: 'New', color: '#9b59b6' },
+                    { icon: 'fas fa-download', label: 'Download Slips', value: 'Archive', color: '#3498db' }
+                ])
+            },
+            '#report-card': {
+                title: 'Report Card',
+                breadcrumb: ['Documents', 'Report Card'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-star', label: 'Top Class Avg.', value: 'Class 10', color: '#f1c40f' },
+                    { icon: 'fas fa-chart-line', label: 'Avg. Marks', value: '78%', color: '#3498db' },
+                    { icon: 'fas fa-check-double', label: 'Cards Finalized', value: '95%', color: '#2ecc71' },
+                    { icon: 'fas fa-tasks', label: 'Pending Uploads', value: '2 Classes', color: '#e74c3c' }
+                ])
+            },
+            '#offer-letter': {
+                title: 'Offer Letter',
+                breadcrumb: ['Documents', 'Offer Letter'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-handshake', label: 'Total Offers Issued', value: '10', color: '#2ecc71' },
+                    { icon: 'fas fa-user-tie', label: 'Offers Accepted', value: '7', color: '#3498db' },
+                    { icon: 'fas fa-times', label: 'Offers Rejected', value: '3', color: '#e74c3c' },
+                    { icon: 'fas fa-plus', label: 'Create New Offer', value: 'Form', color: '#9b59b6' }
+                ])
+            },
+            '#notice-automation': {
+                title: 'Notice Automation',
+                breadcrumb: ['Automation', 'Notice Automation'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-bullhorn', label: 'Total Notices Sent', value: '120', color: '#f39c12' },
+                    { icon: 'fas fa-envelope', label: 'Via Email', value: '80', color: '#3498db' },
+                    { icon: 'fab fa-whatsapp', label: 'Via WhatsApp', value: '40', color: '#2ecc71' },
+                    { icon: 'fas fa-paper-plane', label: 'Schedule New Notice', value: 'Action', color: '#9b59b6' }
+                ])
+            },
+            '#whatsapp-link': {
+                title: 'WhatsApp Form Link',
+                breadcrumb: ['Automation', 'WhatsApp Form Link'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fab fa-whatsapp', label: 'Total Link Uses', value: '350', color: '#2ecc71' },
+                    { icon: 'fas fa-link', label: 'Active Forms', value: '5', color: '#3498db' },
+                    { icon: 'fas fa-exclamation-circle', label: 'Expired Links', value: '2', color: '#e74c3c' },
+                    { icon: 'fas fa-qrcode', label: 'Generate QR/Link', value: 'New', color: '#9b59b6' }
+                ])
+            },
+            '#student-attendance': {
+                title: 'Student Attendance',
+                breadcrumb: ['Attendance', 'Student Attendance'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-user-check', label: 'Today Present', value: '1150', color: '#2ecc71' },
+                    { icon: 'fas fa-user-times', label: 'Today Absent', value: '100', color: '#e74c3c' },
+                    { icon: 'fas fa-percent', label: 'Monthly Avg.', value: '92%', color: '#3498db' },
+                    { icon: 'fas fa-edit', label: 'Mark Attendance', value: 'Action', color: '#f39c12' }
+                ])
+            },
+            '#teacher-attendance': {
+                title: 'Teacher Attendance',
+                breadcrumb: ['Attendance', 'Teacher Attendance'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-user-check', label: 'Today Present', value: '70', color: '#2ecc71' },
+                    { icon: 'fas fa-user-times', label: 'On Leave', value: '5', color: '#e74c3c' },
+                    { icon: 'fas fa-percent', label: 'Monthly Avg.', value: '96%', color: '#3498db' },
+                    { icon: 'fas fa-sign-in-alt', label: 'Late Comers', value: '2', color: '#f39c12' }
+                ])
+            },
+            '#staff-attendance': {
+                title: 'Staff Attendance',
+                breadcrumb: ['Attendance', 'Staff Attendance'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-user-check', label: 'Today Present', value: '25', color: '#2ecc71' },
+                    { icon: 'fas fa-user-times', label: 'On Leave', value: '1', color: '#e74c3c' },
+                    { icon: 'fas fa-percent', label: 'Monthly Avg.', value: '99%', color: '#3498db' },
+                    { icon: 'fas fa-user-cog', label: 'Total Staff', value: '26', color: '#9b59b6' }
+                ])
+            },
+            '#class-work': {
+                title: 'Class Work',
+                breadcrumb: ['Academic', 'Class Work'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-clipboard-list', label: 'Today\'s CW Posted', value: '15/20', color: '#f39c12' },
+                    { icon: 'fas fa-check-circle', label: 'Completed CW', value: '90%', color: '#2ecc71' },
+                    { icon: 'fas fa-calendar-day', label: 'Next Submission', value: 'Tomorrow', color: '#3498db' },
+                    { icon: 'fas fa-plus', label: 'Add Class Work', value: 'Action', color: '#9b59b6' }
+                ])
+            },
+            '#home-work': {
+                title: 'Home Work',
+                breadcrumb: ['Academic', 'Home Work'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-book-open', label: 'Pending HW Upload', value: '5 Classes', color: '#e74c3c' },
+                    { icon: 'fas fa-check-square', label: 'HW Reviewed', value: '85%', color: '#2ecc71' },
+                    { icon: 'fas fa-clock', label: 'Overdue Submissions', value: '10', color: '#f39c12' },
+                    { icon: 'fas fa-plus', label: 'Assign Home Work', value: 'Action', color: '#3498db' }
+                ])
+            },
+            '#fees-collection': {
+                title: 'Fees Collection',
+                breadcrumb: ['Finance', 'Fees Collection'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-money-check-alt', label: 'Today\'s Collection', value: '₹50,000', color: '#2ecc71' },
+                    { icon: 'fas fa-calendar-check', label: 'This Month Target', value: '90%', color: '#3498db' },
+                    { icon: 'fas fa-exclamation-circle', label: 'Defaulters List', value: '150', color: '#e74c3c' },
+                    { icon: 'fas fa-receipt', label: 'Generate Receipt', value: 'Action', color: '#f39c12' }
+                ])
+            },
+            '#expense-module': {
+                title: 'Expense Module',
+                breadcrumb: ['Finance', 'Expense Module'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-wallet', label: 'This Month Expense', value: '₹3.2L', color: '#e74c3c' },
+                    { icon: 'fas fa-clipboard-check', label: 'Approved Requests', value: '8/10', color: '#2ecc71' },
+                    { icon: 'fas fa-chart-pie', label: 'Major Category', value: 'Utilities', color: '#9b59b6' },
+                    { icon: 'fas fa-plus-square', label: 'Add New Expense', value: 'Form', color: '#f39c12' }
+                ])
+            },
+            '#leave-application': {
+                title: 'Leave Management',
+                breadcrumb: ['Leave Management'],
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-envelope-open-text', label: 'Pending Requests', value: '5', color: '#f39c12' },
+                    { icon: 'fas fa-user-slash', label: 'Employees on Leave', value: '8', color: '#e74c3c' },
+                    { icon: 'fas fa-calendar-plus', label: 'Total Leaves Taken', value: '120', color: '#3498db' },
+                    { icon: 'fas fa-check-circle', label: 'Approved Today', value: '2', color: '#2ecc71' }
+                ])
+            }
+        };
+
+        // --- CORE FUNCTIONS ---
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (users[username] && users[username].password === password) {
+                currentUser = {
+                    username: username,
+                    role: users[username].role,
+                    fullName: users[username].fullName
+                };
+
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'block';
+
+                initializeDashboard();
+            } else {
+                alert('Invalid username or password!');
+            }
+        }
+
+        // Initialize dashboard
+        function initializeDashboard() {
+            loadSidebarMenu();
+            updateNavbar();
+            // Load the default dashboard content
+            loadContent(document.querySelector('.menu-link[href="#dashboard"]'));
+        }
+
+        // Load sidebar menu based on user role
+        function loadSidebarMenu() {
+            const role = userRoles[currentUser.role];
+            const menuContainer = document.getElementById('sidebarMenu');
+            const roleDisplay = document.getElementById('userRoleDisplay');
+            
+            roleDisplay.textContent = role.displayName;
+            menuContainer.innerHTML = '';
+
+            role.modules.forEach(module => {
+                const menuItem = document.createElement('li');
+                menuItem.className = 'menu-item';
+
+                if (module.submenu) {
+                    menuItem.innerHTML = `
+                        <a class="menu-link" onclick="toggleSubmenu(this)">
+                            <i class="${module.icon}"></i>
+                            <span>${module.name}</span>
+                            <i class="fas fa-chevron-down menu-arrow"></i>
+                        </a>
+                        <ul class="submenu">
+                            ${module.submenu.map(sub => `
+                                <li><a href="${sub.link}" class="submenu-link" onclick="loadContent(this)">${sub.name}</a></li>
+                            `).join('')}
+                        </ul>
+                    `;
+                } else {
+                    // Main menu item (like Dashboard or Leave Management)
+                    menuItem.innerHTML = `
+                        <a href="${module.link}" class="menu-link ${module.active ? 'active' : ''}" onclick="loadContent(this)">
+                            <i class="${module.icon}"></i>
+                            <span>${module.name}</span>
+                        </a>
+                    `;
+                }
+
+                menuContainer.appendChild(menuItem);
+            });
+        }
+
+        // Dynamic content loading function
+        function loadContent(element) {
+            const link = element.getAttribute('href');
+            const template = contentTemplates[link];
+            const dynamicContent = document.getElementById('dynamicContent');
+            const pageTitle = document.getElementById('pageTitle');
+            const breadcrumbNav = document.getElementById('breadcrumbNav');
+            
+            if (!template) {
+                console.error('Template not found for link:', link);
+                return;
+            }
+
+            // 1. Update Content
+            dynamicContent.innerHTML = template.content;
+
+            // 2. Update Page Header/Title
+            pageTitle.textContent = template.title;
+
+            // 3. Update Breadcrumb
+            breadcrumbNav.innerHTML = '';
+            template.breadcrumb.forEach((item, index, array) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'breadcrumb-item';
+                if (index === array.length - 1) {
+                    listItem.classList.add('active');
+                    listItem.setAttribute('aria-current', 'page');
+                }
+                listItem.textContent = item;
+                breadcrumbNav.appendChild(listItem);
+            });
+
+            // 4. Update Sidebar Active State
+            // Remove active class from all links
+            document.querySelectorAll('.menu-link, .submenu-link').forEach(linkEl => {
+                linkEl.classList.remove('active');
+            });
+            // Add active class to the clicked link
+            element.classList.add('active');
+            
+            // Ensure main menu item remains active if a submenu item is clicked
+            if (element.classList.contains('submenu-link')) {
+                const parentLink = element.closest('.menu-item').querySelector('.menu-link');
+                parentLink.classList.add('active');
+            }
+
+            // 5. Hide sidebar on mobile after click
+            document.getElementById('sidebar').classList.remove('show');
+        }
+
+        // Toggle submenu
+        function toggleSubmenu(element) {
+            const submenu = element.nextElementSibling;
+            const arrow = element.querySelector('.menu-arrow');
+            
+            // Toggle current submenu
+            submenu.classList.toggle('show');
+            arrow.classList.toggle('rotated');
+        }
+
+        // Update Navbar user info
+        function updateNavbar() {
+            if (currentUser) {
+                document.getElementById('userNameNav').textContent = currentUser.fullName;
+                document.getElementById('userAvatarNav').textContent = currentUser.fullName.charAt(0).toUpperCase();
+            }
+        }
+
+        // Handle logout
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('loginForm').reset();
+            document.getElementById('sidebar').classList.remove('show');
+        }
+
+        // Toggle sidebar for mobile view
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
