@@ -824,10 +824,15 @@
                 title: 'Teachers ID Card',
                 breadcrumb: ['Documents', 'Teachers ID Card'],
                 content: generateMetricCardsHtml([
-                    { icon: 'fas fa-chalkboard-teacher', label: 'Total Teachers', value: '75', color: '#2ecc71' },
-                    { icon: 'fas fa-print', label: 'ID Cards Printed', value: '70', color: '#3498db' },
-                    { icon: 'fas fa-hourglass-half', label: 'Pending ID Cards', value: '5', color: '#f39c12' },
-                    { icon: 'fas fa-plus-circle', label: 'Generate New ID', value: 'Action', color: '#1abc9c' }
+                    { 
+                        icon: 'fas fa-chalkboard-teacher', 
+                        label: 'Dashboard', 
+                        value: 'Issue Teachers ID Card', 
+                        color: '#e74c3c', 
+                        change: 'Go to Portal', 
+                        changeClass: 'negative',
+                        link: 'https://script.google.com/macros/s/AKfycbwxYK-F3EmAK8o6ufBNDDWu0SvhMwUmiIPsyPCYswxnXu9HEmkCDXZAS3G2RyCKyLqK/exec'
+                    }
                 ])
             },
             '#student-id-card': {
@@ -1140,3 +1145,4 @@
 </body>
 
 </html>
+
