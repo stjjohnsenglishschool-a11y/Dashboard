@@ -1121,7 +1121,7 @@
             '#warning-letter-dash': {
                 title: 'Warning Letter Portal',
                 breadcrumb: ['Documents', 'Warning Letter'],
-                // MODIFIED CONTENT for single, centered card
+                // Kept as a single centered card
                 content: `
                     <div class="row justify-content-center">
                         <div class="col-lg-6 col-md-8 mb-4">
@@ -1132,8 +1132,8 @@
                                     <div class="generic-card-icon mx-auto" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
                                         <i class="fas fa-exclamation-triangle"></i>
                                     </div>
-                                    <div class="metric-value">Open Portal</div>
-                                    <div class="metric-label">Issue Warning Letter Generation</div>
+                                    <div class="metric-value">Issue Warning Letter Generation</div>
+                                    <div class="metric-label">Open Portal</div>
                                     <div class="metric-change negative">Click to access the Generation Portal</div>
                                 </div>
                             </div>
@@ -1144,7 +1144,7 @@
             '#teacher-id-card': {
                 title: 'Teachers ID Card Portal',
                 breadcrumb: ['Documents', 'Teachers ID Card'],
-                // MODIFIED CONTENT for single, centered card
+                // Kept as a single centered card
                 content: `
                     <div class="row justify-content-center">
                         <div class="col-lg-6 col-md-8 mb-4">
@@ -1155,8 +1155,8 @@
                                     <div class="generic-card-icon mx-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                                         <i class="fas fa-id-card-alt"></i>
                                     </div>
-                                    <div class="metric-value">Open Portal</div>
-                                    <div class="metric-label">Teachers ID Card Generation</div>
+                                    <div class="metric-value">Teachers ID Card Generation</div>
+                                    <div class="metric-label">Open Portal</div>
                                     <div class="metric-change positive">Click to access the Generation Portal</div>
                                 </div>
                             </div>
@@ -1167,31 +1167,58 @@
             '#student-id-card': {
                 title: 'Student ID Card Management',
                 breadcrumb: ['Documents', 'Student ID Card'],
+                // CORRECTED: Restructured to correctly use generateMetricCardsHtml with a linked object
                 content: generateMetricCardsHtml([
-                    { icon: 'fas fa-user-graduate', label: 'Total Students', value: '1,250', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-id-card', label: 'ID Cards Issued', value: '1,200', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-clock', label: 'Pending Requests', value: '50', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-edit', label: 'Update Records', value: 'Form', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
+                    { 
+                        icon: 'fas fa-id-card-alt', 
+                        label: 'Open Portal', 
+                        value: 'Student ID Card Generation', 
+                        change: 'Click to access the Generation Portal', 
+                        changeClass: 'positive', 
+                        color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                        link: 'https://script.google.com/macros/s/AKfycbwUG1CC-ulcp9aZX7Z1GFltBr29DNEfhqTqZq-9IbhYBwJI5OVizumRhaExMwkR2Q1xZA/exec' 
+                    }
                 ])
             },
             '#escort-card': {
                 title: 'Escort Card Management',
                 breadcrumb: ['Documents', 'Escort Card'],
+                // CORRECTED: Restructured to correctly use generateMetricCardsHtml with a linked object
                 content: generateMetricCardsHtml([
-                    { icon: 'fas fa-car-side', label: 'Total Escort Cards', value: '800', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-check-circle', label: 'Verified Cards', value: '780', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-exclamation-triangle', label: 'Pending Verification', value: '20', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-shield-alt', label: 'Security Level', value: 'High', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
+                    { 
+                        icon: 'fas fa-car-side', 
+                        label: 'Open Portal',   
+                        value: 'Escort Card Generation Portal', 
+                        change: 'Click to access the Generation Portal', 
+                        changeClass: 'positive', 
+                        color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                        link: 'https://script.google.com/macros/s/AKfycbzAtjXS7XuIkGdybsamrvMUGI1JSzZX6x7fxRMaNt0r0PCtl06uqRecIBo671s_NlI5iA/exec'
+                    }
                 ])
             },
             '#salary-slip': {
                 title: 'Salary Slip Management',
-                breadcrumb: ['Documents', 'Salary Slip'],
+                breadcrumb: ['Documents', 'Salary Dashboard'],
+                // CORRECTED: Restructured to correctly use generateMetricCardsHtml with two linked objects
                 content: generateMetricCardsHtml([
-                    { icon: 'fas fa-money-bill-wave', label: 'Total Payroll', value: '₹15L', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-calendar-alt', label: 'Last Processed', value: 'Oct 25', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-file-upload', label: 'Upload Status', value: 'Complete', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-download', label: 'Downloads', value: '95%', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
+                    { 
+                        icon: 'fas fa-money-bill-wave', 
+                        label: 'Open Portal',   
+                        value: 'Generate Salary Slip', 
+                        change: 'Click to open the Google Script', 
+                        changeClass: 'positive', 
+                        color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        link: 'https://script.google.com/macros/s/AKfycbxa4YakeftK3_9N9Dl8febapfq_CzvXqjP7chMy66LREx2HENP8frYQMTpE4VTjdhnv/exec'
+                    },
+                    { 
+                        icon: 'fas fa-user-tie', 
+                        label: 'Open Portal', 
+                        value: 'Employee Master Upload', 
+                        change: 'Click to update employee data', 
+                        changeClass: 'warning', 
+                        color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                        link: 'https://script.google.com/macros/s/AKfycbwnt0eYRnCd-MzjGvak5tK_7Rd14CUxww-M0nTZV6RWWOzdDTcRgSYLkMeI7BYcKaP9/exec' 
+                    }
                 ])
             },
             '#report-card': {
@@ -1307,11 +1334,26 @@
             '#leave-application': {
                 title: 'Leave Management System',
                 breadcrumb: ['Leave Management'],
+                // CORRECTED: Restructured to correctly use generateMetricCardsHtml with two linked objects
                 content: generateMetricCardsHtml([
-                    { icon: 'fas fa-envelope-open', label: 'Pending Requests', value: '5', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-user-slash', label: 'On Leave Today', value: '8', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-calendar-alt', label: 'Total Leaves', value: '120', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-check-circle', label: 'Approved Today', value: '2', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }
+                    { 
+                        icon: 'fas fa-chart-line', 
+                        label: 'Leave Management Dashboard', 
+                        value: 'Open Portal', 
+                        change: 'Review & Approve Applications', 
+                        changeClass: 'positive', 
+                        color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        link: 'https://script.google.com/macros/s/AKfycbzMb55uWLzBPVCM5eWu08BPczZjUnpltQZjZKLyseIsCXHgWyw7j01fzeEhnIdun6g-Fg/exec'
+                    },
+                    { 
+                        icon: 'fas fa-file-alt', 
+                        label: 'Check Leave Balance / Apply', 
+                        value: 'Open Form', 
+                        change: 'Apply for Leave', 
+                        changeClass: 'warning', 
+                        color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                        link: 'https://script.google.com/macros/s/AKfycbxrZKD7zMXMNFISAiYKTiu3IO3zF_mRtbzomPBlJn1jQvCWWhEhaThpNwbDlL-VdBzp/exec'
+                    },
                 ])
             }
         };
@@ -1343,7 +1385,11 @@
         function initializeDashboard() {
             loadSidebarMenu();
             updateNavbar();
-            loadContent(document.querySelector('.menu-link[href="#dashboard"]'));
+            // Find the dashboard link and load its content on initial login
+            const dashboardLink = document.querySelector('.menu-link[href="#dashboard"]');
+            if (dashboardLink) {
+                loadContent(dashboardLink);
+            }
         }
 
         // Load sidebar menu based on user role
@@ -1434,10 +1480,10 @@
                 // Also activate the parent menu link if it's a sublink
                 activeLink = element.closest('.submenu').previousElementSibling;
                 element.classList.add('active'); // Keep submenu-link active
-            } else {
-                element.classList.add('active'); // Activate top-level link
-            }
-
+            } 
+            
+            activeLink.classList.add('active'); // Activate top-level link or the menu link itself
+            
             const hash = element.getAttribute('href');
             const template = contentTemplates[hash];
             const dynamicContent = document.getElementById('dynamicContent');
@@ -1468,7 +1514,7 @@
             }
 
             // Prevent default hash navigation
-            if (event && element.tagName === 'A') {
+            if (event && element.tagName === 'A' && element.getAttribute('href').startsWith('#')) {
                 event.preventDefault();
             }
         }
