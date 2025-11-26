@@ -44,14 +44,8 @@
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes pulse {
@@ -65,45 +59,23 @@
         }
 
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
-            }
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
         }
 
         /* ========== LOGIN PAGE ========== */
@@ -118,8 +90,7 @@
             overflow: hidden;
         }
 
-        .login-wrapper::before,
-        .login-wrapper::after {
+        .login-wrapper::before, .login-wrapper::after {
             content: '';
             position: absolute;
             border-radius: 50%;
@@ -127,20 +98,8 @@
             animation: float 6s ease-in-out infinite;
         }
 
-        .login-wrapper::before {
-            width: 500px;
-            height: 500px;
-            top: -250px;
-            right: -250px;
-        }
-
-        .login-wrapper::after {
-            width: 400px;
-            height: 400px;
-            bottom: -200px;
-            left: -200px;
-            animation-duration: 8s;
-        }
+        .login-wrapper::before { width: 500px; height: 500px; top: -250px; right: -250px; }
+        .login-wrapper::after { width: 400px; height: 400px; bottom: -200px; left: -200px; animation-duration: 8s; }
 
         .login-container {
             background: rgba(255, 255, 255, 0.95);
@@ -178,82 +137,21 @@
             left: -100px;
         }
 
-        .login-left i {
-            font-size: 5rem;
-            margin-bottom: 30px;
-            animation: pulse 2s ease infinite;
-            position: relative;
-            z-index: 1;
-        }
+        .login-left i { font-size: 5rem; margin-bottom: 30px; animation: pulse 2s ease infinite; position: relative; z-index: 1; }
+        .login-left h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; position: relative; z-index: 1; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .login-left p { font-size: 1.1rem; line-height: 1.8; opacity: 0.95; position: relative; z-index: 1; }
 
-        .login-left h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
+        .login-right { flex: 1; padding: 80px 50px; background: white; }
+        
+        .login-header { text-align: center; margin-bottom: 50px; }
+        .login-header h3 { font-size: 2rem; font-weight: 700; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        .login-header p { color: #6c757d; font-size: 1rem; }
 
-        .login-left p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
-        }
-
-        .login-right {
-            flex: 1;
-            padding: 80px 50px;
-            background: white;
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .login-header h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            background: var(--primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            color: #6c757d;
-            font-size: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 30px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
-            display: block;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #667eea;
-            font-size: 1.2rem;
-            z-index: 10;
-        }
-
+        .form-group { margin-bottom: 30px; }
+        .form-group label { font-weight: 600; color: #2c3e50; margin-bottom: 12px; font-size: 0.95rem; display: block; }
+        .input-group { position: relative; }
+        .input-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #667eea; font-size: 1.2rem; z-index: 10; }
+        
         .form-control {
             height: 55px;
             border-radius: var(--border-radius);
@@ -263,12 +161,7 @@
             transition: all var(--transition-speed) ease;
             background: #f8f9fa;
         }
-
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
-            background: white;
-        }
+        .form-control:focus { border-color: #667eea; box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15); background: white; }
 
         .btn-login {
             height: 55px;
@@ -283,571 +176,148 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
         }
+        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4); }
 
-        .btn-login::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-login:hover::before {
-            left: 100%;
-        }
-
-        .login-info {
-            margin-top: 40px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: var(--border-radius);
-            border-left: 5px solid #667eea;
-        }
-
-        .login-info h6 {
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1rem;
-        }
+        .login-info { margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: var(--border-radius); border-left: 5px solid #667eea; }
+        .login-info h6 { font-weight: 700; color: #2c3e50; margin-bottom: 10px; font-size: 1rem; }
 
         /* ========== DASHBOARD ========== */
-        .dashboard-wrapper {
-            display: none;
-        }
+        .dashboard-wrapper { display: none; }
 
         .top-navbar {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: var(--navbar-height);
             z-index: 1030;
             box-shadow: 0 5px 30px rgba(0,0,0,0.2);
         }
 
-        .top-navbar .container-fluid {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-        }
+        .top-navbar .container-fluid { height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
 
-        .school-brand {
-            display: flex;
-            align-items: center;
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+        .school-brand { display: flex; align-items: center; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px; }
+        .school-brand i { font-size: 2rem; margin-right: 15px; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: pulse 2s ease infinite; }
 
-        .school-brand i {
-            font-size: 2rem;
-            margin-right: 15px;
-            background: var(--primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: pulse 2s ease infinite;
-        }
+        .navbar-right { display: flex; align-items: center; gap: 30px; }
 
-        .navbar-right {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
+        .notification-icon { position: relative; color: white; font-size: 1.4rem; cursor: pointer; transition: all var(--transition-speed); }
+        .notification-icon:hover { transform: scale(1.1); color: #667eea; }
+        .notification-badge { position: absolute; top: -10px; right: -10px; background: var(--secondary); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: bold; animation: bounce 2s ease infinite; }
 
-        .notification-icon {
-            position: relative;
-            color: white;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-        }
+        .user-profile { display: flex; align-items: center; cursor: pointer; padding: 10px 20px; border-radius: 30px; transition: all var(--transition-speed); color: white; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
+        .user-profile:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
-        .notification-icon:hover {
-            transform: scale(1.1);
-            color: #667eea;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: var(--secondary);
-            color: white;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            animation: bounce 2s ease infinite;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            padding: 10px 20px;
-            border-radius: 30px;
-            transition: all var(--transition-speed);
-            color: white;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .user-profile:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-
-        .user-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
+        .user-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 700; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3); }
 
         .sidebar {
-            position: fixed;
-            top: var(--navbar-height);
-            left: 0;
-            width: var(--sidebar-width);
-            height: calc(100vh - var(--navbar-height));
+            position: fixed; top: var(--navbar-height); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--navbar-height));
             background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
-            box-shadow: 5px 0 30px rgba(0,0,0,0.1);
-            overflow-y: auto;
-            transition: all var(--transition-speed);
-            z-index: 1020;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.1); overflow-y: auto; transition: all var(--transition-speed); z-index: 1020;
         }
+        .sidebar::-webkit-scrollbar { width: 8px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
-        .sidebar::-webkit-scrollbar {
-            width: 8px;
-        }
+        .user-role-badge { padding: 30px 20px; background: var(--primary); color: white; text-align: center; margin-bottom: 20px; position: relative; overflow: hidden; }
+        .user-role-badge::before { content: ''; position: absolute; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; top: -50px; right: -50px; }
+        .user-role-badge h6 { margin: 0; font-size: 0.9rem; opacity: 0.9; position: relative; z-index: 1; }
+        .user-role-badge h5 { margin: 8px 0 0 0; font-weight: 700; font-size: 1.3rem; position: relative; z-index: 1; }
 
-        .sidebar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
+        .sidebar-menu { list-style: none; padding: 10px; margin: 0; }
+        .menu-item { margin-bottom: 5px; }
 
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
+        .menu-link { display: flex; align-items: center; padding: 15px 20px; color: #2c3e50; text-decoration: none; transition: all var(--transition-speed); cursor: pointer; border-radius: 12px; font-weight: 500; }
+        .menu-link:hover { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); color: #667eea; transform: translateX(5px); }
+        .menu-link.active { background: var(--primary); color: white; box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3); transform: translateX(5px); }
+        .menu-link i { width: 30px; margin-right: 15px; font-size: 1.2rem; }
+        .menu-arrow { margin-left: auto; transition: transform var(--transition-speed); font-size: 0.9rem; }
+        .menu-arrow.rotated { transform: rotate(180deg); }
 
-        .user-role-badge {
-            padding: 30px 20px;
-            background: var(--primary);
-            color: white;
-            text-align: center;
-            margin-bottom: 20px;
-            position: relative;
+        .submenu { list-style: none; padding: 0; margin: 5px 0 0 0; background: transparent; display: none; }
+        .submenu.show { display: block; animation: slideDown 0.3s ease; }
+
+        .submenu-link { display: block; padding: 12px 20px 12px 65px; color: #5d6d7e; text-decoration: none; transition: all var(--transition-speed); font-size: 0.9rem; border-radius: 10px; margin: 2px 0; font-weight: 500; }
+        .submenu-link:hover { background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); color: #667eea; padding-left: 70px; }
+        .submenu-link.active { background: var(--primary); color: white; font-weight: 600; padding-left: 70px; }
+
+        .main-content { margin-left: var(--sidebar-width); margin-top: var(--navbar-height); padding: 40px; min-height: calc(100vh - var(--navbar-height)); }
+        
+        .page-header { margin-bottom: 40px; animation: fadeInDown 0.6s ease; }
+        .page-header h2 { color: #1a1a2e; font-weight: 700; margin-bottom: 10px; font-size: 2.2rem; }
+        
+        .breadcrumb { background: transparent; padding: 0; margin: 0; }
+        .breadcrumb-item { font-size: 0.95rem; color: #6c757d; }
+        .breadcrumb-item.active { color: #667eea; font-weight: 600; }
+
+        .metric-card { border: none; border-radius: 20px; box-shadow: var(--shadow-light); transition: all 0.4s ease; overflow: hidden; background: white; position: relative; animation: fadeInUp 0.6s ease; }
+        .metric-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-medium); }
+        .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--primary); }
+        .metric-card .card-body { padding: 30px; }
+
+        .generic-card-icon { width: 70px; height: 70px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 20px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: all var(--transition-speed); }
+        .metric-card:hover .generic-card-icon { transform: scale(1.1) rotate(5deg); }
+
+        .metric-value { font-size: 2.3rem; font-weight: 800; color: #1a1a2e; margin: 15px 0 8px 0; }
+        .metric-label { color: #6c757d; font-size: 1rem; font-weight: 600; margin-bottom: 15px; }
+        
+        .metric-change { font-size: 0.9rem; margin-top: 15px; padding: 8px 12px; border-radius: 10px; display: inline-block; font-weight: 600; }
+        .metric-change.positive { background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); color: #155724; }
+        .metric-change.negative { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); color: #721c24; }
+        .metric-change.warning { background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); color: #856404; }
+
+        /* Generic Iframe Container */
+        .iframe-container {
+            width: 100%;
+            height: calc(100vh - 180px); /* Adjust based on navbar/header */
+            border-radius: var(--border-radius);
             overflow: hidden;
-        }
-
-        .user-role-badge::before {
-            content: '';
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            top: -50px;
-            right: -50px;
-        }
-
-        .user-role-badge h6 {
-            margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        .user-role-badge h5 {
-            margin: 8px 0 0 0;
-            font-weight: 700;
-            font-size: 1.3rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 10px;
-            margin: 0;
-        }
-
-        .menu-item {
-            margin-bottom: 5px;
-        }
-
-        .menu-link {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: #2c3e50;
-            text-decoration: none;
-            transition: all var(--transition-speed);
-            cursor: pointer;
-            border-radius: 12px;
-            font-weight: 500;
-        }
-
-        .menu-link:hover {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #667eea;
-            transform: translateX(5px);
-        }
-
-        .menu-link.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
-            transform: translateX(5px);
-        }
-
-        .menu-link i {
-            width: 30px;
-            margin-right: 15px;
-            font-size: 1.2rem;
-        }
-
-        .menu-arrow {
-            margin-left: auto;
-            transition: transform var(--transition-speed);
-            font-size: 0.9rem;
-        }
-
-        .menu-arrow.rotated {
-            transform: rotate(180deg);
-        }
-
-        .submenu {
-            list-style: none;
-            padding: 0;
-            margin: 5px 0 0 0;
-            background: transparent;
-            display: none;
-        }
-
-        .submenu.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        .submenu-link {
-            display: block;
-            padding: 12px 20px 12px 65px;
-            color: #5d6d7e;
-            text-decoration: none;
-            transition: all var(--transition-speed);
-            font-size: 0.9rem;
-            border-radius: 10px;
-            margin: 2px 0;
-            font-weight: 500;
-        }
-
-        .submenu-link:hover {
-            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
-            color: #667eea;
-            padding-left: 70px;
-        }
-
-        .submenu-link.active {
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-            padding-left: 70px;
-        }
-
-        .main-content {
-            margin-left: var(--sidebar-width);
-            margin-top: var(--navbar-height);
-            padding: 40px;
-            min-height: calc(100vh - var(--navbar-height));
-        }
-
-        .page-header {
-            margin-bottom: 40px;
-            animation: fadeInDown 0.6s ease;
-        }
-
-        .page-header h2 {
-            color: #1a1a2e;
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 2.2rem;
-        }
-
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
-            margin: 0;
-        }
-
-        .breadcrumb-item {
-            font-size: 0.95rem;
-            color: #6c757d;
-        }
-
-        .breadcrumb-item.active {
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .metric-card {
-            border: none;
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-            transition: all 0.4s ease;
-            overflow: hidden;
-            background: white;
-            position: relative;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-10px);
             box-shadow: var(--shadow-medium);
-        }
-
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: var(--primary);
-        }
-
-        .metric-card .card-body {
-            padding: 30px;
-        }
-
-        .generic-card-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: all var(--transition-speed);
-        }
-
-        .metric-card:hover .generic-card-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .metric-value {
-            font-size: 2.3rem;
-            font-weight: 800;
-            color: #1a1a2e;
-            margin: 15px 0 8px 0;
-        }
-
-        .metric-label {
-            color: #6c757d;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .metric-change {
-            font-size: 0.9rem;
-            margin-top: 15px;
-            padding: 8px 12px;
-            border-radius: 10px;
-            display: inline-block;
-            font-weight: 600;
-        }
-
-        .metric-change.positive {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            color: #155724;
-        }
-
-        .metric-change.negative {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-            color: #721c24;
-        }
-
-        .metric-change.warning {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-            color: #856404;
-        }
-
-        .activity-card {
-            border: none;
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-            margin-top: 40px;
             background: white;
-            overflow: hidden;
-            animation: fadeInUp 0.8s ease;
+            animation: fadeInUp 0.5s ease;
         }
-
-        .activity-card .card-header {
-            background: var(--primary);
-            color: white;
+        
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
             border: none;
-            padding: 25px 30px;
         }
 
-        .activity-card .card-header h5 {
-            margin: 0;
-            font-weight: 700;
-            font-size: 1.3rem;
-        }
+        .activity-card { border: none; border-radius: 20px; box-shadow: var(--shadow-light); margin-top: 40px; background: white; overflow: hidden; animation: fadeInUp 0.8s ease; }
+        .activity-card .card-header { background: var(--primary); color: white; border: none; padding: 25px 30px; }
+        .activity-card .card-header h5 { margin: 0; font-weight: 700; font-size: 1.3rem; }
 
-        .activity-table {
-            margin: 0;
-        }
+        .activity-table { margin: 0; }
+        .activity-table thead th { border: none; background: #f8f9fa; color: #495057; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; padding: 20px; letter-spacing: 0.5px; }
+        .activity-table tbody td { padding: 20px; vertical-align: middle; border-top: 1px solid #f1f3f5; font-size: 0.95rem; }
+        .activity-table tbody tr { transition: all var(--transition-speed); }
+        .activity-table tbody tr:hover { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); transform: scale(1.01); }
 
-        .activity-table thead th {
-            border: none;
-            background: #f8f9fa;
-            color: #495057;
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            padding: 20px;
-            letter-spacing: 0.5px;
-        }
+        .status-badge { padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-badge.success { background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); color: #155724; }
+        .status-badge.warning { background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); color: #856404; }
+        .status-badge.danger { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); color: #721c24; }
 
-        .activity-table tbody td {
-            padding: 20px;
-            vertical-align: middle;
-            border-top: 1px solid #f1f3f5;
-            font-size: 0.95rem;
-        }
+        .clickable-card { cursor: pointer; }
+        .clickable-card:hover::before { background: var(--secondary); }
 
-        .activity-table tbody tr {
-            transition: all var(--transition-speed);
-        }
+        .mobile-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; transition: all var(--transition-speed); }
+        .mobile-toggle:hover { color: #667eea; }
 
-        .activity-table tbody tr:hover {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            transform: scale(1.01);
-        }
-
-        .status-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-badge.success {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            color: #155724;
-        }
-
-        .status-badge.warning {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-            color: #856404;
-        }
-
-        .status-badge.danger {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-            color: #721c24;
-        }
-
-        .clickable-card {
-            cursor: pointer;
-        }
-
-        .clickable-card:hover::before {
-            background: var(--secondary);
-        }
-
-        .mobile-toggle {
-            display: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-        }
-
-        .mobile-toggle:hover {
-            color: #667eea;
-        }
-
-        .loading-shimmer {
-            animation: shimmer 2s infinite;
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 1000px 100%;
-        }
+        .loading-shimmer { animation: shimmer 2s infinite; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 1000px 100%; }
 
         /* ========== RESPONSIVE STYLES ========== */
         @media (max-width: 768px) {
-            .mobile-toggle {
-                display: block;
-            }
-
-            .login-container {
-                flex-direction: column;
-            }
-
-            .login-left,
-            .login-right {
-                padding: 50px 30px;
-            }
-
-            .school-brand span {
-                display: none;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .user-profile span {
-                display: none;
-            }
-
-            .metric-card {
-                margin-bottom: 20px;
-            }
-
-            .page-header h2 {
-                font-size: 1.8rem;
-            }
+            .mobile-toggle { display: block; }
+            .login-container { flex-direction: column; }
+            .login-left, .login-right { padding: 50px 30px; }
+            .school-brand span { display: none; }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 20px; }
+            .user-profile span { display: none; }
+            .metric-card { margin-bottom: 20px; }
+            .page-header h2 { font-size: 1.8rem; }
+            .iframe-container { height: 80vh; }
         }
     </style>
 </head>
@@ -981,7 +451,9 @@
                             { name: 'Teachers ID Card', link: '#teacher-id-card' },
                             { name: 'Student ID Card', link: '#student-id-card' },
                             { name: 'Escort Card', link: '#escort-card' },
-                            { name: 'Salary Slip', link: '#salary-slip' },
+                            /* Prompt 5: Salary Slip split into 2 */
+                            { name: 'Generate Salary Slip', link: '#generate-salary-slip' },
+                            { name: 'Employee Master Upload', link: '#employee-master-upload' },
                             { name: 'Report Card', link: '#report-card' },
                             { name: 'Offer Letter', link: '#offer-letter' }
                         ]
@@ -1002,7 +474,9 @@
                     {
                         id: 'academic', name: 'Academic', icon: 'fas fa-book', submenu: [
                             { name: 'Class Work', link: '#class-work' },
-                            { name: 'Home Work', link: '#home-work' }
+                            { name: 'Home Work', link: '#home-work' },
+                            /* Prompt 7: Added Assignment Portal */
+                            { name: 'Assignment Portal', link: '#assignment-portal' }
                         ]
                     },
                     {
@@ -1011,7 +485,13 @@
                             { name: 'Expense Module', link: '#expense-module' }
                         ]
                     },
-                    { id: 'leave', name: 'Leave Management', icon: 'fas fa-user-clock', link: '#leave-application' }
+                    /* Prompt 8: Leave Management split into 2 */
+                    { 
+                        id: 'leave', name: 'Leave Management', icon: 'fas fa-user-clock', submenu: [
+                            { name: 'Open Portal', link: '#leave-open-portal' },
+                            { name: 'Leave_Balance', link: '#leave-balance' }
+                        ]
+                    }
                 ]
             },
             teacher: {
@@ -1021,7 +501,8 @@
                     { id: 'attendance', name: 'Student Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
                     { id: 'classwork', name: 'Class Work', icon: 'fas fa-book-open', link: '#class-work' },
                     { id: 'homework', name: 'Home Work', icon: 'fas fa-home', link: '#home-work' },
-                    { id: 'leave', name: 'Leave Application', icon: 'fas fa-user-clock', link: '#leave-application' }
+                    { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' },
+                    { id: 'leave', name: 'Leave Application', icon: 'fas fa-user-clock', link: '#leave-open-portal' }
                 ]
             },
             student: {
@@ -1030,7 +511,8 @@
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
                     { id: 'attendance', name: 'My Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
                     { id: 'classwork', name: 'Class Work', icon: 'fas fa-book-open', link: '#class-work' },
-                    { id: 'homework', name: 'Home Work', icon: 'fas fa-home', link: '#home-work' }
+                    { id: 'homework', name: 'Home Work', icon: 'fas fa-home', link: '#home-work' },
+                    { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' }
                 ]
             }
         };
@@ -1080,6 +562,15 @@
             return html;
         }
 
+        // Helper function to generate generic iframe HTML
+        function generateIframeHtml(url) {
+            return `
+                <div class="iframe-container">
+                    <iframe src="${url}"></iframe>
+                </div>
+            `;
+        }
+
         // Helper function to generate activities table HTML
         function generateActivitiesTableHtml(activities) {
             let rows = '';
@@ -1125,109 +616,47 @@
                 breadcrumb: ['Home', 'Dashboard'],
                 content: generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities)
             },
+            
+            /* Prompt 1: Warning Letter - Iframe */
             '#warning-letter-dash': {
                 title: 'Warning Letter Portal',
                 breadcrumb: ['Documents', 'Warning Letter'],
-                // Kept as a single centered card
-                content: `
-                    <div class="row justify-content-center">
-                        <div class="col-lg-6 col-md-8 mb-4">
-                            <div class="card metric-card clickable-card" 
-                                 style="cursor: pointer; animation-delay: 0s;" 
-                                 onclick="window.open('https://script.google.com/macros/s/AKfycbyL7VZOZm9tcyQSeRsC7qgU5bj16ZynCTmA1uLsdcPlvA9E4RjhtacskW2bZ1rnfVOi/exec', '_blank')">
-                                <div class="card-body text-center">
-                                    <div class="generic-card-icon mx-auto" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </div>
-                                    <div class="metric-value">Issue Warning Letter Generation</div>
-                                    <div class="metric-label">Open Portal</div>
-                                    <div class="metric-change negative">Click to access the Generation Portal</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec')
             },
+
+            /* Prompt 2: Teachers ID Card - Iframe */
             '#teacher-id-card': {
                 title: 'Teachers ID Card Portal',
                 breadcrumb: ['Documents', 'Teachers ID Card'],
-                // Kept as a single centered card
-                content: `
-                    <div class="row justify-content-center">
-                        <div class="col-lg-6 col-md-8 mb-4">
-                            <div class="card metric-card clickable-card" 
-                                 style="cursor: pointer; animation-delay: 0s;" 
-                                 onclick="window.open('https://script.google.com/macros/s/AKfycbwxYK-F3EmAK8o6ufBNDDWu0SvhMwUmiIPsyPCYswxnXu9HEmkCDXZAS3G2RyCKyLqK/exec', '_blank')">
-                                <div class="card-body text-center">
-                                    <div class="generic-card-icon mx-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                        <i class="fas fa-id-card-alt"></i>
-                                    </div>
-                                    <div class="metric-value">Teachers ID Card Generation</div>
-                                    <div class="metric-label">Open Portal</div>
-                                    <div class="metric-change positive">Click to access the Generation Portal</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec')
             },
+
+            /* Prompt 3: Student ID Card - Iframe */
             '#student-id-card': {
                 title: 'Student ID Card Management',
                 breadcrumb: ['Documents', 'Student ID Card'],
-                // CORRECTED: Restructured to correctly use generateMetricCardsHtml with a linked object
-                content: generateMetricCardsHtml([
-                    { 
-                        icon: 'fas fa-id-card-alt', 
-                        label: 'Open Portal', 
-                        value: 'Student ID Card Generation', 
-                        change: 'Click to access the Generation Portal', 
-                        changeClass: 'positive', 
-                        color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                        link: 'https://script.google.com/macros/s/AKfycbwUG1CC-ulcp9aZX7Z1GFltBr29DNEfhqTqZq-9IbhYBwJI5OVizumRhaExMwkR2Q1xZA/exec' 
-                    }
-                ])
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec')
             },
+
+            /* Prompt 4: Escort Card - Iframe */
             '#escort-card': {
                 title: 'Escort Card Management',
                 breadcrumb: ['Documents', 'Escort Card'],
-                // CORRECTED: Restructured to correctly use generateMetricCardsHtml with a linked object
-                content: generateMetricCardsHtml([
-                    { 
-                        icon: 'fas fa-car-side', 
-                        label: 'Open Portal',   
-                        value: 'Escort Card Generation Portal', 
-                        change: 'Click to access the Generation Portal', 
-                        changeClass: 'positive', 
-                        color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                        link: 'https://script.google.com/macros/s/AKfycbzAtjXS7XuIkGdybsamrvMUGI1JSzZX6x7fxRMaNt0r0PCtl06uqRecIBo671s_NlI5iA/exec'
-                    }
-                ])
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec')
             },
-            '#salary-slip': {
-                title: 'Salary Slip Management',
-                breadcrumb: ['Documents', 'Salary Dashboard'],
-                // CORRECTED: Restructured to correctly use generateMetricCardsHtml with two linked objects
-                content: generateMetricCardsHtml([
-                    { 
-                        icon: 'fas fa-money-bill-wave', 
-                        label: 'Open Portal',   
-                        value: 'Generate Salary Slip', 
-                        change: 'Click to open the Google Script', 
-                        changeClass: 'positive', 
-                        color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        link: 'https://script.google.com/macros/s/AKfycbxa4YakeftK3_9N9Dl8febapfq_CzvXqjP7chMy66LREx2HENP8frYQMTpE4VTjdhnv/exec'
-                    },
-                    { 
-                        icon: 'fas fa-user-tie', 
-                        label: 'Open Portal', 
-                        value: 'Employee Master Upload', 
-                        change: 'Click to update employee data', 
-                        changeClass: 'warning', 
-                        color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                        link: 'https://script.google.com/macros/s/AKfycbwnt0eYRnCd-MzjGvak5tK_7Rd14CUxww-M0nTZV6RWWOzdDTcRgSYLkMeI7BYcKaP9/exec' 
-                    }
-                ])
+
+            /* Prompt 5: Salary Slip Sub-options */
+            '#generate-salary-slip': {
+                title: 'Generate Salary Slip',
+                breadcrumb: ['Documents', 'Salary Slip', 'Generate'],
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec')
             },
+            '#employee-master-upload': {
+                title: 'Employee Master Upload',
+                breadcrumb: ['Documents', 'Salary Slip', 'Master Upload'],
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec')
+            },
+
             '#report-card': {
                 title: 'Report Card Management',
                 breadcrumb: ['Documents', 'Report Card'],
@@ -1238,23 +667,14 @@
                     { icon: 'fas fa-tasks', label: 'Pending Upload', value: '2 Classes', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
                 ])
             },
+
+            /* Prompt 6: Offer Letter - Iframe */
             '#offer-letter': {
                 title: 'Offer Letter Management',
                 breadcrumb: ['Documents', 'Offer Letter'],
-                content: generateMetricCardsHtml([
-                   
-                    { 
-                        icon: 'fas fa-money-bill-wave', 
-                        label: 'Open Portal',   
-                        value: 'Make Offer', 
-                        change: 'Click to open the Google Script', 
-                        changeClass: 'positive', 
-                        color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        link: 'https://script.google.com/macros/s/AKfycbxiNkQBmplPBjXlh9tAtPOjPlEdi5dSPlKeeBaK3pFL1L8lUjEhGh6iefISaLjUx6_v/exec'
-                    }
-                    
-                ])
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec')
             },
+
             '#notice-automation': {
                 title: 'Notice Automation System',
                 breadcrumb: ['Automation', 'Notice Automation'],
@@ -1309,10 +729,9 @@
                 title: 'Class Work Management',
                 breadcrumb: ['Academic', 'Class Work'],
                 content: generateMetricCardsHtml([
-                    { icon: 'fas fa-clipboard-list', label: 'Today Posted', value: '15/20', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-check-circle', label: 'Completed', value: '90%', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-calendar-day', label: 'Next Deadline', value: 'Tomorrow', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-plus-square', label: 'Add New CW', value: 'Action', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
+                    { icon: 'fas fa-chalkboard-teacher', label: 'Class Work', value: 'Daily Logs', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+                    { icon: 'fas fa-book-reader', label: 'Review', value: 'Logs', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+                    { icon: 'fas fa-history', label: 'History', value: 'Archive', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
                 ])
             },
             '#home-work': {
@@ -1325,6 +744,14 @@
                     { icon: 'fas fa-plus', label: 'Assign HW', value: 'Action', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }
                 ])
             },
+
+            /* Prompt 7: Assignment Portal */
+            '#assignment-portal': {
+                title: 'Assignment Portal',
+                breadcrumb: ['Academic', 'Assignment Portal'],
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec')
+            },
+
             '#fees-collection': {
                 title: 'Fees Collection Portal',
                 breadcrumb: ['Finance', 'Fees Collection'],
@@ -1345,30 +772,17 @@
                     { icon: 'fas fa-plus-circle', label: 'Add Expense', value: 'Form', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
                 ])
             },
-            '#leave-application': {
-                title: 'Leave Management System',
-                breadcrumb: ['Leave Management'],
-                // CORRECTED: Restructured to correctly use generateMetricCardsHtml with two linked objects
-                content: generateMetricCardsHtml([
-                    { 
-                        icon: 'fas fa-chart-line', 
-                        label: 'Leave Management Dashboard', 
-                        value: 'Open Portal', 
-                        change: 'Review & Approve Applications', 
-                        changeClass: 'positive', 
-                        color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        link: 'https://script.google.com/macros/s/AKfycbzMb55uWLzBPVCM5eWu08BPczZjUnpltQZjZKLyseIsCXHgWyw7j01fzeEhnIdun6g-Fg/exec'
-                    },
-                    { 
-                        icon: 'fas fa-file-alt', 
-                        label: 'Check Leave Balance / Apply', 
-                        value: 'Open Form', 
-                        change: 'Apply for Leave', 
-                        changeClass: 'warning', 
-                        color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                        link: 'https://script.google.com/macros/s/AKfycbxrZKD7zMXMNFISAiYKTiu3IO3zF_mRtbzomPBlJn1jQvCWWhEhaThpNwbDlL-VdBzp/exec'
-                    },
-                ])
+
+            /* Prompt 8: Leave Management Sub-options */
+            '#leave-open-portal': {
+                title: 'Leave Application Portal',
+                breadcrumb: ['Leave Management', 'Open Portal'],
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec')
+            },
+            '#leave-balance': {
+                title: 'Leave Balance Checker',
+                breadcrumb: ['Leave Management', 'Balance'],
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec')
             }
         };
 
