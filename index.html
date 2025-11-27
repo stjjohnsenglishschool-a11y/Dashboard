@@ -403,8 +403,6 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- REMOVED: Page Header and Breadcrumbs to support full screen view -->
-            
             <!-- Dynamic Content Area -->
             <div id="dynamicContent">
                 <!-- Content will be loaded here dynamically -->
@@ -458,8 +456,8 @@
                     },
                     {
                         id: 'academic', name: 'Academic', icon: 'fas fa-book', submenu: [
-                            { name: 'Class Work', link: '#class-work' },
-                            { name: 'Home Work', link: '#home-work' },
+                            // REMOVED: Class Work
+                            { name: 'Assignment Dashboard', link: '#assignment-dashboard' }, // Renamed from Home Work
                             { name: 'Assignment Portal', link: '#assignment-portal' }
                         ]
                     },
@@ -482,8 +480,8 @@
                 modules: [
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
                     { id: 'attendance', name: 'Student Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
-                    { id: 'classwork', name: 'Class Work', icon: 'fas fa-book-open', link: '#class-work' },
-                    { id: 'homework', name: 'Home Work', icon: 'fas fa-home', link: '#home-work' },
+                    // REMOVED: Class Work
+                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' }, // Renamed from Home Work
                     { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' },
                     { id: 'leave', name: 'Leave Application', icon: 'fas fa-user-clock', link: '#leave-open-portal' }
                 ]
@@ -493,8 +491,8 @@
                 modules: [
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
                     { id: 'attendance', name: 'My Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
-                    { id: 'classwork', name: 'Class Work', icon: 'fas fa-book-open', link: '#class-work' },
-                    { id: 'homework', name: 'Home Work', icon: 'fas fa-home', link: '#home-work' },
+                    // REMOVED: Class Work
+                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' }, // Renamed from Home Work
                     { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' }
                 ]
             }
@@ -730,20 +728,10 @@
                     { icon: 'fas fa-users-cog', label: 'Total Staff', value: '26', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
                 ])
             },
-            '#class-work': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-chalkboard-teacher', label: 'Class Work', value: 'Daily Logs', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-book-reader', label: 'Review', value: 'Logs', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-history', label: 'History', value: 'Archive', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
-                ])
-            },
-            '#home-work': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-book-open', label: 'Pending Upload', value: '5 Classes', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-check-double', label: 'Reviewed', value: '85%', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-exclamation-circle', label: 'Overdue', value: '10', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-plus', label: 'Assign HW', value: 'Action', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }
-                ])
+            
+            // Renamed from Home Work to Assignment Dashboard
+            '#assignment-dashboard': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzeSXzBw8bbz_TA98wM3Z-UN4UjNN4TfAfWMd2OdyaKYxi3omTc8wGm8Q9soc_hqRXo/exec')
             },
 
             '#assignment-portal': {
