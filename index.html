@@ -240,15 +240,9 @@
         .submenu-link:hover { background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); color: #667eea; padding-left: 70px; }
         .submenu-link.active { background: var(--primary); color: white; font-weight: 600; padding-left: 70px; }
 
-        .main-content { margin-left: var(--sidebar-width); margin-top: var(--navbar-height); padding: 40px; min-height: calc(100vh - var(--navbar-height)); }
+        /* Modified: Reduced padding for full-screen feel */
+        .main-content { margin-left: var(--sidebar-width); margin-top: var(--navbar-height); padding: 20px; min-height: calc(100vh - var(--navbar-height)); }
         
-        .page-header { margin-bottom: 40px; animation: fadeInDown 0.6s ease; }
-        .page-header h2 { color: #1a1a2e; font-weight: 700; margin-bottom: 10px; font-size: 2.2rem; }
-        
-        .breadcrumb { background: transparent; padding: 0; margin: 0; }
-        .breadcrumb-item { font-size: 0.95rem; color: #6c757d; }
-        .breadcrumb-item.active { color: #667eea; font-weight: 600; }
-
         .metric-card { border: none; border-radius: 20px; box-shadow: var(--shadow-light); transition: all 0.4s ease; overflow: hidden; background: white; position: relative; animation: fadeInUp 0.6s ease; }
         .metric-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-medium); }
         .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--primary); }
@@ -265,10 +259,10 @@
         .metric-change.negative { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); color: #721c24; }
         .metric-change.warning { background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); color: #856404; }
 
-        /* Generic Iframe Container */
+        /* Modified: Generic Iframe Container Height increased for full screen */
         .iframe-container {
             width: 100%;
-            height: calc(100vh - 180px); /* Adjust based on navbar/header */
+            height: calc(100vh - 110px); /* Adjusted: 100vh - (Navbar 70px + Padding 40px) */
             border-radius: var(--border-radius);
             overflow: hidden;
             box-shadow: var(--shadow-medium);
@@ -313,11 +307,10 @@
             .school-brand span { display: none; }
             .sidebar { transform: translateX(-100%); }
             .sidebar.show { transform: translateX(0); }
-            .main-content { margin-left: 0; padding: 20px; }
+            .main-content { margin-left: 0; padding: 15px; }
             .user-profile span { display: none; }
             .metric-card { margin-bottom: 20px; }
-            .page-header h2 { font-size: 1.8rem; }
-            .iframe-container { height: 80vh; }
+            .iframe-container { height: 85vh; }
         }
     </style>
 </head>
@@ -410,15 +403,8 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <div class="page-header">
-                <h2 id="pageTitle">Dashboard</h2>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb" id="breadcrumbNav">
-                        <li class="breadcrumb-item active">Home</li>
-                    </ol>
-                </nav>
-            </div>
-
+            <!-- REMOVED: Page Header and Breadcrumbs to support full screen view -->
+            
             <!-- Dynamic Content Area -->
             <div id="dynamicContent">
                 <!-- Content will be loaded here dynamically -->
@@ -451,7 +437,6 @@
                             { name: 'Teachers ID Card', link: '#teacher-id-card' },
                             { name: 'Student ID Card', link: '#student-id-card' },
                             { name: 'Escort Card', link: '#escort-card' },
-                            /* Prompt 5: Salary Slip split into 2 */
                             { name: 'Generate Salary Slip', link: '#generate-salary-slip' },
                             { name: 'Employee Master Upload', link: '#employee-master-upload' },
                             { name: 'Report Card', link: '#report-card' },
@@ -475,7 +460,6 @@
                         id: 'academic', name: 'Academic', icon: 'fas fa-book', submenu: [
                             { name: 'Class Work', link: '#class-work' },
                             { name: 'Home Work', link: '#home-work' },
-                            /* Prompt 7: Added Assignment Portal */
                             { name: 'Assignment Portal', link: '#assignment-portal' }
                         ]
                     },
@@ -485,7 +469,6 @@
                             { name: 'Expense Module', link: '#expense-module' }
                         ]
                     },
-                    /* Prompt 8: Leave Management split into 2 */
                     { 
                         id: 'leave', name: 'Leave Management', icon: 'fas fa-user-clock', submenu: [
                             { name: 'Open Portal', link: '#leave-open-portal' },
@@ -517,9 +500,12 @@
             }
         };
 
+        // --- DASHBOARD METRICS WITH API PLACEHOLDERS ---
         const defaultDashboardMetrics = [
-            { iconClass: 'students', icon: 'fas fa-user-graduate', label: 'Total Students', value: '1,250', change: '+12% since last month', changeClass: 'positive', color: '#667eea' },
-            { iconClass: 'teachers', icon: 'fas fa-chalkboard-teacher', label: 'Total Teachers', value: '75', change: '+5 new joiners', changeClass: 'positive', color: '#f093fb' },
+            // Prompt 1: Student Data Placeholder
+            { iconClass: 'students', icon: 'fas fa-user-graduate', label: 'Total Students', value: 'Loading...', change: 'last month', changeClass: 'positive', color: '#667eea' },
+            // Prompt 2: Teacher Data Placeholder
+            { iconClass: 'teachers', icon: 'fas fa-chalkboard-teacher', label: 'Total Teachers', value: 'Loading...', change: 'This Month', changeClass: 'positive', color: '#f093fb' },
             { iconClass: 'attendance', icon: 'fas fa-chart-bar', label: 'Avg. Attendance', value: '88.5%', change: '-1.5% from last week', changeClass: 'negative', color: '#4facfe' },
             { iconClass: 'fees', icon: 'fas fa-money-check-alt', label: 'Fees Collected', value: '₹5.2L', change: 'Target: ₹7L', changeClass: 'warning', color: '#fa709a' }
         ];
@@ -532,6 +518,58 @@
             { date: '2025-10-23', activity: 'Fees payment received from Roll No 101', user: 'Admin', status: 'success' },
         ];
         
+        // --- FUNCTION: FETCH LIVE DATA FROM GOOGLE SHEETS ---
+        async function fetchLiveDashboardData() {
+            const apiKey = 'AIzaSyBHM6jOSzcJzo4KEJF4KOfxrwU5Nyo_d1k';
+            
+            // Configuration for Students
+            const studentSheetId = '1-d7X5tsQzzXsj9krElPKDpFtg49jJ4cbeqrje97Ng34';
+            const studentRange = "'Student Data'!D2";
+            
+            // Configuration for Teachers
+            const teacherSheetId = '1yl7eKzpmnKJpALxWzvRQJVSHuH0ND7mSZOMeIK1NMJI';
+            const teacherRange = "'User'!D2";
+
+            const studentUrl = `https://sheets.googleapis.com/v4/spreadsheets/${studentSheetId}/values/${studentRange}?key=${apiKey}`;
+            const teacherUrl = `https://sheets.googleapis.com/v4/spreadsheets/${teacherSheetId}/values/${teacherRange}?key=${apiKey}`;
+
+            try {
+                // Fetch Student Data
+                const studentResponse = await fetch(studentUrl);
+                const studentData = await studentResponse.json();
+                
+                // Fetch Teacher Data
+                const teacherResponse = await fetch(teacherUrl);
+                const teacherData = await teacherResponse.json();
+
+                // Update Metrics Array
+                if (studentData.values && studentData.values.length > 0) {
+                    defaultDashboardMetrics[0].value = studentData.values[0][0]; // Update Student Count
+                } else {
+                    defaultDashboardMetrics[0].value = "N/A";
+                }
+
+                if (teacherData.values && teacherData.values.length > 0) {
+                    defaultDashboardMetrics[1].value = teacherData.values[0][0]; // Update Teacher Count
+                } else {
+                    defaultDashboardMetrics[1].value = "N/A";
+                }
+
+                // Refresh the Dashboard View if currently displayed (Active link check)
+                const dashboardLink = document.querySelector('a[href="#dashboard"]');
+                if (dashboardLink && dashboardLink.classList.contains('active')) {
+                    // Re-render the content
+                    const content = generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities);
+                    document.getElementById('dynamicContent').innerHTML = content;
+                }
+
+            } catch (error) {
+                console.error("Error fetching sheet data:", error);
+                defaultDashboardMetrics[0].value = "Error";
+                defaultDashboardMetrics[1].value = "Error";
+            }
+        }
+
         // Helper function to generate generic cards HTML
         function generateMetricCardsHtml(cardsData) {
             let html = '<div class="row">';
@@ -612,54 +650,34 @@
         // Content templates
         const contentTemplates = {
             '#dashboard': {
-                title: 'Dashboard Overview',
-                breadcrumb: ['Home', 'Dashboard'],
-                content: generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities)
+                // Use a getter to ensure latest data is used when rendered
+                get content() { return generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities) }
             },
             
-            /* Prompt 1: Warning Letter - Iframe */
             '#warning-letter-dash': {
-                title: 'Warning Letter Portal',
-                breadcrumb: ['Documents', 'Warning Letter'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec')
             },
 
-            /* Prompt 2: Teachers ID Card - Iframe */
             '#teacher-id-card': {
-                title: 'Teachers ID Card Portal',
-                breadcrumb: ['Documents', 'Teachers ID Card'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec')
             },
 
-            /* Prompt 3: Student ID Card - Iframe */
             '#student-id-card': {
-                title: 'Student ID Card Management',
-                breadcrumb: ['Documents', 'Student ID Card'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec')
             },
 
-            /* Prompt 4: Escort Card - Iframe */
             '#escort-card': {
-                title: 'Escort Card Management',
-                breadcrumb: ['Documents', 'Escort Card'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec')
             },
 
-            /* Prompt 5: Salary Slip Sub-options */
             '#generate-salary-slip': {
-                title: 'Generate Salary Slip',
-                breadcrumb: ['Documents', 'Salary Slip', 'Generate'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec')
             },
             '#employee-master-upload': {
-                title: 'Employee Master Upload',
-                breadcrumb: ['Documents', 'Salary Slip', 'Master Upload'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec')
             },
 
             '#report-card': {
-                title: 'Report Card Management',
-                breadcrumb: ['Documents', 'Report Card'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-star', label: 'Top Performer', value: 'Class 10', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
                     { icon: 'fas fa-chart-line', label: 'Average Score', value: '78%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
@@ -668,16 +686,11 @@
                 ])
             },
 
-            /* Prompt 6: Offer Letter - Iframe */
             '#offer-letter': {
-                title: 'Offer Letter Management',
-                breadcrumb: ['Documents', 'Offer Letter'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec')
             },
 
             '#notice-automation': {
-                title: 'Notice Automation System',
-                breadcrumb: ['Automation', 'Notice Automation'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-bullhorn', label: 'Total Notices', value: '120', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
                     { icon: 'fas fa-envelope', label: 'Via Email', value: '80', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
@@ -686,8 +699,6 @@
                 ])
             },
             '#whatsapp-link': {
-                title: 'WhatsApp Form Link Generator',
-                breadcrumb: ['Automation', 'WhatsApp Form Link'],
                 content: generateMetricCardsHtml([
                     { icon: 'fab fa-whatsapp', label: 'Total Link Uses', value: '350', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
                     { icon: 'fas fa-link', label: 'Active Forms', value: '5', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
@@ -696,8 +707,6 @@
                 ])
             },
             '#student-attendance': {
-                title: 'Student Attendance Tracker',
-                breadcrumb: ['Attendance', 'Student Attendance'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-user-check', label: 'Today Present', value: '1,150', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
                     { icon: 'fas fa-user-times', label: 'Today Absent', value: '100', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
@@ -706,8 +715,6 @@
                 ])
             },
             '#teacher-attendance': {
-                title: 'Teacher Attendance Management',
-                breadcrumb: ['Attendance', 'Teacher Attendance'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-user-check', label: 'Today Present', value: '70', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
                     { icon: 'fas fa-user-clock', label: 'On Leave', value: '5', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
@@ -716,8 +723,6 @@
                 ])
             },
             '#staff-attendance': {
-                title: 'Staff Attendance System',
-                breadcrumb: ['Attendance', 'Staff Attendance'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-user-check', label: 'Today Present', value: '25', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
                     { icon: 'fas fa-user-times', label: 'On Leave', value: '1', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
@@ -726,8 +731,6 @@
                 ])
             },
             '#class-work': {
-                title: 'Class Work Management',
-                breadcrumb: ['Academic', 'Class Work'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-chalkboard-teacher', label: 'Class Work', value: 'Daily Logs', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
                     { icon: 'fas fa-book-reader', label: 'Review', value: 'Logs', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
@@ -735,8 +738,6 @@
                 ])
             },
             '#home-work': {
-                title: 'Home Work Assignment',
-                breadcrumb: ['Academic', 'Home Work'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-book-open', label: 'Pending Upload', value: '5 Classes', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
                     { icon: 'fas fa-check-double', label: 'Reviewed', value: '85%', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
@@ -745,16 +746,11 @@
                 ])
             },
 
-            /* Prompt 7: Assignment Portal */
             '#assignment-portal': {
-                title: 'Assignment Portal',
-                breadcrumb: ['Academic', 'Assignment Portal'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec')
             },
 
             '#fees-collection': {
-                title: 'Fees Collection Portal',
-                breadcrumb: ['Finance', 'Fees Collection'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-rupee-sign', label: 'Today Collection', value: '₹50,000', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
                     { icon: 'fas fa-chart-pie', label: 'Monthly Target', value: '90%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
@@ -763,8 +759,6 @@
                 ])
             },
             '#expense-module': {
-                title: 'Expense Tracking Module',
-                breadcrumb: ['Finance', 'Expense Module'],
                 content: generateMetricCardsHtml([
                     { icon: 'fas fa-wallet', label: 'This Month', value: '₹3.2L', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
                     { icon: 'fas fa-clipboard-check', label: 'Approved', value: '8/10', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
@@ -773,15 +767,10 @@
                 ])
             },
 
-            /* Prompt 8: Leave Management Sub-options */
             '#leave-open-portal': {
-                title: 'Leave Application Portal',
-                breadcrumb: ['Leave Management', 'Open Portal'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec')
             },
             '#leave-balance': {
-                title: 'Leave Balance Checker',
-                breadcrumb: ['Leave Management', 'Balance'],
                 content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec')
             }
         };
@@ -813,6 +802,10 @@
         function initializeDashboard() {
             loadSidebarMenu();
             updateNavbar();
+            
+            // --- TRIGGER DATA FETCH ---
+            fetchLiveDashboardData();
+
             // Find the dashboard link and load its content on initial login
             const dashboardLink = document.querySelector('.menu-link[href="#dashboard"]');
             if (dashboardLink) {
@@ -915,29 +908,26 @@
             const hash = element.getAttribute('href');
             const template = contentTemplates[hash];
             const dynamicContent = document.getElementById('dynamicContent');
-            const pageTitle = document.getElementById('pageTitle');
-            const breadcrumbNav = document.getElementById('breadcrumbNav');
 
             if (template) {
-                // 1. Update Title and Breadcrumb
-                pageTitle.textContent = template.title;
-                let breadcrumbHtml = '';
-                template.breadcrumb.forEach((item, index) => {
-                    const isActive = index === template.breadcrumb.length - 1;
-                    breadcrumbHtml += `<li class="breadcrumb-item ${isActive ? 'active' : ''}">${item}</li>`;
-                });
-                breadcrumbNav.innerHTML = breadcrumbHtml;
-
-                // 2. Load Content
+                // Load Content
                 // Show a placeholder while content is loading
-                dynamicContent.innerHTML = '<div class="row"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
-                setTimeout(() => {
-                    dynamicContent.innerHTML = template.content;
-                }, 300);
+                // Note: For dashboard, we use a getter or simple content string. 
+                // If it's the dashboard, we want to ensure it uses the latest data.
+                if (hash === '#dashboard') {
+                    dynamicContent.innerHTML = '<div class="row"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
+                    setTimeout(() => {
+                        // Use the getter from template which references the updated global array
+                        dynamicContent.innerHTML = template.content; 
+                    }, 300);
+                } else {
+                     dynamicContent.innerHTML = '<div class="row"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
+                     setTimeout(() => {
+                        dynamicContent.innerHTML = template.content;
+                    }, 300);
+                }
                 
             } else {
-                pageTitle.textContent = 'Content Not Found';
-                breadcrumbNav.innerHTML = '<li class="breadcrumb-item">Error</li><li class="breadcrumb-item active">404</li>';
                 dynamicContent.innerHTML = '<div class="alert alert-danger">Content for this module is not yet implemented or not found.</div>';
             }
 
