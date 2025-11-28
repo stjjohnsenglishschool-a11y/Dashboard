@@ -739,12 +739,7 @@
             },
 
             '#fees-collection': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-rupee-sign', label: 'Today Collection', value: '₹50,000', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-chart-pie', label: 'Monthly Target', value: '90%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-user-slash', label: 'Defaulters', value: '150', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-receipt', label: 'Generate Receipt', value: 'Action', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
-                ])
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwqZo5CtfzwFhADKet3Z3Vr6XIyPby4CHWlApfcbDnXVPXZ0jVMJYfJg9YtZtV3yTI5sg/exec')
             },
             '#expense-module': {
                 content: generateMetricCardsHtml([
