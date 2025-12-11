@@ -16,6 +16,7 @@
             --dark: #1a1a2e;
             --light: #f8f9fa;
             --sidebar-width: 280px;
+            --sidebar-collapsed-width: 80px; /* New variable for collapsed state */
             --navbar-height: 70px;
             --border-radius: 15px;
             --transition-speed: 0.3s;
@@ -393,6 +394,7 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3); 
         }
 
+        /* ========== SIDEBAR UPDATES FOR TOGGLE ========== */
         .sidebar {
             position: fixed; 
             top: var(--navbar-height); 
@@ -402,9 +404,71 @@
             background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
             box-shadow: 5px 0 30px rgba(0,0,0,0.1); 
             overflow-y: auto; 
+            overflow-x: hidden; /* Prevent horizontal scroll when collapsing */
             transition: all var(--transition-speed); 
             z-index: 1020;
             transform-style: preserve-3d;
+        }
+
+        /* New: Desktop Toggle Button Style */
+        .sidebar-toggle-desktop {
+            position: absolute;
+            top: 20px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1050;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-toggle-desktop:hover {
+            transform: scale(1.1);
+        }
+
+        /* New: Collapsed State Styles */
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar.collapsed .sidebar-toggle-desktop i {
+            transform: rotate(180deg);
+        }
+
+        .sidebar.collapsed .user-role-badge {
+            padding: 15px 5px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar.collapsed .user-role-badge h6,
+        .sidebar.collapsed .user-role-badge h5 {
+            display: none;
+        }
+
+        .sidebar.collapsed .menu-link span,
+        .sidebar.collapsed .menu-arrow {
+            display: none;
+        }
+
+        .sidebar.collapsed .menu-link {
+            justify-content: center;
+            padding: 15px 10px;
+        }
+
+        .sidebar.collapsed .menu-link i {
+            margin-right: 0;
+            font-size: 1.4rem;
+        }
+
+        .sidebar.collapsed .submenu {
+            display: none !important; /* Force hide submenus when collapsed */
         }
         
         .sidebar::-webkit-scrollbar { 
@@ -475,6 +539,7 @@
             border-radius: 12px; 
             font-weight: 500; 
             transform-style: preserve-3d;
+            white-space: nowrap; /* Prevent text wrapping */
         }
         
         .menu-link:hover { 
@@ -483,12 +548,22 @@
             transform: translateX(5px) translateZ(10px); 
             box-shadow: var(--shadow-3d);
         }
+
+        /* Fix hover effect in collapsed mode */
+        .sidebar.collapsed .menu-link:hover {
+            transform: none;
+        }
         
         .menu-link.active { 
             background: var(--primary); 
             color: white; 
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3); 
             transform: translateX(5px) translateZ(15px); 
+        }
+        
+        /* Fix active effect in collapsed mode */
+        .sidebar.collapsed .menu-link.active {
+            transform: none;
         }
         
         .menu-link i { 
@@ -555,6 +630,12 @@
             padding: 20px; 
             min-height: calc(100vh - var(--navbar-height)); 
             transform-style: preserve-3d;
+            transition: margin-left var(--transition-speed); /* Smooth transition for content */
+        }
+
+        /* New: Main content adjustment when sidebar is collapsed */
+        .main-content.sidebar-collapsed {
+            margin-left: var(--sidebar-collapsed-width);
         }
         
         .metric-card { 
@@ -772,12 +853,15 @@
         /* ========== RESPONSIVE STYLES ========== */
         @media (max-width: 768px) {
             .mobile-toggle { display: block; }
+            .sidebar-toggle-desktop { display: none; } /* Hide desktop toggle on mobile */
             .login-container { flex-direction: column; }
             .login-left, .login-right { padding: 50px 30px; }
             .school-brand span { display: none; }
             .sidebar { transform: translateX(-100%); }
             .sidebar.show { transform: translateX(0); }
             .main-content { margin-left: 0; padding: 15px; }
+            /* Reset main content margin when collapsed style exists but on mobile */
+            .main-content.sidebar-collapsed { margin-left: 0; }
             .user-profile span { display: none; }
             .metric-card { margin-bottom: 20px; }
             .iframe-container { height: 85vh; }
@@ -862,6 +946,11 @@
 
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
+            <!-- New: Desktop Toggle Arrow -->
+            <div class="sidebar-toggle-desktop" onclick="toggleSidebarDesktop()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+
             <div class="user-role-badge">
                 <h6>Logged in as</h6>
                 <h5 id="userRoleDisplay">Administrator</h5>
@@ -1332,8 +1421,17 @@
             document.getElementById('sidebar').classList.toggle('show');
         }
 
+        // NEW: Toggle Sidebar visibility for desktop
+        function toggleSidebarDesktop() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('sidebar-collapsed');
+        }
+
         // Toggle Submenu visibility
         function toggleSubmenu(element) {
+            // Prevent toggling submenu if sidebar is collapsed
+            if(document.getElementById('sidebar').classList.contains('collapsed')) return;
+
             const submenu = element.nextElementSibling;
             const arrow = element.querySelector('.menu-arrow');
             
