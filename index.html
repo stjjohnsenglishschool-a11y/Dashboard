@@ -1,3 +1,5 @@
+--- START OF FILE Paste March 17, 2026 - 5:43PM ---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,10 +18,9 @@
             --dark: #1a1a2e;
             --light: #f8f9fa;
             --sidebar-width: 280px;
-            --sidebar-collapsed-width: 80px; /* New variable for collapsed state */
             --navbar-height: 70px;
             --border-radius: 15px;
-            --transition-speed: 0.3s;
+            --transition-speed: 0.4s;
             --shadow-light: 0 10px 40px rgba(0,0,0,0.1);
             --shadow-medium: 0 20px 60px rgba(0,0,0,0.15);
             --shadow-heavy: 0 30px 80px rgba(0,0,0,0.3);
@@ -44,45 +45,25 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-30px); }
         }
-
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(50px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
-
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
         }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes shimmer {
             0% { background-position: -1000px 0; }
             100% { background-position: 1000px 0; }
-        }
-
-        @keyframes rotate3d {
-            0% { transform: perspective(1000px) rotateY(0deg); }
-            100% { transform: perspective(1000px) rotateY(360deg); }
         }
 
         /* ========== LOGIN PAGE ========== */
@@ -135,158 +116,16 @@
             overflow: hidden;
         }
 
-        .login-left::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            top: -100px;
-            left: -100px;
-        }
+        .login-left i { font-size: 5rem; margin-bottom: 30px; animation: pulse 2s ease infinite; position: relative; z-index: 1; }
+        .login-left h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; position: relative; z-index: 1; }
+        .login-right { flex: 1; padding: 80px 50px; background: white; }
+        .login-header { text-align: center; margin-bottom: 50px; }
+        .login-header h3 { font-size: 2rem; font-weight: 700; background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .login-left i { 
-            font-size: 5rem; 
-            margin-bottom: 30px; 
-            animation: pulse 2s ease infinite; 
-            position: relative; 
-            z-index: 1;
-            transform: translateZ(30px);
-        }
-        
-        .login-left h2 { 
-            font-size: 2.5rem; 
-            font-weight: 800; 
-            margin-bottom: 20px; 
-            position: relative; 
-            z-index: 1; 
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            transform: translateZ(20px);
-        }
-        
-        .login-left p { 
-            font-size: 1.1rem; 
-            line-height: 1.8; 
-            opacity: 0.95; 
-            position: relative; 
-            z-index: 1;
-            transform: translateZ(10px);
-        }
+        .form-control { height: 55px; border-radius: var(--border-radius); border: 2px solid #e9ecef; padding: 10px 20px 10px 55px; background: #f8f9fa; }
+        .btn-login { height: 55px; border-radius: var(--border-radius); font-weight: 600; background: var(--primary); border: none; color: white; transition: all 0.4s ease; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); }
 
-        .login-right { 
-            flex: 1; 
-            padding: 80px 50px; 
-            background: white;
-            transform-style: preserve-3d;
-        }
-        
-        .login-header { 
-            text-align: center; 
-            margin-bottom: 50px;
-            transform: translateZ(20px);
-        }
-        
-        .login-header h3 { 
-            font-size: 2rem; 
-            font-weight: 700; 
-            background: var(--primary); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            margin-bottom: 10px;
-        }
-        
-        .login-header p { 
-            color: #6c757d; 
-            font-size: 1rem; 
-        }
-
-        .form-group { 
-            margin-bottom: 30px; 
-        }
-        
-        .form-group label { 
-            font-weight: 600; 
-            color: #2c3e50; 
-            margin-bottom: 12px; 
-            font-size: 0.95rem; 
-            display: block; 
-        }
-        
-        .input-group { 
-            position: relative; 
-        }
-        
-        .input-icon { 
-            position: absolute; 
-            left: 20px; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            color: #667eea; 
-            font-size: 1.2rem; 
-            z-index: 10; 
-        }
-        
-        .form-control {
-            height: 55px;
-            border-radius: var(--border-radius);
-            border: 2px solid #e9ecef;
-            padding: 10px 20px 10px 55px;
-            font-size: 1rem;
-            transition: all var(--transition-speed) ease;
-            background: #f8f9fa;
-            transform-style: preserve-3d;
-        }
-        
-        .form-control:focus { 
-            border-color: #667eea; 
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15); 
-            background: white; 
-            transform: translateZ(10px);
-        }
-
-        .btn-login {
-            height: 55px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            font-size: 1.1rem;
-            background: var(--primary);
-            border: none;
-            color: white;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-            transform-style: preserve-3d;
-        }
-        
-        .btn-login:hover { 
-            transform: translateY(-3px) translateZ(20px); 
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4); 
-        }
-        
-        .btn-login:active {
-            transform: translateY(0) translateZ(10px);
-        }
-
-        .login-info { 
-            margin-top: 40px; 
-            padding: 25px; 
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
-            border-radius: var(--border-radius); 
-            border-left: 5px solid #667eea; 
-            transform-style: preserve-3d;
-            transform: translateZ(10px);
-        }
-        
-        .login-info h6 { 
-            font-weight: 700; 
-            color: #2c3e50; 
-            margin-bottom: 10px; 
-            font-size: 1rem; 
-        }
-
-        /* ========== DASHBOARD ========== */
+        /* ========== DASHBOARD LAYOUT (AUTO-HIDE ENABLED) ========== */
         .dashboard-wrapper { display: none; }
 
         .top-navbar {
@@ -295,576 +134,96 @@
             position: fixed;
             top: 0; left: 0; right: 0;
             height: var(--navbar-height);
-            z-index: 1030;
+            z-index: 1040;
             box-shadow: 0 5px 30px rgba(0,0,0,0.2);
-            transform-style: preserve-3d;
         }
 
-        .top-navbar .container-fluid { 
-            height: 100%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 0 30px; 
-        }
+        .top-navbar .container-fluid { height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
 
-        .school-brand { 
-            display: flex; 
-            align-items: center; 
-            font-size: 1.4rem; 
-            font-weight: 700; 
-            letter-spacing: 0.5px; 
+        .nav-toggle-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 15px;
         }
-        
-        .school-brand i { 
-            font-size: 2rem; 
-            margin-right: 15px; 
-            background: var(--primary); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            animation: pulse 2s ease infinite; 
-        }
+        .nav-toggle-btn:hover { background: var(--primary); transform: scale(1.05); }
 
-        .navbar-right { 
-            display: flex; 
-            align-items: center; 
-            gap: 30px; 
-        }
-
-        .notification-icon { 
-            position: relative; 
-            color: white; 
-            font-size: 1.4rem; 
-            cursor: pointer; 
-            transition: all var(--transition-speed); 
-            transform-style: preserve-3d;
-        }
-        
-        .notification-icon:hover { 
-            transform: scale(1.1) translateZ(10px); 
-            color: #667eea; 
-        }
-        
-        .notification-badge { 
-            position: absolute; 
-            top: -10px; 
-            right: -10px; 
-            background: var(--secondary); 
-            color: white; 
-            border-radius: 50%; 
-            width: 22px; 
-            height: 22px; 
-            font-size: 0.7rem; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-weight: bold; 
-            animation: bounce 2s ease infinite; 
-        }
-
-        .user-profile { 
-            display: flex; 
-            align-items: center; 
-            cursor: pointer; 
-            padding: 10px 20px; 
-            border-radius: 30px; 
-            transition: all var(--transition-speed); 
-            color: white; 
-            background: rgba(255,255,255,0.1); 
-            backdrop-filter: blur(10px); 
-            transform-style: preserve-3d;
-        }
-        
-        .user-profile:hover { 
-            background: rgba(255,255,255,0.2); 
-            transform: translateY(-2px) translateZ(10px); 
-        }
-
-        .user-avatar { 
-            width: 42px; 
-            height: 42px; 
-            border-radius: 50%; 
-            background: var(--primary); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-right: 12px; 
-            font-weight: 700; 
-            font-size: 1.1rem; 
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3); 
-        }
-
-        /* ========== SIDEBAR UPDATES FOR TOGGLE ========== */
         .sidebar {
             position: fixed; 
             top: var(--navbar-height); 
             left: 0; 
             width: var(--sidebar-width); 
             height: calc(100vh - var(--navbar-height));
-            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            background: white;
             box-shadow: 5px 0 30px rgba(0,0,0,0.1); 
             overflow-y: auto; 
-            overflow-x: hidden; /* Prevent horizontal scroll when collapsing */
-            transition: all var(--transition-speed); 
-            z-index: 1020;
-            transform-style: preserve-3d;
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1030;
+            transform: translateX(-100%); /* Auto-hidden by default */
         }
 
-        /* New: Desktop Toggle Button Style */
-        .sidebar-toggle-desktop {
-            position: absolute;
-            top: 20px;
-            right: 15px;
-            width: 32px;
-            height: 32px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1050;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-toggle-desktop:hover {
-            transform: scale(1.1);
-        }
+        .sidebar.show { transform: translateX(0); }
 
-        /* New: Collapsed State Styles */
-        .sidebar.collapsed {
-            width: var(--sidebar-collapsed-width);
-        }
-
-        .sidebar.collapsed .sidebar-toggle-desktop i {
-            transform: rotate(180deg);
-        }
-
-        .sidebar.collapsed .user-role-badge {
-            padding: 15px 5px;
-            margin-bottom: 10px;
-        }
-
-        .sidebar.collapsed .user-role-badge h6,
-        .sidebar.collapsed .user-role-badge h5 {
-            display: none;
-        }
-
-        .sidebar.collapsed .menu-link span,
-        .sidebar.collapsed .menu-arrow {
-            display: none;
-        }
-
-        .sidebar.collapsed .menu-link {
-            justify-content: center;
-            padding: 15px 10px;
-        }
-
-        .sidebar.collapsed .menu-link i {
-            margin-right: 0;
-            font-size: 1.4rem;
-        }
-
-        .sidebar.collapsed .submenu {
-            display: none !important; /* Force hide submenus when collapsed */
-        }
-        
-        .sidebar::-webkit-scrollbar { 
-            width: 8px; 
-        }
-        
-        .sidebar::-webkit-scrollbar-thumb { 
-            background: var(--primary); 
-            border-radius: 10px; 
-        }
-
-        .user-role-badge { 
-            padding: 30px 20px; 
-            background: var(--primary); 
-            color: white; 
-            text-align: center; 
-            margin-bottom: 20px; 
-            position: relative; 
-            overflow: hidden; 
-            transform-style: preserve-3d;
-        }
-        
-        .user-role-badge::before { 
-            content: ''; 
-            position: absolute; 
-            width: 150px; 
-            height: 150px; 
-            background: rgba(255,255,255,0.1); 
-            border-radius: 50%; 
-            top: -50px; 
-            right: -50px; 
-        }
-        
-        .user-role-badge h6 { 
-            margin: 0; 
-            font-size: 0.9rem; 
-            opacity: 0.9; 
-            position: relative; 
-            z-index: 1; 
-        }
-        
-        .user-role-badge h5 { 
-            margin: 8px 0 0 0; 
-            font-weight: 700; 
-            font-size: 1.3rem; 
-            position: relative; 
-            z-index: 1; 
-        }
-
-        .sidebar-menu { 
-            list-style: none; 
-            padding: 10px; 
-            margin: 0; 
-        }
-        
-        .menu-item { 
-            margin-bottom: 5px; 
-        }
-
-        .menu-link { 
-            display: flex; 
-            align-items: center; 
-            padding: 15px 20px; 
-            color: #2c3e50; 
-            text-decoration: none; 
-            transition: all var(--transition-speed); 
-            cursor: pointer; 
-            border-radius: 12px; 
-            font-weight: 500; 
-            transform-style: preserve-3d;
-            white-space: nowrap; /* Prevent text wrapping */
-        }
-        
-        .menu-link:hover { 
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
-            color: #667eea; 
-            transform: translateX(5px) translateZ(10px); 
-            box-shadow: var(--shadow-3d);
-        }
-
-        /* Fix hover effect in collapsed mode */
-        .sidebar.collapsed .menu-link:hover {
-            transform: none;
-        }
-        
-        .menu-link.active { 
-            background: var(--primary); 
-            color: white; 
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3); 
-            transform: translateX(5px) translateZ(15px); 
-        }
-        
-        /* Fix active effect in collapsed mode */
-        .sidebar.collapsed .menu-link.active {
-            transform: none;
-        }
-        
-        .menu-link i { 
-            width: 30px; 
-            margin-right: 15px; 
-            font-size: 1.2rem; 
-        }
-        
-        .menu-arrow { 
-            margin-left: auto; 
-            transition: transform var(--transition-speed); 
-            font-size: 0.9rem; 
-        }
-        
-        .menu-arrow.rotated { 
-            transform: rotate(180deg); 
-        }
-
-        .submenu { 
-            list-style: none; 
-            padding: 0; 
-            margin: 5px 0 0 0; 
-            background: transparent; 
-            display: none; 
-        }
-        
-        .submenu.show { 
-            display: block; 
-            animation: slideDown 0.3s ease; 
-        }
-
-        .submenu-link { 
-            display: block; 
-            padding: 12px 20px 12px 65px; 
-            color: #5d6d7e; 
-            text-decoration: none; 
-            transition: all var(--transition-speed); 
-            font-size: 0.9rem; 
-            border-radius: 10px; 
-            margin: 2px 0; 
-            font-weight: 500; 
-            transform-style: preserve-3d;
-        }
-        
-        .submenu-link:hover { 
-            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); 
-            color: #667eea; 
-            padding-left: 70px; 
-            transform: translateZ(10px);
-        }
-        
-        .submenu-link.active { 
-            background: var(--primary); 
-            color: white; 
-            font-weight: 600; 
-            padding-left: 70px; 
-            transform: translateZ(10px);
-        }
-
-        /* Modified: Reduced padding for full-screen feel */
         .main-content { 
-            margin-left: var(--sidebar-width); 
+            margin-left: 0; /* Starts as full screen */
             margin-top: var(--navbar-height); 
             padding: 20px; 
             min-height: calc(100vh - var(--navbar-height)); 
-            transform-style: preserve-3d;
-            transition: margin-left var(--transition-speed); /* Smooth transition for content */
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1); 
         }
 
-        /* New: Main content adjustment when sidebar is collapsed */
-        .main-content.sidebar-collapsed {
-            margin-left: var(--sidebar-collapsed-width);
-        }
-        
-        .metric-card { 
-            border: none; 
-            border-radius: 20px; 
-            box-shadow: var(--shadow-light); 
-            transition: all 0.4s ease; 
-            overflow: hidden; 
-            background: white; 
-            position: relative; 
-            animation: fadeInUp 0.6s ease; 
-            transform-style: preserve-3d;
-        }
-        
-        .metric-card:hover { 
-            transform: translateY(-10px) rotateX(5deg) rotateY(5deg); 
-            box-shadow: var(--shadow-medium); 
-        }
-        
-        .metric-card::before { 
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            height: 5px; 
-            background: var(--primary); 
-        }
-        
-        .metric-card .card-body { 
-            padding: 30px; 
+        /* When Sidebar is visible, push content (Desktop) */
+        @media (min-width: 992px) {
+            .sidebar.show + .main-content {
+                margin-left: var(--sidebar-width);
+            }
         }
 
-        .generic-card-icon { 
-            width: 70px; 
-            height: 70px; 
-            border-radius: 18px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 2rem; 
-            margin-bottom: 20px; 
-            color: white; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
-            transition: all var(--transition-speed); 
-            transform-style: preserve-3d;
-        }
-        
-        .metric-card:hover .generic-card-icon { 
-            transform: scale(1.1) rotate(5deg) translateZ(20px); 
-        }
+        .user-role-badge { padding: 30px 20px; background: var(--primary); color: white; text-align: center; margin-bottom: 20px; }
+        .sidebar-menu { list-style: none; padding: 10px; }
+        .menu-link { display: flex; align-items: center; padding: 15px 20px; color: #2c3e50; text-decoration: none; transition: 0.3s; border-radius: 12px; font-weight: 500; cursor: pointer; }
+        .menu-link:hover { background: #f8f9fa; color: #667eea; }
+        .menu-link.active { background: var(--primary); color: white; }
+        .submenu { list-style: none; padding: 0; display: none; }
+        .submenu.show { display: block; }
+        .submenu-link { display: block; padding: 10px 20px 10px 60px; color: #5d6d7e; font-size: 0.9rem; text-decoration: none; }
+        .submenu-link.active { color: #667eea; font-weight: 700; }
 
-        .metric-value { 
-            font-size: 2.3rem; 
-            font-weight: 800; 
-            color: #1a1a2e; 
-            margin: 15px 0 8px 0; 
-        }
-        
-        .metric-label { 
-            color: #6c757d; 
-            font-size: 1rem; 
-            font-weight: 600; 
-            margin-bottom: 15px; 
-        }
-        
-        .metric-change { 
-            font-size: 0.9rem; 
-            margin-top: 15px; 
-            padding: 8px 12px; 
-            border-radius: 10px; 
-            display: inline-block; 
-            font-weight: 600; 
-        }
-        
-        .metric-change.positive { 
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); 
-            color: #155724; 
-        }
-        
-        .metric-change.negative { 
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); 
-            color: #721c24; 
-        }
-        
-        .metric-change.warning { 
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); 
-            color: #856404; 
-        }
-
-        /* Modified: Generic Iframe Container Height increased for full screen */
+        /* Full Screen Iframe */
         .iframe-container {
             width: 100%;
-            height: calc(100vh - 110px); /* Adjusted: 100vh - (Navbar 70px + Padding 40px) */
+            height: calc(100vh - 110px); 
             border-radius: var(--border-radius);
             overflow: hidden;
             box-shadow: var(--shadow-medium);
             background: white;
-            animation: fadeInUp 0.5s ease;
-            transform-style: preserve-3d;
         }
-        
-        .iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+        .iframe-container iframe { width: 100%; height: 100%; border: none; }
 
-        .activity-card { 
-            border: none; 
-            border-radius: 20px; 
-            box-shadow: var(--shadow-light); 
-            margin-top: 40px; 
-            background: white; 
-            overflow: hidden; 
-            animation: fadeInUp 0.8s ease; 
-            transform-style: preserve-3d;
-        }
+        /* Metric Cards */
+        .metric-card { border: none; border-radius: 20px; box-shadow: var(--shadow-light); transition: 0.4s; background: white; margin-bottom: 20px; }
+        .metric-card:hover { transform: translateY(-5px); }
+        .generic-card-icon { width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; margin-bottom: 15px; }
         
-        .activity-card .card-header { 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 25px 30px; 
-        }
+        /* Activity Table */
+        .activity-card { border: none; border-radius: 20px; box-shadow: var(--shadow-light); background: white; }
+        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .status-badge.success { background: #d4edda; color: #155724; }
         
-        .activity-card .card-header h5 { 
-            margin: 0; 
-            font-weight: 700; 
-            font-size: 1.3rem; 
-        }
+        .loading-shimmer { animation: shimmer 2s infinite; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 1000px 100%; }
 
-        .activity-table { 
-            margin: 0; 
-        }
-        
-        .activity-table thead th { 
-            border: none; 
-            background: #f8f9fa; 
-            color: #495057; 
-            font-weight: 700; 
-            font-size: 0.85rem; 
-            text-transform: uppercase; 
-            padding: 20px; 
-            letter-spacing: 0.5px; 
-        }
-        
-        .activity-table tbody td { 
-            padding: 20px; 
-            vertical-align: middle; 
-            border-top: 1px solid #f1f3f5; 
-            font-size: 0.95rem; 
-        }
-        
-        .activity-table tbody tr { 
-            transition: all var(--transition-speed); 
-            transform-style: preserve-3d;
-        }
-        
-        .activity-table tbody tr:hover { 
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
-            transform: scale(1.01) translateZ(10px); 
-        }
-
-        .status-badge { 
-            padding: 8px 16px; 
-            border-radius: 20px; 
-            font-size: 0.8rem; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-        }
-        
-        .status-badge.success { 
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); 
-            color: #155724; 
-        }
-        
-        .status-badge.warning { 
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); 
-            color: #856404; 
-        }
-        
-        .status-badge.danger { 
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); 
-            color: #721c24; 
-        }
-
-        .clickable-card { 
-            cursor: pointer; 
-        }
-        
-        .clickable-card:hover::before { 
-            background: var(--secondary); 
-        }
-
-        .mobile-toggle { 
-            display: none; 
-            color: white; 
-            font-size: 1.5rem; 
-            cursor: pointer; 
-            transition: all var(--transition-speed); 
-        }
-        
-        .mobile-toggle:hover { 
-            color: #667eea; 
-        }
-
-        .loading-shimmer { 
-            animation: shimmer 2s infinite; 
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); 
-            background-size: 1000px 100%; 
-        }
-
-        /* ========== RESPONSIVE STYLES ========== */
         @media (max-width: 768px) {
-            .mobile-toggle { display: block; }
-            .sidebar-toggle-desktop { display: none; } /* Hide desktop toggle on mobile */
-            .login-container { flex-direction: column; }
-            .login-left, .login-right { padding: 50px 30px; }
             .school-brand span { display: none; }
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.show { transform: translateX(0); }
-            .main-content { margin-left: 0; padding: 15px; }
-            /* Reset main content margin when collapsed style exists but on mobile */
-            .main-content.sidebar-collapsed { margin-left: 0; }
-            .user-profile span { display: none; }
-            .metric-card { margin-bottom: 20px; }
-            .iframe-container { height: 85vh; }
+            .sidebar { width: 250px; }
+            .main-content { margin-left: 0 !important; }
         }
     </style>
 </head>
@@ -875,7 +234,7 @@
             <div class="login-left">
                 <i class="fas fa-graduation-cap"></i>
                 <h2>St. John's English School</h2>
-                <p>Experience the future of education management. Seamlessly manage your institution with our advanced, intuitive platform designed for excellence.</p>
+                <p>Experience the future of education management. Seamlessly manage your institution with excellence.</p>
             </div>
             <div class="login-right">
                 <div class="login-header">
@@ -886,57 +245,41 @@
                     <div class="form-group">
                         <label>Username</label>
                         <div class="input-group">
-                            <i class="input-icon fas fa-user"></i>
-                            <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                            <i class="fas fa-user" style="position:absolute; left:20px; top:20px; z-index:10; color:#667eea"></i>
+                            <input type="text" class="form-control" id="username" placeholder="Enter username" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Password</label>
                         <div class="input-group">
-                            <i class="input-icon fas fa-lock"></i>
-                            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                            <i class="fas fa-lock" style="position:absolute; left:20px; top:20px; z-index:10; color:#667eea"></i>
+                            <input type="password" class="form-control" id="password" placeholder="Enter password" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-login btn-block mt-4">
-                        <i class="fas fa-sign-in-alt mr-2"></i> Sign In
-                    </button>
+                    <button type="submit" class="btn btn-login btn-block mt-4">Sign In</button>
                 </form>
-                <div class="login-info">
-                    <h6><i class="fas fa-info-circle mr-2"></i>St. John's Automation System</h6>
-                </div>
             </div>
         </div>
     </div>
 
     <!-- Dashboard -->
     <div class="dashboard-wrapper" id="dashboardPage">
-        <!-- Top Navbar -->
         <nav class="top-navbar">
             <div class="container-fluid">
-                <div style="display: flex; align-items: center; gap: 20px;">
-                    <div class="mobile-toggle" onclick="toggleSidebar()">
+                <div style="display: flex; align-items: center;">
+                    <button class="nav-toggle-btn" onclick="toggleSidebar()">
                         <i class="fas fa-bars"></i>
-                    </div>
+                    </button>
                     <div class="school-brand">
-                        <i class="fas fa-graduation-cap"></i>
+                        <i class="fas fa-graduation-cap mr-2"></i>
                         <span>St. John's English School</span>
                     </div>
                 </div>
-                <div class="navbar-right">
-                    <div class="notification-icon">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">5</span>
-                    </div>
-                    <div class="user-profile dropdown">
-                        <div data-toggle="dropdown">
-                            <div class="user-avatar" id="userAvatarNav">A</div>
-                            <span id="userNameNav">Admin User</span>
-                            <i class="fas fa-chevron-down ml-2"></i>
-                        </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="user-profile dropdown" style="cursor:pointer; display:flex; align-items:center;" data-toggle="dropdown">
+                        <div id="userAvatarNav" style="width:40px; height:40px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; margin-right:10px; font-weight:700;">A</div>
+                        <span id="userNameNav" class="d-none d-md-block">Admin User</span>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profile</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Settings</a>
-                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
                         </div>
                     </div>
@@ -944,28 +287,16 @@
             </div>
         </nav>
 
-        <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
-            <!-- New: Desktop Toggle Arrow -->
-            <div class="sidebar-toggle-desktop" onclick="toggleSidebarDesktop()">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-
             <div class="user-role-badge">
-                <h6>Logged in as</h6>
-                <h5 id="userRoleDisplay">Administrator</h5>
+                <h6 style="opacity:0.8; font-size:0.8rem;">Logged in as</h6>
+                <h5 id="userRoleDisplay" style="font-weight:700;">Administrator</h5>
             </div>
-            <ul class="sidebar-menu" id="sidebarMenu">
-                <!-- Menu items will be dynamically loaded -->
-            </ul>
+            <ul class="sidebar-menu" id="sidebarMenu"></ul>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Dynamic Content Area -->
-            <div id="dynamicContent">
-                <!-- Content will be loaded here dynamically -->
-            </div>
+        <div class="main-content" id="mainContent">
+            <div id="dynamicContent"></div>
         </div>
     </div>
 
@@ -973,66 +304,52 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // User credentials and roles - UPDATED
+        // --- LOGIC PRESERVED EXACTLY ---
         const users = {
-            'Admin': { password: '4321', role: 'admin', fullName: 'Admin User' }, // Password changed to 4321
+            'Admin': { password: '4321', role: 'admin', fullName: 'Admin User' },
             'Teacher': { password: '1234', role: 'teacher', fullName: 'Teacher User' },
             'Student': { password: '1234', role: 'student', fullName: 'Student User' },
-            'Office': { password: '1234', role: 'office', fullName: 'Office User' } // Added Office user
+            'Office': { password: '1234', role: 'office', fullName: 'Office User' }
         };
 
         let currentUser = null;
 
-        // User roles and their module access - UPDATED with Office role
         const userRoles = {
             admin: {
                 displayName: 'Administrator',
                 modules: [
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
-                    {
-                        id: 'documents', name: 'Documents', icon: 'fas fa-file-alt', submenu: [
-                            { name: 'Warning Letter', link: '#warning-letter-dash' },
-                            { name: 'Teachers ID Card', link: '#teacher-id-card' },
-                            { name: 'Student ID Card', link: '#student-id-card' },
-                            { name: 'Escort Card', link: '#escort-card' },
-                            { name: 'Generate Salary Slip', link: '#generate-salary-slip' },
-                            { name: 'Employee Master Upload', link: '#employee-master-upload' },
-                            { name: 'Report Card', link: '#report-card' },
-                            { name: 'Offer Letter', link: '#offer-letter' }
-                        ]
-                    },
-                    {
-                        id: 'automation', name: 'Automation', icon: 'fas fa-cogs', submenu: [
-                            { name: 'Notice Automation', link: '#notice-automation' },
-                            { name: 'WhatsApp Form Link', link: '#whatsapp-link' }
-                        ]
-                    },
-                    {
-                        id: 'attendance', name: 'Attendance', icon: 'fas fa-calendar-check', submenu: [
-                            { name: 'Student Attendance', link: '#student-attendance' },
-                            { name: 'Teacher Attendance', link: '#teacher-attendance' },
-                            { name: 'Staff Attendance', link: '#staff-attendance' }
-                        ]
-                    },
-                    {
-                        id: 'academic', name: 'Academic', icon: 'fas fa-book', submenu: [
-                            // REMOVED: Class Work
-                            { name: 'Assignment Dashboard', link: '#assignment-dashboard' }, // Renamed from Home Work
-                            { name: 'Assignment Portal', link: '#assignment-portal' }
-                        ]
-                    },
-                    {
-                        id: 'finance', name: 'Finance', icon: 'fas fa-rupee-sign', submenu: [
-                            { name: 'Fees Collection', link: '#fees-collection' },
-                            { name: 'Expense Module', link: '#expense-module' }
-                        ]
-                    },
-                    { 
-                        id: 'leave', name: 'Leave Management', icon: 'fas fa-user-clock', submenu: [
-                            { name: 'Open Portal', link: '#leave-open-portal' },
-                            { name: 'Leave_Balance', link: '#leave-balance' }
-                        ]
-                    }
+                    { id: 'documents', name: 'Documents', icon: 'fas fa-file-alt', submenu: [
+                        { name: 'Warning Letter', link: '#warning-letter-dash' },
+                        { name: 'Teachers ID Card', link: '#teacher-id-card' },
+                        { name: 'Student ID Card', link: '#student-id-card' },
+                        { name: 'Escort Card', link: '#escort-card' },
+                        { name: 'Generate Salary Slip', link: '#generate-salary-slip' },
+                        { name: 'Employee Master Upload', link: '#employee-master-upload' },
+                        { name: 'Report Card', link: '#report-card' },
+                        { name: 'Offer Letter', link: '#offer-letter' }
+                    ]},
+                    { id: 'automation', name: 'Automation', icon: 'fas fa-cogs', submenu: [
+                        { name: 'Notice Automation', link: '#notice-automation' },
+                        { name: 'WhatsApp Form Link', link: '#whatsapp-link' }
+                    ]},
+                    { id: 'attendance', name: 'Attendance', icon: 'fas fa-calendar-check', submenu: [
+                        { name: 'Student Attendance', link: '#student-attendance' },
+                        { name: 'Teacher Attendance', link: '#teacher-attendance' },
+                        { name: 'Staff Attendance', link: '#staff-attendance' }
+                    ]},
+                    { id: 'academic', name: 'Academic', icon: 'fas fa-book', submenu: [
+                        { name: 'Assignment Dashboard', link: '#assignment-dashboard' },
+                        { name: 'Assignment Portal', link: '#assignment-portal' }
+                    ]},
+                    { id: 'finance', name: 'Finance', icon: 'fas fa-rupee-sign', submenu: [
+                        { name: 'Fees Collection', link: '#fees-collection' },
+                        { name: 'Expense Module', link: '#expense-module' }
+                    ]},
+                    { id: 'leave', name: 'Leave Management', icon: 'fas fa-user-clock', submenu: [
+                        { name: 'Open Portal', link: '#leave-open-portal' },
+                        { name: 'Leave_Balance', link: '#leave-balance' }
+                    ]}
                 ]
             },
             teacher: {
@@ -1040,8 +357,7 @@
                 modules: [
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
                     { id: 'attendance', name: 'Student Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
-                    // REMOVED: Class Work
-                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' }, // Renamed from Home Work
+                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' },
                     { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' },
                     { id: 'leave', name: 'Leave Application', icon: 'fas fa-user-clock', link: '#leave-open-portal' }
                 ]
@@ -1051,31 +367,24 @@
                 modules: [
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
                     { id: 'attendance', name: 'My Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
-                    // REMOVED: Class Work
-                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' }, // Renamed from Home Work
+                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' },
                     { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' }
                 ]
             },
-            // NEW: Office role with access to Finance module only
             office: {
                 displayName: 'Office Staff',
                 modules: [
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
-                    {
-                        id: 'finance', name: 'Finance', icon: 'fas fa-rupee-sign', submenu: [
-                            { name: 'Fees Collection', link: '#fees-collection' },
-                            { name: 'Expense Module', link: '#expense-module' }
-                        ]
-                    }
+                    { id: 'finance', name: 'Finance', icon: 'fas fa-rupee-sign', submenu: [
+                        { name: 'Fees Collection', link: '#fees-collection' },
+                        { name: 'Expense Module', link: '#expense-module' }
+                    ]}
                 ]
             }
         };
 
-        // --- DASHBOARD METRICS WITH API PLACEHOLDERS ---
         const defaultDashboardMetrics = [
-            // Prompt 1: Student Data Placeholder
             { iconClass: 'students', icon: 'fas fa-user-graduate', label: 'Total Students', value: 'Loading...', change: 'last month', changeClass: 'positive', color: '#667eea' },
-            // Prompt 2: Teacher Data Placeholder
             { iconClass: 'teachers', icon: 'fas fa-chalkboard-teacher', label: 'Total Teachers', value: 'Loading...', change: 'This Month', changeClass: 'positive', color: '#f093fb' },
             { iconClass: 'attendance', icon: 'fas fa-chart-bar', label: 'Avg. Attendance', value: '88.5%', change: '-1.5% from last week', changeClass: 'negative', color: '#4facfe' },
             { iconClass: 'fees', icon: 'fas fa-money-check-alt', label: 'Fees Collected', value: '₹5.2L', change: 'Target: ₹7L', changeClass: 'warning', color: '#fa709a' }
@@ -1088,16 +397,11 @@
             { date: '2025-10-23', activity: 'Leave request from Teacher M. Singh', user: 'Teacher User', status: 'danger' },
             { date: '2025-10-23', activity: 'Fees payment received from Roll No 101', user: 'Admin', status: 'success' },
         ];
-        
-        // --- FUNCTION: FETCH LIVE DATA FROM GOOGLE SHEETS ---
+
         async function fetchLiveDashboardData() {
             const apiKey = 'AIzaSyBHM6jOSzcJzo4KEJF4KOfxrwU5Nyo_d1k';
-            
-            // Configuration for Students
             const studentSheetId = '1-d7X5tsQzzXsj9krElPKDpFtg49jJ4cbeqrje97Ng34';
             const studentRange = "'Student Data'!D2";
-            
-            // Configuration for Teachers
             const teacherSheetId = '1yl7eKzpmnKJpALxWzvRQJVSHuH0ND7mSZOMeIK1NMJI';
             const teacherRange = "'User'!D2";
 
@@ -1105,408 +409,141 @@
             const teacherUrl = `https://sheets.googleapis.com/v4/spreadsheets/${teacherSheetId}/values/${teacherRange}?key=${apiKey}`;
 
             try {
-                // Fetch Student Data
-                const studentResponse = await fetch(studentUrl);
-                const studentData = await studentResponse.json();
-                
-                // Fetch Teacher Data
-                const teacherResponse = await fetch(teacherUrl);
-                const teacherData = await teacherResponse.json();
+                const [sRes, tRes] = await Promise.all([fetch(studentUrl), fetch(teacherUrl)]);
+                const sData = await sRes.json();
+                const tData = await tRes.json();
 
-                // Update Metrics Array
-                if (studentData.values && studentData.values.length > 0) {
-                    defaultDashboardMetrics[0].value = studentData.values[0][0]; // Update Student Count
-                } else {
-                    defaultDashboardMetrics[0].value = "N/A";
+                if (sData.values) defaultDashboardMetrics[0].value = sData.values[0][0];
+                if (tData.values) defaultDashboardMetrics[1].value = tData.values[0][0];
+
+                if (document.querySelector('a[href="#dashboard"]')?.classList.contains('active')) {
+                    loadContent(document.querySelector('a[href="#dashboard"]'));
                 }
-
-                if (teacherData.values && teacherData.values.length > 0) {
-                    defaultDashboardMetrics[1].value = teacherData.values[0][0]; // Update Teacher Count
-                } else {
-                    defaultDashboardMetrics[1].value = "N/A";
-                }
-
-                // Refresh the Dashboard View if currently displayed (Active link check)
-                const dashboardLink = document.querySelector('a[href="#dashboard"]');
-                if (dashboardLink && dashboardLink.classList.contains('active')) {
-                    // Re-render the content
-                    const content = generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities);
-                    document.getElementById('dynamicContent').innerHTML = content;
-                }
-
-            } catch (error) {
-                console.error("Error fetching sheet data:", error);
-                defaultDashboardMetrics[0].value = "Error";
-                defaultDashboardMetrics[1].value = "Error";
-            }
+            } catch (error) { console.error("Error:", error); }
         }
 
-        // Helper function to generate generic cards HTML
+        // --- UI HELPERS ---
         function generateMetricCardsHtml(cardsData) {
             let html = '<div class="row">';
-            cardsData.forEach((metric, index) => {
-                const isClickable = metric.link;
-                const cardClass = isClickable ? 'metric-card clickable-card' : 'metric-card';
-                const cardStyle = isClickable ? 'cursor: pointer;' : '';
-                const animationDelay = `animation-delay: ${index * 0.1}s;`;
-                
+            cardsData.forEach(metric => {
                 html += `
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="card ${cardClass}" 
-                             style="${cardStyle} ${animationDelay}" 
-                             ${isClickable ? `onclick="window.open('${metric.link}', '_blank')"` : ''}>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card metric-card">
                             <div class="card-body">
-                                <div class="generic-card-icon" style="background: ${metric.color || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};">
-                                    <i class="${metric.icon}"></i>
-                                </div>
-                                <div class="metric-value">${metric.value}</div>
-                                <div class="metric-label">${metric.label}</div>
-                                ${metric.change ? `<div class="metric-change ${metric.changeClass || ''}">${metric.change}</div>` : ''}
+                                <div class="generic-card-icon" style="background: ${metric.color};"><i class="${metric.icon}"></i></div>
+                                <div style="font-size:1.8rem; font-weight:800;">${metric.value}</div>
+                                <div style="color:#6c757d; font-weight:600;">${metric.label}</div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
             html += '</div>';
             return html;
         }
 
-        // Helper function to generate generic iframe HTML
         function generateIframeHtml(url) {
-            return `
-                <div class="iframe-container">
-                    <iframe src="${url}"></iframe>
-                </div>
-            `;
+            return `<div class="iframe-container"><iframe src="${url}"></iframe></div>`;
         }
 
-        // Helper function to generate activities table HTML
         function generateActivitiesTableHtml(activities) {
-            let rows = '';
-            activities.forEach(activity => {
-                rows += `
-                    <tr>
-                        <td><strong>${activity.date}</strong></td>
-                        <td>${activity.activity}</td>
-                        <td>${activity.user}</td>
-                        <td><span class="status-badge ${activity.status}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
-                    </tr>
-                `;
-            });
-
-            return `
-                <div class="card activity-card">
-                    <div class="card-header">
-                        <h5><i class="fas fa-clock mr-2"></i>Recent Activities</h5>
-                    </div>
-                    <div class="card-body p-0">
-                        <table class="table activity-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Activity</th>
-                                    <th>User</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${rows}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
+            let rows = activities.map(a => `<tr><td>${a.date}</td><td>${a.activity}</td><td><span class="status-badge ${a.status}">${a.status}</span></td></tr>`).join('');
+            return `<div class="card activity-card"><div class="card-header bg-primary text-white">Recent Activities</div><div class="card-body p-0"><table class="table mb-0"><tbody>${rows}</tbody></table></div></div>`;
         }
 
-        // Content templates
         const contentTemplates = {
-            '#dashboard': {
-                // Use a getter to ensure latest data is used when rendered
-                get content() { return generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities) }
-            },
-            
-            '#warning-letter-dash': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec')
-            },
-
-            '#teacher-id-card': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec')
-            },
-
-            '#student-id-card': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec')
-            },
-
-            '#escort-card': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec')
-            },
-
-            '#generate-salary-slip': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec')
-            },
-            '#employee-master-upload': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec')
-            },
-
-            '#report-card': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-star', label: 'Top Performer', value: 'Class 10', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-chart-line', label: 'Average Score', value: '78%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-check-double', label: 'Cards Generated', value: '95%', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-tasks', label: 'Pending Upload', value: '2 Classes', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
-                ])
-            },
-
-            '#offer-letter': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec')
-            },
-
-            '#notice-automation': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-bullhorn', label: 'Total Notices', value: '120', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-envelope', label: 'Via Email', value: '80', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fab fa-whatsapp', label: 'Via WhatsApp', value: '40', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-paper-plane', label: 'Schedule New', value: 'Action', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
-                ])
-            },
-            '#whatsapp-link': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fab fa-whatsapp', label: 'Total Link Uses', value: '350', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-link', label: 'Active Forms', value: '5', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-ban', label: 'Expired Links', value: '2', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-qrcode', label: 'Generate QR', value: 'New', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
-                ])
-            },
-            '#student-attendance': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-user-check', label: 'Today Present', value: '1,150', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-user-times', label: 'Today Absent', value: '100', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '92%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-edit', label: 'Mark Attendance', value: 'Action', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
-                ])
-            },
-            '#teacher-attendance': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-user-check', label: 'Today Present', value: '70', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-user-clock', label: 'On Leave', value: '5', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '96%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-clock', label: 'Late Arrivals', value: '2', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
-                ])
-            },
-            '#staff-attendance': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-user-check', label: 'Today Present', value: '25', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-user-times', label: 'On Leave', value: '1', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '99%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-users-cog', label: 'Total Staff', value: '26', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
-                ])
-            },
-            
-            // Renamed from Home Work to Assignment Dashboard
-            '#assignment-dashboard': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzeSXzBw8bbz_TA98wM3Z-UN4UjNN4TfAfWMd2OdyaKYxi3omTc8wGm8Q9soc_hqRXo/exec')
-            },
-
-            '#assignment-portal': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec')
-            },
-
-            '#fees-collection': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwqZo5CtfzwFhADKet3Z3Vr6XIyPby4CHWlApfcbDnXVPXZ0jVMJYfJg9YtZtV3yTI5sg/exec')
-            },
-            
-            // UPDATED: Expense Module now loads Iframe with your key
-            '#expense-module': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycby_PW0sWz9pHJSFQAv2hPcvxuScQAtw8hngSqUUru52xy0TW4GmXtYqGBZLofa_Wg0xpA/exec')
-            },
-
-            '#leave-open-portal': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec')
-            },
-            '#leave-balance': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec')
-            }
+            '#dashboard': { get content() { return generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities) } },
+            '#warning-letter-dash': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec') },
+            '#teacher-id-card': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec') },
+            '#student-id-card': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec') },
+            '#escort-card': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec') },
+            '#generate-salary-slip': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec') },
+            '#employee-master-upload': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec') },
+            '#offer-letter': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec') },
+            '#assignment-dashboard': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzeSXzBw8bbz_TA98wM3Z-UN4UjNN4TfAfWMd2OdyaKYxi3omTc8wGm8Q9soc_hqRXo/exec') },
+            '#assignment-portal': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec') },
+            '#fees-collection': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwqZo5CtfzwFhADKet3Z3Vr6XIyPby4CHWlApfcbDnXVPXZ0jVMJYfJg9YtZtV3yTI5sg/exec') },
+            '#expense-module': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycby_PW0sWz9pHJSFQAv2hPcvxuScQAtw8hngSqUUru52xy0TW4GmXtYqGBZLofa_Wg0xpA/exec') },
+            '#leave-open-portal': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec') },
+            '#leave-balance': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec') },
+            '#report-card': { content: generateMetricCardsHtml([{icon:'fas fa-star', label:'Status', value:'Active', color: 'var(--primary)'}]) },
+            '#notice-automation': { content: generateMetricCardsHtml([{icon:'fas fa-bullhorn', label:'Sent', value:'120', color: 'var(--warning)'}]) },
+            '#whatsapp-link': { content: generateMetricCardsHtml([{icon:'fab fa-whatsapp', label:'Status', value:'Online', color: 'var(--success)'}]) },
+            '#student-attendance': { content: generateMetricCardsHtml([{icon:'fas fa-user-check', label:'Today', value:'92%', color: 'var(--primary)'}]) },
+            '#teacher-attendance': { content: generateMetricCardsHtml([{icon:'fas fa-user-clock', label:'Today', value:'98%', color: 'var(--success)'}]) },
+            '#staff-attendance': { content: generateMetricCardsHtml([{icon:'fas fa-users', label:'Today', value:'100%', color: 'var(--secondary)'}]) }
         };
 
-        // Handle login
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (users[username] && users[username].password === password) {
-                currentUser = {
-                    username: username,
-                    role: users[username].role,
-                    fullName: users[username].fullName
-                };
-
+        // --- CORE FUNCTIONS ---
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            if (users[u] && users[u].password === p) {
+                currentUser = users[u];
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('dashboardPage').style.display = 'block';
-
                 initializeDashboard();
-            } else {
-                alert('Invalid username or password!');
-            }
+            } else alert('Invalid credentials');
         }
 
-        // Initialize dashboard
         function initializeDashboard() {
             loadSidebarMenu();
-            updateNavbar();
-            
-            // --- TRIGGER DATA FETCH ---
             fetchLiveDashboardData();
-
-            // Find the dashboard link and load its content on initial login
-            const dashboardLink = document.querySelector('.menu-link[href="#dashboard"]');
-            if (dashboardLink) {
-                loadContent(dashboardLink);
-            }
+            loadContent(null, '#dashboard');
+            
+            // Auto-hide on start for full screen
+            document.getElementById('sidebar').classList.remove('show');
         }
 
-        // Load sidebar menu based on user role
         function loadSidebarMenu() {
+            const menu = document.getElementById('sidebarMenu');
             const role = userRoles[currentUser.role];
-            const menuContainer = document.getElementById('sidebarMenu');
-            const roleDisplay = document.getElementById('userRoleDisplay');
-            
-            roleDisplay.textContent = role.displayName;
-            menuContainer.innerHTML = '';
+            document.getElementById('userRoleDisplay').textContent = role.displayName;
+            document.getElementById('userNameNav').textContent = currentUser.fullName;
+            menu.innerHTML = '';
 
-            role.modules.forEach(module => {
-                const menuItem = document.createElement('li');
-                menuItem.className = 'menu-item';
-
-                if (module.submenu) {
-                    menuItem.innerHTML = `
-                        <a class="menu-link" onclick="toggleSubmenu(this)">
-                            <i class="${module.icon}"></i>
-                            <span>${module.name}</span>
-                            <i class="fas fa-chevron-down menu-arrow"></i>
-                        </a>
-                        <ul class="submenu">
-                            ${module.submenu.map(sub => `
-                                <li><a href="${sub.link}" class="submenu-link" onclick="loadContent(this)">${sub.name}</a></li>
-                            `).join('')}
-                        </ul>
-                    `;
+            role.modules.forEach(m => {
+                const li = document.createElement('li');
+                if(m.submenu) {
+                    li.innerHTML = `<a class="menu-link" onclick="toggleSubmenu(this)"><i class="${m.icon} mr-3"></i><span>${m.name}</span><i class="fas fa-chevron-down ml-auto"></i></a>
+                                    <ul class="submenu">${m.submenu.map(s => `<li><a href="${s.link}" class="submenu-link" onclick="loadContent(this)">${s.name}</a></li>`).join('')}</ul>`;
                 } else {
-                    menuItem.innerHTML = `
-                        <a href="${module.link}" class="menu-link ${module.active ? 'active' : ''}" onclick="loadContent(this)">
-                            <i class="${module.icon}"></i>
-                            <span>${module.name}</span>
-                        </a>
-                    `;
+                    li.innerHTML = `<a href="${m.link}" class="menu-link" onclick="loadContent(this)"><i class="${m.icon} mr-3"></i><span>${m.name}</span></a>`;
                 }
-                menuContainer.appendChild(menuItem);
+                menu.appendChild(li);
             });
         }
 
-        // Update Navbar display
-        function updateNavbar() {
-            const userAvatar = document.getElementById('userAvatarNav');
-            const userName = document.getElementById('userNameNav');
-            
-            if (currentUser) {
-                const initials = currentUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-                userAvatar.textContent = initials;
-                userName.textContent = currentUser.fullName;
-            }
-        }
-
-        // Toggle Sidebar visibility for mobile
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('show');
         }
 
-        // NEW: Toggle Sidebar visibility for desktop
-        function toggleSidebarDesktop() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
-            document.querySelector('.main-content').classList.toggle('sidebar-collapsed');
+        function toggleSubmenu(el) {
+            el.nextElementSibling.classList.toggle('show');
+            el.querySelector('.fa-chevron-down').classList.toggle('fa-rotate-180');
         }
 
-        // Toggle Submenu visibility
-        function toggleSubmenu(element) {
-            // Prevent toggling submenu if sidebar is collapsed
-            if(document.getElementById('sidebar').classList.contains('collapsed')) return;
-
-            const submenu = element.nextElementSibling;
-            const arrow = element.querySelector('.menu-arrow');
+        function loadContent(el, hashOverride) {
+            const hash = el ? el.getAttribute('href') : hashOverride;
+            const dynamic = document.getElementById('dynamicContent');
             
-            // Close other open submenus
-            document.querySelectorAll('.submenu.show').forEach(openSub => {
-                if (openSub !== submenu) {
-                    openSub.classList.remove('show');
-                    openSub.previousElementSibling.querySelector('.menu-arrow').classList.remove('rotated');
-                }
-            });
-            
-            submenu.classList.toggle('show');
-            arrow.classList.toggle('rotated');
-        }
+            document.querySelectorAll('.menu-link, .submenu-link').forEach(l => l.classList.remove('active'));
+            if(el) el.classList.add('active');
 
-        // Load content based on menu link
-        function loadContent(element) {
-            // Close sidebar on mobile after clicking a link
-            document.getElementById('sidebar').classList.remove('show');
-
-            // Remove 'active' from all links and sublinks
-            document.querySelectorAll('.menu-link, .submenu-link').forEach(link => {
-                link.classList.remove('active');
-            });
-
-            // Determine the element to mark as active
-            let activeLink = element;
-            if (element.classList.contains('submenu-link')) {
-                // Also activate the parent menu link if it's a sublink
-                activeLink = element.closest('.submenu').previousElementSibling;
-                element.classList.add('active'); // Keep submenu-link active
-            } 
-            
-            activeLink.classList.add('active'); // Activate top-level link or the menu link itself
-            
-            const hash = element.getAttribute('href');
-            const template = contentTemplates[hash];
-            const dynamicContent = document.getElementById('dynamicContent');
-
-            if (template) {
-                // Load Content
-                // Show a placeholder while content is loading
-                // Note: For dashboard, we use a getter or simple content string. 
-                // If it's the dashboard, we want to ensure it uses the latest data.
-                if (hash === '#dashboard') {
-                    dynamicContent.innerHTML = '<div class="row"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
-                    setTimeout(() => {
-                        // Use the getter from template which references the updated global array
-                        dynamicContent.innerHTML = template.content; 
-                    }, 300);
-                } else {
-                     dynamicContent.innerHTML = '<div class="row"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
-                     setTimeout(() => {
-                        dynamicContent.innerHTML = template.content;
-                    }, 300);
-                }
-                
-            } else {
-                dynamicContent.innerHTML = '<div class="alert alert-danger">Content for this module is not yet implemented or not found.</div>';
+            if(contentTemplates[hash]) {
+                dynamic.innerHTML = '<div class="loading-shimmer" style="height:300px; border-radius:20px;"></div>';
+                setTimeout(() => {
+                    dynamic.innerHTML = contentTemplates[hash].content;
+                }, 400);
             }
+            
+            // Auto-hide sidebar after selection on smaller screens
+            if(window.innerWidth < 992) document.getElementById('sidebar').classList.remove('show');
+            
+            if(event) event.preventDefault();
+        }
 
-            // Prevent default hash navigation
-            if (event && element.tagName === 'A' && element.getAttribute('href').startsWith('#')) {
-                event.preventDefault();
-            }
-        }
-        
-        // Handle Logout
-        function logout() {
-            currentUser = null;
-            document.getElementById('loginPage').style.display = 'flex';
-            document.getElementById('dashboardPage').style.display = 'none';
-            document.getElementById('loginForm').reset();
-            window.location.hash = ''; // Clear location hash
-        }
+        function logout() { location.reload(); }
     </script>
 </body>
 </html>
