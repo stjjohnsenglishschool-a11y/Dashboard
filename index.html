@@ -1,5 +1,3 @@
---- START OF FILE Paste March 17, 2026 - 5:43PM ---
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +16,7 @@
             --dark: #1a1a2e;
             --light: #f8f9fa;
             --sidebar-width: 280px;
-            --sidebar-collapsed-width: 0px; /* Changed to 0px for true Auto-Hide */
+            --sidebar-collapsed-width: 0px; 
             --navbar-height: 70px;
             --border-radius: 15px;
             --transition-speed: 0.3s;
@@ -297,7 +295,7 @@
             position: fixed;
             top: 0; left: 0; right: 0;
             height: var(--navbar-height);
-            z-index: 1030;
+            z-index: 1040;
             box-shadow: 0 5px 30px rgba(0,0,0,0.2);
             transform-style: preserve-3d;
         }
@@ -396,7 +394,7 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3); 
         }
 
-        /* ========== SIDEBAR UPDATES FOR TOGGLE ========== */
+        /* ========== SIDEBAR UPDATES FOR AUTO-HIDE ========== */
         .sidebar {
             position: fixed; 
             top: var(--navbar-height); 
@@ -406,72 +404,37 @@
             background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
             box-shadow: 5px 0 30px rgba(0,0,0,0.1); 
             overflow-y: auto; 
-            overflow-x: hidden; /* Prevent horizontal scroll when collapsing */
-            transition: all var(--transition-speed); 
-            z-index: 1020;
-            transform-style: preserve-3d;
+            overflow-x: hidden;
+            transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1030;
+            transform: translateX(-100%); /* ALWAYS HIDDEN BY DEFAULT */
         }
 
-        /* New: Desktop Toggle Button Style */
-        .sidebar-toggle-desktop {
-            position: absolute;
-            top: 20px;
-            right: 15px;
-            width: 32px;
-            height: 32px;
-            background: var(--primary);
+        /* When sidebar has "show" class, it slides in */
+        .sidebar.show {
+            transform: translateX(0);
+        }
+
+        /* Button to toggle sidebar - Fixed in top left */
+        .sidebar-toggle-main {
+            background: rgba(255,255,255,0.1);
             color: white;
-            border-radius: 50%;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 1050;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            margin-right: 15px;
+            font-size: 1.2rem;
         }
-        
-        .sidebar-toggle-desktop:hover {
+
+        .sidebar-toggle-main:hover {
+            background: var(--primary);
             transform: scale(1.1);
-        }
-
-        /* New: Collapsed State Styles */
-        .sidebar.collapsed {
-            width: var(--sidebar-collapsed-width);
-            transform: translateX(-280px); /* True hide for auto-hide system */
-        }
-
-        .sidebar.collapsed .sidebar-toggle-desktop i {
-            transform: rotate(180deg);
-        }
-
-        .sidebar.collapsed .user-role-badge {
-            padding: 15px 5px;
-            margin-bottom: 10px;
-        }
-
-        .sidebar.collapsed .user-role-badge h6,
-        .sidebar.collapsed .user-role-badge h5 {
-            display: none;
-        }
-
-        .sidebar.collapsed .menu-link span,
-        .sidebar.collapsed .menu-arrow {
-            display: none;
-        }
-
-        .sidebar.collapsed .menu-link {
-            justify-content: center;
-            padding: 15px 10px;
-        }
-
-        .sidebar.collapsed .menu-link i {
-            margin-right: 0;
-            font-size: 1.4rem;
-        }
-
-        .sidebar.collapsed .submenu {
-            display: none !important; /* Force hide submenus when collapsed */
         }
         
         .sidebar::-webkit-scrollbar { 
@@ -542,7 +505,7 @@
             border-radius: 12px; 
             font-weight: 500; 
             transform-style: preserve-3d;
-            white-space: nowrap; /* Prevent text wrapping */
+            white-space: nowrap;
         }
         
         .menu-link:hover { 
@@ -552,21 +515,11 @@
             box-shadow: var(--shadow-3d);
         }
 
-        /* Fix hover effect in collapsed mode */
-        .sidebar.collapsed .menu-link:hover {
-            transform: none;
-        }
-        
         .menu-link.active { 
             background: var(--primary); 
             color: white; 
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3); 
             transform: translateX(5px) translateZ(15px); 
-        }
-        
-        /* Fix active effect in collapsed mode */
-        .sidebar.collapsed .menu-link.active {
-            transform: none;
         }
         
         .menu-link i { 
@@ -626,19 +579,21 @@
             transform: translateZ(10px);
         }
 
-        /* Modified: Full screen portal - Zero padding */
+        /* ========== MAIN CONTENT UPDATED FOR FULL SCREEN PORTAL ========== */
         .main-content { 
-            margin-left: var(--sidebar-width); 
+            margin-left: 0; /* Content takes full width */
             margin-top: var(--navbar-height); 
-            padding: 0; /* Changed to 0 for Full Screen portal */
+            padding: 0; 
             min-height: calc(100vh - var(--navbar-height)); 
             transform-style: preserve-3d;
-            transition: margin-left var(--transition-speed); /* Smooth transition for content */
+            transition: margin-left var(--transition-speed); 
         }
 
-        /* New: Main content adjustment for Full Screen */
-        .main-content.sidebar-collapsed {
-            margin-left: 0;
+        /* Push content slightly when sidebar is open on desktop */
+        @media (min-width: 992px) {
+            .sidebar.show + .main-content {
+                margin-left: var(--sidebar-width);
+            }
         }
         
         .metric-card { 
@@ -651,7 +606,7 @@
             position: relative; 
             animation: fadeInUp 0.6s ease; 
             transform-style: preserve-3d;
-            margin: 20px; /* Added margin since main container padding is 0 */
+            margin: 20px;
         }
         
         .metric-card:hover { 
@@ -730,11 +685,11 @@
             color: #856404; 
         }
 
-        /* Modified: Iframe Height for Full Screen Portal */
+        /* IFRAME FULL SCREEN PORTAL HEIGHT */
         .iframe-container {
             width: 100%;
             height: calc(100vh - var(--navbar-height)); 
-            border-radius: 0; /* Square edges for full screen portal */
+            border-radius: 0; 
             overflow: hidden;
             box-shadow: none;
             background: white;
@@ -836,18 +791,6 @@
             background: var(--secondary); 
         }
 
-        .mobile-toggle { 
-            display: none; 
-            color: white; 
-            font-size: 1.5rem; 
-            cursor: pointer; 
-            transition: all var(--transition-speed); 
-        }
-        
-        .mobile-toggle:hover { 
-            color: #667eea; 
-        }
-
         .loading-shimmer { 
             animation: shimmer 2s infinite; 
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); 
@@ -856,19 +799,10 @@
 
         /* ========== RESPONSIVE STYLES ========== */
         @media (max-width: 768px) {
-            .mobile-toggle { display: block; }
-            .sidebar-toggle-desktop { display: none; } /* Hide desktop toggle on mobile */
-            .login-container { flex-direction: column; }
-            .login-left, .login-right { padding: 50px 30px; }
             .school-brand span { display: none; }
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.show { transform: translateX(0); }
-            .main-content { margin-left: 0; padding: 0; }
-            /* Reset main content margin when collapsed style exists but on mobile */
-            .main-content.sidebar-collapsed { margin-left: 0; }
-            .user-profile span { display: none; }
+            .sidebar { width: 250px; }
+            .main-content { margin-left: 0 !important; }
             .metric-card { margin: 15px; }
-            .iframe-container { height: calc(100vh - var(--navbar-height)); }
         }
     </style>
 </head>
@@ -917,10 +851,11 @@
         <!-- Top Navbar -->
         <nav class="top-navbar">
             <div class="container-fluid">
-                <div style="display: flex; align-items: center; gap: 20px;">
-                    <div class="mobile-toggle" onclick="toggleSidebarDesktop()">
+                <div style="display: flex; align-items: center;">
+                    <!-- PERMANENT TOGGLE BUTTON FOR AUTO-HIDE MENU -->
+                    <button class="sidebar-toggle-main" onclick="toggleSidebarMenu()">
                         <i class="fas fa-bars"></i>
-                    </div>
+                    </button>
                     <div class="school-brand">
                         <i class="fas fa-graduation-cap"></i>
                         <span>St. John's English School</span>
@@ -950,11 +885,6 @@
 
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
-            <!-- New: Desktop Toggle Arrow -->
-            <div class="sidebar-toggle-desktop" onclick="toggleSidebarDesktop()">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-
             <div class="user-role-badge">
                 <h6>Logged in as</h6>
                 <h5 id="userRoleDisplay">Administrator</h5>
@@ -965,7 +895,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="main-content">
+        <div class="main-content" id="mainContent">
             <!-- Dynamic Content Area -->
             <div id="dynamicContent">
                 <!-- Content will be loaded here dynamically -->
@@ -977,17 +907,16 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // User credentials and roles - UPDATED
+        // User credentials and roles - PRESERVED
         const users = {
-            'Admin': { password: '4321', role: 'admin', fullName: 'Admin User' }, // Password changed to 4321
+            'Admin': { password: '4321', role: 'admin', fullName: 'Admin User' },
             'Teacher': { password: '1234', role: 'teacher', fullName: 'Teacher User' },
             'Student': { password: '1234', role: 'student', fullName: 'Student User' },
-            'Office': { password: '1234', role: 'office', fullName: 'Office User' } // Added Office user
+            'Office': { password: '1234', role: 'office', fullName: 'Office User' }
         };
 
         let currentUser = null;
 
-        // User roles and their module access - UPDATED with Office role
         const userRoles = {
             admin: {
                 displayName: 'Administrator',
@@ -1020,8 +949,7 @@
                     },
                     {
                         id: 'academic', name: 'Academic', icon: 'fas fa-book', submenu: [
-                            // REMOVED: Class Work
-                            { name: 'Assignment Dashboard', link: '#assignment-dashboard' }, // Renamed from Home Work
+                            { name: 'Assignment Dashboard', link: '#assignment-dashboard' },
                             { name: 'Assignment Portal', link: '#assignment-portal' }
                         ]
                     },
@@ -1044,8 +972,7 @@
                 modules: [
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
                     { id: 'attendance', name: 'Student Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
-                    // REMOVED: Class Work
-                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' }, // Renamed from Home Work
+                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' },
                     { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' },
                     { id: 'leave', name: 'Leave Application', icon: 'fas fa-user-clock', link: '#leave-open-portal' }
                 ]
@@ -1055,12 +982,10 @@
                 modules: [
                     { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
                     { id: 'attendance', name: 'My Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
-                    // REMOVED: Class Work
-                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' }, // Renamed from Home Work
+                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' },
                     { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' }
                 ]
             },
-            // NEW: Office role with access to Finance module only
             office: {
                 displayName: 'Office Staff',
                 modules: [
@@ -1075,11 +1000,8 @@
             }
         };
 
-        // --- DASHBOARD METRICS WITH API PLACEHOLDERS ---
         const defaultDashboardMetrics = [
-            // Prompt 1: Student Data Placeholder
             { iconClass: 'students', icon: 'fas fa-user-graduate', label: 'Total Students', value: 'Loading...', change: 'last month', changeClass: 'positive', color: '#667eea' },
-            // Prompt 2: Teacher Data Placeholder
             { iconClass: 'teachers', icon: 'fas fa-chalkboard-teacher', label: 'Total Teachers', value: 'Loading...', change: 'This Month', changeClass: 'positive', color: '#f093fb' },
             { iconClass: 'attendance', icon: 'fas fa-chart-bar', label: 'Avg. Attendance', value: '88.5%', change: '-1.5% from last week', changeClass: 'negative', color: '#4facfe' },
             { iconClass: 'fees', icon: 'fas fa-money-check-alt', label: 'Fees Collected', value: '₹5.2L', change: 'Target: ₹7L', changeClass: 'warning', color: '#fa709a' }
@@ -1093,15 +1015,10 @@
             { date: '2025-10-23', activity: 'Fees payment received from Roll No 101', user: 'Admin', status: 'success' },
         ];
         
-        // --- FUNCTION: FETCH LIVE DATA FROM GOOGLE SHEETS ---
         async function fetchLiveDashboardData() {
             const apiKey = 'AIzaSyBHM6jOSzcJzo4KEJF4KOfxrwU5Nyo_d1k';
-            
-            // Configuration for Students
             const studentSheetId = '1-d7X5tsQzzXsj9krElPKDpFtg49jJ4cbeqrje97Ng34';
             const studentRange = "'Student Data'!D2";
-            
-            // Configuration for Teachers
             const teacherSheetId = '1yl7eKzpmnKJpALxWzvRQJVSHuH0ND7mSZOMeIK1NMJI';
             const teacherRange = "'User'!D2";
 
@@ -1109,58 +1026,30 @@
             const teacherUrl = `https://sheets.googleapis.com/v4/spreadsheets/${teacherSheetId}/values/${teacherRange}?key=${apiKey}`;
 
             try {
-                // Fetch Student Data
                 const studentResponse = await fetch(studentUrl);
                 const studentData = await studentResponse.json();
-                
-                // Fetch Teacher Data
                 const teacherResponse = await fetch(teacherUrl);
                 const teacherData = await teacherResponse.json();
 
-                // Update Metrics Array
-                if (studentData.values && studentData.values.length > 0) {
-                    defaultDashboardMetrics[0].value = studentData.values[0][0]; // Update Student Count
-                } else {
-                    defaultDashboardMetrics[0].value = "N/A";
-                }
+                if (studentData.values && studentData.values.length > 0) defaultDashboardMetrics[0].value = studentData.values[0][0];
+                if (teacherData.values && teacherData.values.length > 0) defaultDashboardMetrics[1].value = teacherData.values[0][0];
 
-                if (teacherData.values && teacherData.values.length > 0) {
-                    defaultDashboardMetrics[1].value = teacherData.values[0][0]; // Update Teacher Count
-                } else {
-                    defaultDashboardMetrics[1].value = "N/A";
-                }
-
-                // Refresh the Dashboard View if currently displayed (Active link check)
                 const dashboardLink = document.querySelector('a[href="#dashboard"]');
                 if (dashboardLink && dashboardLink.classList.contains('active')) {
-                    // Re-render the content
                     const content = generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities);
                     document.getElementById('dynamicContent').innerHTML = content;
                 }
-
-            } catch (error) {
-                console.error("Error fetching sheet data:", error);
-                defaultDashboardMetrics[0].value = "Error";
-                defaultDashboardMetrics[1].value = "Error";
-            }
+            } catch (error) { console.error("Error fetching data:", error); }
         }
 
-        // Helper function to generate generic cards HTML
         function generateMetricCardsHtml(cardsData) {
             let html = '<div class="row" style="padding: 10px;">';
             cardsData.forEach((metric, index) => {
-                const isClickable = metric.link;
-                const cardClass = isClickable ? 'metric-card clickable-card' : 'metric-card';
-                const cardStyle = isClickable ? 'cursor: pointer;' : '';
-                const animationDelay = `animation-delay: ${index * 0.1}s;`;
-                
                 html += `
                     <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="card ${cardClass}" 
-                             style="${cardStyle} ${animationDelay}" 
-                             ${isClickable ? `onclick="window.open('${metric.link}', '_blank')"` : ''}>
+                        <div class="card metric-card" style="animation-delay: ${index * 0.1}s;">
                             <div class="card-body">
-                                <div class="generic-card-icon" style="background: ${metric.color || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};">
+                                <div class="generic-card-icon" style="background: ${metric.color};">
                                     <i class="${metric.icon}"></i>
                                 </div>
                                 <div class="metric-value">${metric.value}</div>
@@ -1168,349 +1057,144 @@
                                 ${metric.change ? `<div class="metric-change ${metric.changeClass || ''}">${metric.change}</div>` : ''}
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
             html += '</div>';
             return html;
         }
 
-        // Helper function to generate generic iframe HTML
         function generateIframeHtml(url) {
-            return `
-                <div class="iframe-container">
-                    <iframe src="${url}"></iframe>
-                </div>
-            `;
+            return `<div class="iframe-container"><iframe src="${url}"></iframe></div>`;
         }
 
-        // Helper function to generate activities table HTML
         function generateActivitiesTableHtml(activities) {
-            let rows = '';
-            activities.forEach(activity => {
-                rows += `
-                    <tr>
-                        <td><strong>${activity.date}</strong></td>
-                        <td>${activity.activity}</td>
-                        <td>${activity.user}</td>
-                        <td><span class="status-badge ${activity.status}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
-                    </tr>
-                `;
-            });
+            let rows = activities.map(activity => `
+                <tr>
+                    <td><strong>${activity.date}</strong></td>
+                    <td>${activity.activity}</td>
+                    <td>${activity.user}</td>
+                    <td><span class="status-badge ${activity.status}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
+                </tr>`).join('');
 
             return `
                 <div class="card activity-card">
-                    <div class="card-header">
-                        <h5><i class="fas fa-clock mr-2"></i>Recent Activities</h5>
-                    </div>
+                    <div class="card-header"><h5><i class="fas fa-clock mr-2"></i>Recent Activities</h5></div>
                     <div class="card-body p-0">
                         <table class="table activity-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Activity</th>
-                                    <th>User</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${rows}
-                            </tbody>
+                            <thead><tr><th>Date</th><th>Activity</th><th>User</th><th>Status</th></tr></thead>
+                            <tbody>${rows}</tbody>
                         </table>
                     </div>
-                </div>
-            `;
+                </div>`;
         }
 
-        // Content templates
         const contentTemplates = {
-            '#dashboard': {
-                // Use a getter to ensure latest data is used when rendered
-                get content() { return generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities) }
-            },
-            
-            '#warning-letter-dash': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec')
-            },
-
-            '#teacher-id-card': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec')
-            },
-
-            '#student-id-card': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec')
-            },
-
-            '#escort-card': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec')
-            },
-
-            '#generate-salary-slip': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec')
-            },
-            '#employee-master-upload': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec')
-            },
-
-            '#report-card': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-star', label: 'Top Performer', value: 'Class 10', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-chart-line', label: 'Average Score', value: '78%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-check-double', label: 'Cards Generated', value: '95%', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-tasks', label: 'Pending Upload', value: '2 Classes', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
-                ])
-            },
-
-            '#offer-letter': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec')
-            },
-
-            '#notice-automation': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-bullhorn', label: 'Total Notices', value: '120', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-envelope', label: 'Via Email', value: '80', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fab fa-whatsapp', label: 'Via WhatsApp', value: '40', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-paper-plane', label: 'Schedule New', value: 'Action', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
-                ])
-            },
-            '#whatsapp-link': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fab fa-whatsapp', label: 'Total Link Uses', value: '350', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-link', label: 'Active Forms', value: '5', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-ban', label: 'Expired Links', value: '2', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-qrcode', label: 'Generate QR', value: 'New', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
-                ])
-            },
-            '#student-attendance': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-user-check', label: 'Today Present', value: '1,150', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-user-times', label: 'Today Absent', value: '100', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '92%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-edit', label: 'Mark Attendance', value: 'Action', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
-                ])
-            },
-            '#teacher-attendance': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-user-check', label: 'Today Present', value: '70', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-user-clock', label: 'On Leave', value: '5', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '96%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-clock', label: 'Late Arrivals', value: '2', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
-                ])
-            },
-            '#staff-attendance': {
-                content: generateMetricCardsHtml([
-                    { icon: 'fas fa-user-check', label: 'Today Present', value: '25', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-                    { icon: 'fas fa-user-times', label: 'On Leave', value: '1', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '99%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { icon: 'fas fa-users-cog', label: 'Total Staff', value: '26', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
-                ])
-            },
-            
-            // Renamed from Home Work to Assignment Dashboard
-            '#assignment-dashboard': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzeSXzBw8bbz_TA98wM3Z-UN4UjNN4TfAfWMd2OdyaKYxi3omTc8wGm8Q9soc_hqRXo/exec')
-            },
-
-            '#assignment-portal': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec')
-            },
-
-            '#fees-collection': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwqZo5CtfzwFhADKet3Z3Vr6XIyPby4CHWlApfcbDnXVPXZ0jVMJYfJg9YtZtV3yTI5sg/exec')
-            },
-            
-            // UPDATED: Expense Module now loads Iframe with your key
-            '#expense-module': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycby_PW0sWz9pHJSFQAv2hPcvxuScQAtw8hngSqUUru52xy0TW4GmXtYqGBZLofa_Wg0xpA/exec')
-            },
-
-            '#leave-open-portal': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec')
-            },
-            '#leave-balance': {
-                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec')
-            }
+            '#dashboard': { get content() { return generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities) } },
+            '#warning-letter-dash': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec') },
+            '#teacher-id-card': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec') },
+            '#student-id-card': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec') },
+            '#escort-card': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec') },
+            '#generate-salary-slip': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec') },
+            '#employee-master-upload': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec') },
+            '#report-card': { content: generateMetricCardsHtml([{ icon: 'fas fa-star', label: 'Status', value: 'Active', color: 'var(--primary)' }]) },
+            '#offer-letter': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec') },
+            '#notice-automation': { content: generateMetricCardsHtml([{ icon: 'fas fa-bullhorn', label: 'Total', value: '120', color: 'var(--warning)' }]) },
+            '#whatsapp-link': { content: generateMetricCardsHtml([{ icon: 'fab fa-whatsapp', label: 'Active', value: '5', color: 'var(--success)' }]) },
+            '#student-attendance': { content: generateMetricCardsHtml([{ icon: 'fas fa-user-check', label: 'Today', value: '92%', color: 'var(--primary)' }]) },
+            '#teacher-attendance': { content: generateMetricCardsHtml([{ icon: 'fas fa-user-clock', label: 'Today', value: '96%', color: 'var(--success)' }]) },
+            '#staff-attendance': { content: generateMetricCardsHtml([{ icon: 'fas fa-users-cog', label: 'Today', value: '99%', color: 'var(--secondary)' }]) },
+            '#assignment-dashboard': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzeSXzBw8bbz_TA98wM3Z-UN4UjNN4TfAfWMd2OdyaKYxi3omTc8wGm8Q9soc_hqRXo/exec') },
+            '#assignment-portal': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec') },
+            '#fees-collection': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwqZo5CtfzwFhADKet3Z3Vr6XIyPby4CHWlApfcbDnXVPXZ0jVMJYfJg9YtZtV3yTI5sg/exec') },
+            '#expense-module': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycby_PW0sWz9pHJSFQAv2hPcvxuScQAtw8hngSqUUru52xy0TW4GmXtYqGBZLofa_Wg0xpA/exec') },
+            '#leave-open-portal': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec') },
+            '#leave-balance': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec') }
         };
 
-        // Handle login
         function handleLogin(event) {
             event.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (users[username] && users[username].password === password) {
-                currentUser = {
-                    username: username,
-                    role: users[username].role,
-                    fullName: users[username].fullName
-                };
-
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            if (users[u] && users[u].password === p) {
+                currentUser = users[u];
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('dashboardPage').style.display = 'block';
-
                 initializeDashboard();
-            } else {
-                alert('Invalid username or password!');
-            }
+            } else alert('Invalid username or password!');
         }
 
-        // Initialize dashboard
         function initializeDashboard() {
             loadSidebarMenu();
             updateNavbar();
-            
-            // Trigger true auto-hide on start
-            toggleSidebarDesktop();
-
-            // --- TRIGGER DATA FETCH ---
             fetchLiveDashboardData();
-
-            // Find the dashboard link and load its content on initial login
-            const dashboardLink = document.querySelector('.menu-link[href="#dashboard"]');
-            if (dashboardLink) {
-                loadContent(dashboardLink);
-            }
+            loadContent(null, '#dashboard');
         }
 
-        // Load sidebar menu based on user role
         function loadSidebarMenu() {
             const role = userRoles[currentUser.role];
             const menuContainer = document.getElementById('sidebarMenu');
-            const roleDisplay = document.getElementById('userRoleDisplay');
-            
-            roleDisplay.textContent = role.displayName;
+            document.getElementById('userRoleDisplay').textContent = role.displayName;
             menuContainer.innerHTML = '';
 
             role.modules.forEach(module => {
                 const menuItem = document.createElement('li');
                 menuItem.className = 'menu-item';
-
                 if (module.submenu) {
                     menuItem.innerHTML = `
                         <a class="menu-link" onclick="toggleSubmenu(this)">
-                            <i class="${module.icon}"></i>
-                            <span>${module.name}</span>
-                            <i class="fas fa-chevron-down menu-arrow"></i>
+                            <i class="${module.icon}"></i><span>${module.name}</span><i class="fas fa-chevron-down menu-arrow"></i>
                         </a>
-                        <ul class="submenu">
-                            ${module.submenu.map(sub => `
-                                <li><a href="${sub.link}" class="submenu-link" onclick="loadContent(this)">${sub.name}</a></li>
-                            `).join('')}
-                        </ul>
-                    `;
+                        <ul class="submenu">${module.submenu.map(sub => `<li><a href="${sub.link}" class="submenu-link" onclick="loadContent(this)">${sub.name}</a></li>`).join('')}</ul>`;
                 } else {
-                    menuItem.innerHTML = `
-                        <a href="${module.link}" class="menu-link ${module.active ? 'active' : ''}" onclick="loadContent(this)">
-                            <i class="${module.icon}"></i>
-                            <span>${module.name}</span>
-                        </a>
-                    `;
+                    menuItem.innerHTML = `<a href="${module.link}" class="menu-link" onclick="loadContent(this)"><i class="${module.icon}"></i><span>${module.name}</span></a>`;
                 }
                 menuContainer.appendChild(menuItem);
             });
         }
 
-        // Update Navbar display
         function updateNavbar() {
-            const userAvatar = document.getElementById('userAvatarNav');
-            const userName = document.getElementById('userNameNav');
-            
-            if (currentUser) {
-                const initials = currentUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-                userAvatar.textContent = initials;
-                userName.textContent = currentUser.fullName;
-            }
+            const initials = currentUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            document.getElementById('userAvatarNav').textContent = initials;
+            document.getElementById('userNameNav').textContent = currentUser.fullName;
         }
 
-        // Toggle Sidebar visibility for mobile
-        function toggleSidebar() {
+        // TOGGLE FUNCTION FOR THE AUTO-HIDE MENU
+        function toggleSidebarMenu() {
             document.getElementById('sidebar').classList.toggle('show');
         }
 
-        // NEW: Toggle Sidebar visibility for desktop - Updated for True Auto-Hide
-        function toggleSidebarDesktop() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
-            document.querySelector('.main-content').classList.toggle('sidebar-collapsed');
-        }
-
-        // Toggle Submenu visibility
         function toggleSubmenu(element) {
-            // Prevent toggling submenu if sidebar is collapsed
-            if(document.getElementById('sidebar').classList.contains('collapsed')) return;
-
             const submenu = element.nextElementSibling;
             const arrow = element.querySelector('.menu-arrow');
-            
-            // Close other open submenus
             document.querySelectorAll('.submenu.show').forEach(openSub => {
                 if (openSub !== submenu) {
                     openSub.classList.remove('show');
                     openSub.previousElementSibling.querySelector('.menu-arrow').classList.remove('rotated');
                 }
             });
-            
             submenu.classList.toggle('show');
             arrow.classList.toggle('rotated');
         }
 
-        // Load content based on menu link
-        function loadContent(element) {
-            // Close sidebar on mobile after clicking a link
-            document.getElementById('sidebar').classList.remove('show');
-
-            // Remove 'active' from all links and sublinks
-            document.querySelectorAll('.menu-link, .submenu-link').forEach(link => {
-                link.classList.remove('active');
-            });
-
-            // Determine the element to mark as active
-            let activeLink = element;
-            if (element.classList.contains('submenu-link')) {
-                // Also activate the parent menu link if it's a sublink
-                activeLink = element.closest('.submenu').previousElementSibling;
-                element.classList.add('active'); // Keep submenu-link active
-            } 
-            
-            activeLink.classList.add('active'); // Activate top-level link or the menu link itself
-            
-            const hash = element.getAttribute('href');
+        function loadContent(element, hashOverride) {
+            const hash = element ? element.getAttribute('href') : hashOverride;
             const template = contentTemplates[hash];
             const dynamicContent = document.getElementById('dynamicContent');
 
-            if (template) {
-                // Load Content
-                // Show a placeholder while content is loading
-                if (hash === '#dashboard') {
-                    dynamicContent.innerHTML = '<div class="row" style="margin:20px;"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
-                    setTimeout(() => {
-                        dynamicContent.innerHTML = template.content; 
-                    }, 300);
-                } else {
-                     dynamicContent.innerHTML = '<div class="row" style="margin:20px;"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
-                     setTimeout(() => {
-                        dynamicContent.innerHTML = template.content;
-                    }, 300);
-                }
-                
-            } else {
-                dynamicContent.innerHTML = '<div class="alert alert-danger" style="margin:20px;">Content for this module is not yet implemented or not found.</div>';
-            }
+            document.querySelectorAll('.menu-link, .submenu-link').forEach(link => link.classList.remove('active'));
+            if(element) element.classList.add('active');
 
-            // Prevent default hash navigation
-            if (event && element.tagName === 'A' && element.getAttribute('href').startsWith('#')) {
-                event.preventDefault();
+            if (template) {
+                dynamicContent.innerHTML = '<div class="row" style="margin:20px;"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px;"></div></div></div>'; 
+                setTimeout(() => { dynamicContent.innerHTML = template.content; }, 300);
             }
+            
+            // Auto-hide sidebar after clicking a menu item
+            document.getElementById('sidebar').classList.remove('show');
+            if (event) event.preventDefault();
         }
         
-        // Handle Logout
-        function logout() {
-            currentUser = null;
-            document.getElementById('loginPage').style.display = 'flex';
-            document.getElementById('dashboardPage').style.display = 'none';
-            document.getElementById('loginForm').reset();
-            window.location.hash = ''; // Clear location hash
-        }
+        function logout() { location.reload(); }
     </script>
 </body>
 </html>
