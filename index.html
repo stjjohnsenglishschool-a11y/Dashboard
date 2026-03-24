@@ -1,802 +1,1512 @@
-const MAIN_SPREADSHEET_ID = "1bNnImMa5KXc8j9aw1oFPq5QSIfxt8UldmAv0Wt8RfdY";
-const FEES_SPREADSHEET_ID = "1-d7X5tsQzzXsj9krElPKDpFtg49jJ4cbeqrje97Ng34";
-const SALARY_SPREADSHEET_ID = "1PU5UHsth9dNhb0dmzTwHfQOrjTg9F1JPWvUczmkunw0";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St. John's English School - Premium Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 80px; /* New variable for collapsed state */
+            --navbar-height: 70px;
+            --border-radius: 15px;
+            --transition-speed: 0.3s;
+            --shadow-light: 0 10px 40px rgba(0,0,0,0.1);
+            --shadow-medium: 0 20px 60px rgba(0,0,0,0.15);
+            --shadow-heavy: 0 30px 80px rgba(0,0,0,0.3);
+            --shadow-3d: 0 15px 35px rgba(0,0,0,0.2);
+        }
 
-function getSpreadsheet() {
-  return SpreadsheetApp.openById(MAIN_SPREADSHEET_ID);
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-function doGet() {
-  return HtmlService.createTemplateFromFile('index')
-    .evaluate()
-    .setTitle("St. John's English School - Accounts Manager")
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
-    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-function getSchoolInfo() {
-  const ss = getSpreadsheet();
-  const configSheet = ss.getSheetByName("Config");
-  return {
-    name: configSheet ? (configSheet.getRange("B1").getValue() || "St. John's English School") : "St. John's English School",
-    address: configSheet ? (configSheet.getRange("B2").getValue() || "") : ""
-  };
-}
+        /* ========== ANIMATIONS ========== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-30px); }
+        }
 
-function getDepartments() {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("Departments");
-  if (!sheet) return [];
-  const lastRow = sheet.getLastRow();
-  return lastRow > 1 ? sheet.getRange(2, 1, lastRow - 1, 1).getValues().flat().filter(String) : [];
-}
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-function getIncomeTypes() {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("IncomeTypes");
-  if (!sheet) return [];
-  const lastRow = sheet.getLastRow();
-  return lastRow > 1 ? sheet.getRange(2, 1, lastRow - 1, 1).getValues().flat().filter(String) : [];
-}
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
 
-function getExpenseTypes() {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("ExpenseTypes");
-  if (!sheet) return [];
-  const lastRow = sheet.getLastRow();
-  return lastRow > 1 ? sheet.getRange(2, 1, lastRow - 1, 1).getValues().flat().filter(String) : [];
-}
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
 
-function getStaffUsers() {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("Config");
-  if (!sheet) return ["Admin"];
-  const lastRow = sheet.getLastRow();
-  return lastRow > 1 ? sheet.getRange(2, 3, lastRow - 1, 1).getValues().flat().filter(String) : ["Admin"];
-}
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-function getStudentData() {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("Student PhoneNumber");
-  if (!sheet) return [];
-  const lastRow = sheet.getLastRow();
-  if (lastRow < 2) return [];
-  const data = sheet.getRange(2, 1, lastRow - 1, 3).getValues();
-  return data.map(row => ({
-    className: row[0],
-    studentName: row[1],
-    rollNo: row[2]
-  })).filter(item => item.className && item.studentName);
-}
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-function getNextVoucherNo() {
-  const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
-  try {
-    const ss = getSpreadsheet();
-    const configSheet = ss.getSheetByName("Config");
-    const lastVoucherCell = configSheet.getRange("B4");
-    let currentVal = lastVoucherCell.getValue();
-    let nextVal = (typeof currentVal === 'number' ? currentVal : 0) + 1;
-    lastVoucherCell.setValue(nextVal);
-    return nextVal;
-  } catch (e) {
-    throw new Error("Could not generate Voucher ID.");
-  } finally {
-    lock.releaseLock();
-  }
-}
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-function addIncomeRecord(record) {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("Income");
-  const lastRow = sheet.getLastRow();
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
 
-  if (lastRow > 1) {
-    const lastData = sheet.getRange(lastRow, 1, 1, 18).getValues()[0];
-    const lastTimestamp = lastData[11];
-    const now = new Date();
-    if (now - lastTimestamp < 30000) {
-      const lastVoucherData = {
-        date: lastData[1],
-        department: lastData[2],
-        incomeType: lastData[3],
-        studentName: lastData[5],
-        amount: lastData[7],
-        academicYear: lastData[12]
-      };
-      if (lastVoucherData.date === record.date &&
-          lastVoucherData.department === record.department &&
-          lastVoucherData.incomeType === record.incomeType &&
-          lastVoucherData.studentName === record.studentName &&
-          lastVoucherData.academicYear === record.academicYear &&
-          Math.abs(lastVoucherData.amount - parseFloat(record.amount)) < 0.01) {
-        throw new Error("Duplicate submission detected. Please wait a moment and try again.");
-      }
-    }
-  }
+        @keyframes rotate3d {
+            0% { transform: perspective(1000px) rotateY(0deg); }
+            100% { transform: perspective(1000px) rotateY(360deg); }
+        }
 
-  const voucherNo = getNextVoucherNo();
-  const timestamp = new Date();
+        /* ========== LOGIN PAGE ========== */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
 
-  const amount = parseFloat(record.amount) || 0;
-  const totalPaid = parseFloat(record.totalPaid) || 0;
-  const discountAmount = parseFloat(record.discountAmount) || 0;
-  const lateFee = parseFloat(record.lateFee) || 0;
-  const due = amount - (totalPaid + discountAmount);   // Updated formula
+        .login-wrapper::before, .login-wrapper::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
 
-  const rowData = [
-    voucherNo,                       // A
-    record.date,                     // B
-    record.department,               // C
-    record.incomeType,               // D
-    record.className,                // E
-    record.studentName,              // F
-    record.rollNo,                   // G
-    amount,                          // H
-    record.paymentMode,              // I
-    record.remarks,                  // J
-    record.createdBy,                // K
-    timestamp,                       // L
-    record.academicYear,             // M
-    record.discountScholarship,      // N
-    discountAmount,                  // O
-    lateFee,                         // P
-    totalPaid,                       // Q
-    due                              // R
-  ];
+        .login-wrapper::before { width: 500px; height: 500px; top: -250px; right: -250px; }
+        .login-wrapper::after { width: 400px; height: 400px; bottom: -200px; left: -200px; animation-duration: 8s; }
 
-  sheet.appendRow(rowData);
-  return { success: true, voucherNo: voucherNo, message: "Income Saved Successfully!" };
-}
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-heavy);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            z-index: 1;
+            animation: slideUp 0.8s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
 
-function addExpenseRecord(record) {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("Expense");
-  const lastRow = sheet.getLastRow();
-  if (lastRow > 1) {
-    const lastData = sheet.getRange(lastRow, 1, 1, 10).getValues()[0];
-    const lastTimestamp = lastData[9];
-    const now = new Date();
-    if (now - lastTimestamp < 30000) {
-      const lastVoucherData = {
-        date: lastData[1],
-        department: lastData[2],
-        expenseType: lastData[3],
-        paidTo: lastData[5],
-        amount: lastData[4]
-      };
-      if (lastVoucherData.date === record.date &&
-          lastVoucherData.department === record.department &&
-          lastVoucherData.expenseType === record.expenseType &&
-          lastVoucherData.paidTo === record.paidTo &&
-          Math.abs(lastVoucherData.amount - parseFloat(record.amount)) < 0.01) {
-        throw new Error("Duplicate submission detected. Please wait a moment and try again.");
-      }
-    }
-  }
-  const voucherNo = getNextVoucherNo();
-  const timestamp = new Date();
-  const rowData = [
-    voucherNo,
-    record.date,
-    record.department,
-    record.expenseType,
-    parseFloat(record.amount),
-    record.paidTo,
-    record.paymentMode,
-    record.remarks,
-    record.createdBy,
-    timestamp
-  ];
-  sheet.appendRow(rowData);
-  return { success: true, voucherNo: voucherNo, message: "Expense Saved Successfully!" };
-}
+        .login-left {
+            flex: 1;
+            background: var(--primary);
+            padding: 80px 50px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-function deleteTransaction(voucherNo, type) {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName(type);
-  const data = sheet.getDataRange().getValues();
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][0] == voucherNo) {
-      sheet.deleteRow(i + 1);
-      return { success: true, message: "Deleted Successfully" };
-    }
-  }
-  return { success: false, error: "Transaction not found" };
-}
-function deleteIncomeRecord(v) { return deleteTransaction(v, "Income"); }
-function deleteExpenseRecord(v) { return deleteTransaction(v, "Expense"); }
+        .login-left::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+        }
 
-function parseDateRobust(value) {
-  if (!value) return null;
-  if (Object.prototype.toString.call(value) === '[object Date]') {
-    if (isNaN(value.getTime())) return null;
-    const y = value.getFullYear();
-    const m = String(value.getMonth() + 1).padStart(2, '0');
-    const d = String(value.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  }
-  if (typeof value === 'string') {
-    const cleanVal = value.trim();
-    const dmy = cleanVal.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-    if (dmy) {
-      const day = dmy[1].padStart(2, '0');
-      const month = dmy[2].padStart(2, '0');
-      const year = dmy[3];
-      return `${year}-${month}-${day}`;
-    }
-    const iso = cleanVal.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
-    if (iso) {
-      return `${iso[1]}-${iso[2].padStart(2, '0')}-${iso[3].padStart(2, '0')}`;
-    }
-  }
-  return null;
-}
+        .login-left i { 
+            font-size: 5rem; 
+            margin-bottom: 30px; 
+            animation: pulse 2s ease infinite; 
+            position: relative; 
+            z-index: 1;
+            transform: translateZ(30px);
+        }
+        
+        .login-left h2 { 
+            font-size: 2.5rem; 
+            font-weight: 800; 
+            margin-bottom: 20px; 
+            position: relative; 
+            z-index: 1; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            transform: translateZ(20px);
+        }
+        
+        .login-left p { 
+            font-size: 1.1rem; 
+            line-height: 1.8; 
+            opacity: 0.95; 
+            position: relative; 
+            z-index: 1;
+            transform: translateZ(10px);
+        }
 
-function getIncomeRecords() {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("Income");
-  const lastRow = sheet.getLastRow();
-  if (lastRow < 2) return [];
-  const data = sheet.getRange(2, 1, lastRow - 1, 18).getValues();
-  return data.map(r => ({
-    VoucherNo: r[0],
-    Date: parseDateRobust(r[1]),
-    Department: r[2],
-    IncomeType: r[3],
-    ClassName: r[4],
-    StudentName: r[5],
-    RollNo: r[6],
-    Amount: r[7],
-    PaymentMode: r[8],
-    Remarks: r[9],
-    CreatedBy: r[10],
-    AcademicYear: r[12],
-    DiscountScholarship: r[13],
-    DiscountAmount: r[14],
-    LateFee: r[15],
-    TotalPaid: r[16],
-    Due: r[17]
-  })).filter(r => r.VoucherNo && r.Date).reverse();
-}
+        .login-right { 
+            flex: 1; 
+            padding: 80px 50px; 
+            background: white;
+            transform-style: preserve-3d;
+        }
+        
+        .login-header { 
+            text-align: center; 
+            margin-bottom: 50px;
+            transform: translateZ(20px);
+        }
+        
+        .login-header h3 { 
+            font-size: 2rem; 
+            font-weight: 700; 
+            background: var(--primary); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            margin-bottom: 10px;
+        }
+        
+        .login-header p { 
+            color: #6c757d; 
+            font-size: 1rem; 
+        }
 
-function getExternalFeesData() {
-  try {
-    const ss = SpreadsheetApp.openById(FEES_SPREADSHEET_ID);
-    const sheet = ss.getSheetByName("Fees Collection");
-    if (!sheet) return [];
-    const lastRow = sheet.getLastRow();
-    if (lastRow < 2) return [];
-    const data = sheet.getRange(2, 2, lastRow - 1, 9).getValues();
-    return data.map(r => ({
-      Date: parseDateRobust(r[0]),
-      ClassName: r[3],
-      StudentName: r[4],
-      Amount: parseFloat(r[8]) || 0
-    })).filter(r => r.Date && r.Amount > 0);
-  } catch(e) {
-    console.error("Error fetching fees: " + e.toString());
-    return [];
-  }
-}
+        .form-group { 
+            margin-bottom: 30px; 
+        }
+        
+        .form-group label { 
+            font-weight: 600; 
+            color: #2c3e50; 
+            margin-bottom: 12px; 
+            font-size: 0.95rem; 
+            display: block; 
+        }
+        
+        .input-group { 
+            position: relative; 
+        }
+        
+        .input-icon { 
+            position: absolute; 
+            left: 20px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: #667eea; 
+            font-size: 1.2rem; 
+            z-index: 10; 
+        }
+        
+        .form-control {
+            height: 55px;
+            border-radius: var(--border-radius);
+            border: 2px solid #e9ecef;
+            padding: 10px 20px 10px 55px;
+            font-size: 1rem;
+            transition: all var(--transition-speed) ease;
+            background: #f8f9fa;
+            transform-style: preserve-3d;
+        }
+        
+        .form-control:focus { 
+            border-color: #667eea; 
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15); 
+            background: white; 
+            transform: translateZ(10px);
+        }
 
-function getExpenseRecords() {
-  const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName("Expense");
-  const lastRow = sheet.getLastRow();
-  if (lastRow < 2) return [];
-  const data = sheet.getRange(2, 1, lastRow - 1, 10).getValues();
-  return data.map(r => ({
-    VoucherNo: r[0],
-    Date: parseDateRobust(r[1]),
-    Department: r[2],
-    ExpenseType: r[3],
-    Amount: r[4],
-    PaidTo: r[5],
-    PaymentMode: r[6],
-    Remarks: r[7],
-    CreatedBy: r[8]
-  })).filter(r => r.VoucherNo && r.Date).reverse();
-}
+        .btn-login {
+            height: 55px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 1.1rem;
+            background: var(--primary);
+            border: none;
+            color: white;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transform-style: preserve-3d;
+        }
+        
+        .btn-login:hover { 
+            transform: translateY(-3px) translateZ(20px); 
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4); 
+        }
+        
+        .btn-login:active {
+            transform: translateY(0) translateZ(10px);
+        }
 
-function getExternalSalaryData() {
-  try {
-    const ss = SpreadsheetApp.openById(SALARY_SPREADSHEET_ID);
-    const sheet = ss.getSheetByName("Sal_DashBoard");
-    if (!sheet) return [];
-    const lastRow = sheet.getLastRow();
-    if (lastRow < 2) return [];
-    const data = sheet.getRange(2, 1, lastRow - 1, 20).getValues();
-    return data.map(r => ({
-      Date: parseDateRobust(r[4]),
-      EmployeeName: r[2],
-      Amount: parseFloat(r[19]) || 0
-    })).filter(r => r.Date !== null && r.Amount > 0);
-  } catch (e) {
-    console.error("Error fetching salaries: " + e.toString());
-    return [];
-  }
-}
+        .login-info { 
+            margin-top: 40px; 
+            padding: 25px; 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
+            border-radius: var(--border-radius); 
+            border-left: 5px solid #667eea; 
+            transform-style: preserve-3d;
+            transform: translateZ(10px);
+        }
+        
+        .login-info h6 { 
+            font-weight: 700; 
+            color: #2c3e50; 
+            margin-bottom: 10px; 
+            font-size: 1rem; 
+        }
 
-function getDashboardData(selectedYear = null) {
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const year = selectedYear ? parseInt(selectedYear) : currentYear;
+        /* ========== DASHBOARD ========== */
+        .dashboard-wrapper { display: none; }
 
-  const incomeRecords = getIncomeRecords();
-  const expenseRecords = getExpenseRecords();
+        .top-navbar {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--navbar-height);
+            z-index: 1030;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.2);
+            transform-style: preserve-3d;
+        }
 
-  const filterByYear = (records) => {
-    return records.filter(record => {
-      if (!record.Date) return false;
-      const recordYear = parseInt(record.Date.split('-')[0]);
-      return recordYear === year;
-    });
-  };
+        .top-navbar .container-fluid { 
+            height: 100%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 30px; 
+        }
 
-  const yearIncome = filterByYear(incomeRecords);
-  const yearExpense = filterByYear(expenseRecords);
+        .school-brand { 
+            display: flex; 
+            align-items: center; 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            letter-spacing: 0.5px; 
+        }
+        
+        .school-brand i { 
+            font-size: 2rem; 
+            margin-right: 15px; 
+            background: var(--primary); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            animation: pulse 2s ease infinite; 
+        }
 
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+        .navbar-right { 
+            display: flex; 
+            align-items: center; 
+            gap: 30px; 
+        }
 
-  const monthWiseIncome = [];
-  const monthWiseExpense = [];
+        .notification-icon { 
+            position: relative; 
+            color: white; 
+            font-size: 1.4rem; 
+            cursor: pointer; 
+            transition: all var(--transition-speed); 
+            transform-style: preserve-3d;
+        }
+        
+        .notification-icon:hover { 
+            transform: scale(1.1) translateZ(10px); 
+            color: #667eea; 
+        }
+        
+        .notification-badge { 
+            position: absolute; 
+            top: -10px; 
+            right: -10px; 
+            background: var(--secondary); 
+            color: white; 
+            border-radius: 50%; 
+            width: 22px; 
+            height: 22px; 
+            font-size: 0.7rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            animation: bounce 2s ease infinite; 
+        }
 
-  for (let month = 0; month < 12; month++) {
-    const monthIncomeRecords = yearIncome.filter(record => {
-      const recordMonth = parseInt(record.Date.split('-')[1]) - 1;
-      return recordMonth === month;
-    });
-    const totalPaid = monthIncomeRecords.reduce((sum, record) =>
-      sum + (parseFloat(record.TotalPaid) || 0), 0);
-    const totalDue = monthIncomeRecords.reduce((sum, record) =>
-      sum + (parseFloat(record.Due) || 0), 0);
-    monthWiseIncome.push({
-      month: months[month],
-      totalPaid: totalPaid,
-      totalDue: totalDue
-    });
+        .user-profile { 
+            display: flex; 
+            align-items: center; 
+            cursor: pointer; 
+            padding: 10px 20px; 
+            border-radius: 30px; 
+            transition: all var(--transition-speed); 
+            color: white; 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(10px); 
+            transform-style: preserve-3d;
+        }
+        
+        .user-profile:hover { 
+            background: rgba(255,255,255,0.2); 
+            transform: translateY(-2px) translateZ(10px); 
+        }
 
-    const monthExpenseRecords = yearExpense.filter(record => {
-      const recordMonth = parseInt(record.Date.split('-')[1]) - 1;
-      return recordMonth === month;
-    });
-    const totalAmount = monthExpenseRecords.reduce((sum, record) =>
-      sum + (parseFloat(record.Amount) || 0), 0);
-    monthWiseExpense.push({
-      month: months[month],
-      totalAmount: totalAmount
-    });
-  }
+        .user-avatar { 
+            width: 42px; 
+            height: 42px; 
+            border-radius: 50%; 
+            background: var(--primary); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-right: 12px; 
+            font-weight: 700; 
+            font-size: 1.1rem; 
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3); 
+        }
 
-  const totalIncomePaid = monthWiseIncome.reduce((sum, month) => sum + month.totalPaid, 0);
-  const totalIncomeDue = monthWiseIncome.reduce((sum, month) => sum + month.totalDue, 0);
-  const totalExpense = monthWiseExpense.reduce((sum, month) => sum + month.totalAmount, 0);
+        /* ========== SIDEBAR UPDATES FOR TOGGLE ========== */
+        .sidebar {
+            position: fixed; 
+            top: var(--navbar-height); 
+            left: 0; 
+            width: var(--sidebar-width); 
+            height: calc(100vh - var(--navbar-height));
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            box-shadow: 5px 0 30px rgba(0,0,0,0.1); 
+            overflow-y: auto; 
+            overflow-x: hidden; /* Prevent horizontal scroll when collapsing */
+            transition: all var(--transition-speed); 
+            z-index: 1020;
+            transform-style: preserve-3d;
+        }
 
-  return {
-    year: year,
-    monthWiseIncome: monthWiseIncome,
-    monthWiseExpense: monthWiseExpense,
-    totals: {
-      incomePaid: totalIncomePaid,
-      incomeDue: totalIncomeDue,
-      expense: totalExpense,
-      netBalance: totalIncomePaid - totalExpense
-    }
-  };
-}
+        /* New: Desktop Toggle Button Style */
+        .sidebar-toggle-desktop {
+            position: absolute;
+            top: 20px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1050;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-toggle-desktop:hover {
+            transform: scale(1.1);
+        }
 
-function getDashboardIncomeMonthWiseCSV(year) {
-  const data = getDashboardData(year);
-  let csv = `Monthly Income Report - ${data.year}\n`;
-  csv += "Month,Total Paid (₹),Total Due (₹)\n";
-  data.monthWiseIncome.forEach(month => {
-    csv += `"${month.month}",${month.totalPaid.toFixed(2)},${month.totalDue.toFixed(2)}\n`;
-  });
-  csv += `\nTOTAL,${data.totals.incomePaid.toFixed(2)},${data.totals.incomeDue.toFixed(2)}\n`;
-  return csv;
-}
+        /* New: Collapsed State Styles */
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
 
-function getDashboardExpenseMonthWiseCSV(year) {
-  const data = getDashboardData(year);
-  let csv = `Monthly Expense Report - ${data.year}\n`;
-  csv += "Month,Total Amount (₹)\n";
-  data.monthWiseExpense.forEach(month => {
-    csv += `"${month.month}",${month.totalAmount.toFixed(2)}\n`;
-  });
-  csv += `\nTOTAL,${data.totals.expense.toFixed(2)}\n`;
-  return csv;
-}
+        .sidebar.collapsed .sidebar-toggle-desktop i {
+            transform: rotate(180deg);
+        }
 
-function getDashboardCombinedMonthWiseCSV(year) {
-  const data = getDashboardData(year);
-  let csv = `Combined Monthly Report - ${data.year}\n`;
-  csv += "Month,Income Paid (₹),Income Due (₹),Expense (₹),Net (₹)\n";
-  for (let i = 0; i < 12; i++) {
-    const incomeMonth = data.monthWiseIncome[i];
-    const expenseMonth = data.monthWiseExpense[i];
-    const net = incomeMonth.totalPaid - expenseMonth.totalAmount;
-    csv += `"${incomeMonth.month}",${incomeMonth.totalPaid.toFixed(2)},${incomeMonth.totalDue.toFixed(2)},${expenseMonth.totalAmount.toFixed(2)},${net.toFixed(2)}\n`;
-  }
-  csv += `\nTOTAL,${data.totals.incomePaid.toFixed(2)},${data.totals.incomeDue.toFixed(2)},${data.totals.expense.toFixed(2)},${data.totals.netBalance.toFixed(2)}\n`;
-  return csv;
-}
+        .sidebar.collapsed .user-role-badge {
+            padding: 15px 5px;
+            margin-bottom: 10px;
+        }
 
-function getLegacyDashboardData() {
-  const today = new Date();
-  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-  const formatDate = (d) => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-  };
-  const startStr = formatDate(firstDay);
-  const endStr = formatDate(today);
-  const fees = getExternalFeesData();
-  const incomeVouchers = getIncomeRecords();
-  const salaries = getExternalSalaryData();
-  const expenseVouchers = getExpenseRecords();
-  const filterByDate = (arr) => arr.filter(i => i.Date >= startStr && i.Date <= endStr);
-  const curFees = filterByDate(fees);
-  const curIncV = filterByDate(incomeVouchers);
-  const curSal = filterByDate(salaries);
-  const curExpV = filterByDate(expenseVouchers);
-  const sum = (arr) => arr.reduce((acc, curr) => acc + (parseFloat(curr.Amount)||0), 0);
-  const totalInc = sum(curFees) + sum(curIncV);
-  const totalExp = sum(curSal) + sum(curExpV);
-  const trendData = { labels: [], income: [], expense: [] };
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-    const mLabel = d.toLocaleString('default', { month: 'short' });
-    const mStartObj = new Date(d.getFullYear(), d.getMonth(), 1);
-    const mEndObj = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-    const mStart = formatDate(mStartObj);
-    const mEnd = formatDate(mEndObj);
-    const rangeFilter = (arr) => arr.filter(x => x.Date >= mStart && x.Date <= mEnd);
-    const mInc = sum(rangeFilter(fees)) + sum(rangeFilter(incomeVouchers));
-    const mExp = sum(rangeFilter(salaries)) + sum(rangeFilter(expenseVouchers));
-    trendData.labels.push(mLabel);
-    trendData.income.push(mInc);
-    trendData.expense.push(mExp);
-  }
-  return {
-    totalIncome: totalInc,
-    totalExpense: totalExp,
-    balance: totalInc - totalExp,
-    trend: trendData
-  };
-}
+        .sidebar.collapsed .user-role-badge h6,
+        .sidebar.collapsed .user-role-badge h5 {
+            display: none;
+        }
 
-function getReportData(reportType, startDate, endDate) {
-  const start = startDate;
-  const end = endDate;
-  const filterDate = (arr) => arr.filter(i => i.Date >= start && i.Date <= end);
+        .sidebar.collapsed .menu-link span,
+        .sidebar.collapsed .menu-arrow {
+            display: none;
+        }
 
-  let rawData = [];
-  let summary = { total: 0, count: 0 };
-  let chartData = { labels: [], values: [] };
-  let topEntries = [];
-  let title = "";
+        .sidebar.collapsed .menu-link {
+            justify-content: center;
+            padding: 15px 10px;
+        }
 
-  const aggregateBy = (data, keyField) => {
-    const map = {};
-    data.forEach(item => {
-      const k = item[keyField] || "Other";
-      map[k] = (map[k] || 0) + (parseFloat(item.Amount) || 0);
-    });
-    return {
-      labels: Object.keys(map),
-      values: Object.values(map)
-    };
-  };
+        .sidebar.collapsed .menu-link i {
+            margin-right: 0;
+            font-size: 1.4rem;
+        }
 
-  switch(reportType) {
-    case 'consolidated':
-      title = "Consolidated Financial Statement";
-      const f = filterDate(getExternalFeesData());
-      const iv = filterDate(getIncomeRecords());
-      const s = filterDate(getExternalSalaryData());
-      const ev = filterDate(getExpenseRecords());
-      const totI = f.reduce((a,b)=>a+b.Amount,0) + iv.reduce((a,b)=>a+b.Amount,0);
-      const totE = s.reduce((a,b)=>a+b.Amount,0) + ev.reduce((a,b)=>a+b.Amount,0);
-      summary.total = totI - totE;
-      summary.income = totI;
-      summary.expense = totE;
-      chartData.labels = ["Total Income", "Total Expense"];
-      chartData.values = [totI, totE];
-      const merged = [
-        ...f.map(x => ({ Date: x.Date, Desc: "Fees: "+x.StudentName, Type: "Income", Amount: x.Amount })),
-        ...iv.map(x => ({ Date: x.Date, Desc: "Voucher: "+x.IncomeType, Type: "Income", Amount: x.Amount })),
-        ...s.map(x => ({ Date: x.Date, Desc: "Salary: "+x.EmployeeName, Type: "Expense", Amount: x.Amount })),
-        ...ev.map(x => ({ Date: x.Date, Desc: "Expense: "+x.ExpenseType, Type: "Expense", Amount: x.Amount }))
-      ].sort((a,b) => (a.Date < b.Date ? 1 : -1));
-      topEntries = merged.slice(0, 15);
-      rawData = merged;
-      break;
-    case 'fees':
-      title = "Fees Collection Report";
-      rawData = filterDate(getExternalFeesData());
-      summary.total = rawData.reduce((sum, item) => sum + item.Amount, 0);
-      summary.count = rawData.length;
-      chartData = aggregateBy(rawData, 'ClassName');
-      topEntries = rawData.sort((a,b) => (a.Date < b.Date ? 1 : -1)).slice(0, 15);
-      break;
-    case 'salary':
-      title = "Salary & Payroll Report";
-      rawData = filterDate(getExternalSalaryData());
-      summary.total = rawData.reduce((sum, item) => sum + item.Amount, 0);
-      summary.count = rawData.length;
-      chartData = aggregateBy(rawData, 'EmployeeName');
-      topEntries = rawData.sort((a,b) => (a.Date < b.Date ? 1 : -1)).slice(0, 15);
-      break;
-    case 'voucher_income':
-      title = "Voucher Income (Misc)";
-      rawData = filterDate(getIncomeRecords());
-      summary.total = rawData.reduce((sum, item) => sum + item.Amount, 0);
-      summary.count = rawData.length;
-      chartData = aggregateBy(rawData, 'IncomeType');
-      topEntries = rawData.sort((a,b) => (a.Date < b.Date ? 1 : -1)).slice(0, 15);
-      break;
-    case 'voucher_expense':
-      title = "Operational Expenses";
-      rawData = filterDate(getExpenseRecords());
-      summary.total = rawData.reduce((sum, item) => sum + item.Amount, 0);
-      summary.count = rawData.length;
-      chartData = aggregateBy(rawData, 'ExpenseType');
-      topEntries = rawData.sort((a,b) => (a.Date < b.Date ? 1 : -1)).slice(0, 15);
-      break;
-  }
+        .sidebar.collapsed .submenu {
+            display: none !important; /* Force hide submenus when collapsed */
+        }
+        
+        .sidebar::-webkit-scrollbar { 
+            width: 8px; 
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb { 
+            background: var(--primary); 
+            border-radius: 10px; 
+        }
 
-  return {
-    title: title,
-    summary: summary,
-    chartData: chartData,
-    topEntries: topEntries,
-    allData: rawData
-  };
-}
+        .user-role-badge { 
+            padding: 30px 20px; 
+            background: var(--primary); 
+            color: white; 
+            text-align: center; 
+            margin-bottom: 20px; 
+            position: relative; 
+            overflow: hidden; 
+            transform-style: preserve-3d;
+        }
+        
+        .user-role-badge::before { 
+            content: ''; 
+            position: absolute; 
+            width: 150px; 
+            height: 150px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 50%; 
+            top: -50px; 
+            right: -50px; 
+        }
+        
+        .user-role-badge h6 { 
+            margin: 0; 
+            font-size: 0.9rem; 
+            opacity: 0.9; 
+            position: relative; 
+            z-index: 1; 
+        }
+        
+        .user-role-badge h5 { 
+            margin: 8px 0 0 0; 
+            font-weight: 700; 
+            font-size: 1.3rem; 
+            position: relative; 
+            z-index: 1; 
+        }
 
-function generateVoucher(voucherNo, type) {
-  const isIncome = type.toLowerCase() === 'income';
-  let record;
-  if (isIncome) {
-    const recs = getIncomeRecords();
-    record = recs.find(r => r.VoucherNo == voucherNo);
-  } else {
-    const recs = getExpenseRecords();
-    record = recs.find(r => r.VoucherNo == voucherNo);
-  }
-  if (!record) throw new Error(`Voucher #${voucherNo} not found.`);
-  const schoolInfo = getSchoolInfo();
-  const title = isIncome ? 'RECEIPT' : 'PAYMENT';
+        .sidebar-menu { 
+            list-style: none; 
+            padding: 10px; 
+            margin: 0; 
+        }
+        
+        .menu-item { 
+            margin-bottom: 5px; 
+        }
 
-  const dateStr = record.Date;
-  const department = record.Department;
-  const category = isIncome ? record.IncomeType : record.ExpenseType;
-  const amount = parseFloat(record.Amount).toFixed(2);
-  const totalPaid = parseFloat(record.TotalPaid || 0).toFixed(2);
-  const lateFee = parseFloat(record.LateFee || 0).toFixed(2);
-  const discountAmount = parseFloat(record.DiscountAmount || 0).toFixed(2);
-  const due = parseFloat(record.Due || 0).toFixed(2);
-  const academicYear = record.AcademicYear || '-';
-  const discountScholarship = record.DiscountScholarship || '-';
-  const mode = record.PaymentMode;
-  const remarks = record.Remarks || "-";
+        .menu-link { 
+            display: flex; 
+            align-items: center; 
+            padding: 15px 20px; 
+            color: #2c3e50; 
+            text-decoration: none; 
+            transition: all var(--transition-speed); 
+            cursor: pointer; 
+            border-radius: 12px; 
+            font-weight: 500; 
+            transform-style: preserve-3d;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        
+        .menu-link:hover { 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
+            color: #667eea; 
+            transform: translateX(5px) translateZ(10px); 
+            box-shadow: var(--shadow-3d);
+        }
 
-  let partyBlock = '';
-  if (isIncome) {
-    partyBlock = `
-      <div style="margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 10px;">
-        <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">STUDENT DETAILS:</div>
-        <div style="font-size: 16px; font-weight: bold; margin-left: 0;">${record.StudentName}</div>
-        <div style="font-size: 12px; font-weight: bold; margin-top: 3px;">Class: ${record.ClassName} | Roll: ${record.RollNo}</div>
-        <div style="font-size: 12px; font-weight: bold; margin-top: 5px;">Academic Year: ${academicYear}</div>
-      </div>`;
-  } else {
-    partyBlock = `
-      <div style="margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 10px;">
-        <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">PAID TO:</div>
-        <div style="font-size: 16px; font-weight: bold; margin-left: 0;">${record.PaidTo}</div>
-      </div>`;
-  }
+        /* Fix hover effect in collapsed mode */
+        .sidebar.collapsed .menu-link:hover {
+            transform: none;
+        }
+        
+        .menu-link.active { 
+            background: var(--primary); 
+            color: white; 
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3); 
+            transform: translateX(5px) translateZ(15px); 
+        }
+        
+        /* Fix active effect in collapsed mode */
+        .sidebar.collapsed .menu-link.active {
+            transform: none;
+        }
+        
+        .menu-link i { 
+            width: 30px; 
+            margin-right: 15px; 
+            font-size: 1.2rem; 
+        }
+        
+        .menu-arrow { 
+            margin-left: auto; 
+            transition: transform var(--transition-speed); 
+            font-size: 0.9rem; 
+        }
+        
+        .menu-arrow.rotated { 
+            transform: rotate(180deg); 
+        }
 
-  const creatorLine = record.CreatedBy ? `<div style="font-size:11px; font-weight: bold; margin-top: 5px;">Created By: ${record.CreatedBy}</div>` : '';
+        .submenu { 
+            list-style: none; 
+            padding: 0; 
+            margin: 5px 0 0 0; 
+            background: transparent; 
+            display: none; 
+        }
+        
+        .submenu.show { 
+            display: block; 
+            animation: slideDown 0.3s ease; 
+        }
 
-  const financialDetails = isIncome ? `
-    <table style="width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px; font-weight: bold; border: 2px solid #000;">
-      <tr style="border-bottom: 2px solid #000;">
-        <th style="padding: 8px; text-align: left; border-right: 1px solid #000; background: #fff;">DESCRIPTION</th>
-        <th style="padding: 8px; text-align: right; background: #fff;">AMOUNT (₹)</th>
-      </tr>
-       <tr><td style="padding: 8px; border-bottom: 1px solid #000; border-right: 1px solid #000;">Total Amount</td><td style="padding: 8px; text-align: right; border-bottom: 1px solid #000;">${amount}</td></tr>
-       <tr><td style="padding: 8px; border-bottom: 1px solid #000; border-right: 1px solid #000;">Discount/Scholarship</td><td style="padding: 8px; text-align: right; border-bottom: 1px solid #000;">${discountScholarship}</td></tr>
-       <tr><td style="padding: 8px; border-bottom: 1px solid #000; border-right: 1px solid #000;">Discount Amount</td><td style="padding: 8px; text-align: right; border-bottom: 1px solid #000;">${discountAmount}</td></tr>
-       <tr><td style="padding: 8px; border-bottom: 1px solid #000; border-right: 1px solid #000;">Late Fee</td><td style="padding: 8px; text-align: right; border-bottom: 1px solid #000;">${lateFee}</td></tr>
-       <tr><td style="padding: 8px; border-bottom: 1px solid #000; border-right: 1px solid #000;">Total Paid</td><td style="padding: 8px; text-align: right; border-bottom: 1px solid #000; font-weight: bold;">${totalPaid}</td></tr>
-      <tr style="border-top: 3px solid #000;"><td style="padding: 10px; font-weight: bold; border-right: 1px solid #000; background: #f0f0f0;">DUE AMOUNT</td><td style="padding: 10px; text-align: right; font-weight: bold; background: #f0f0f0; font-size: 15px;">₹ ${due}</td></tr>
-    </table>
-  ` : '';
+        .submenu-link { 
+            display: block; 
+            padding: 12px 20px 12px 65px; 
+            color: #5d6d7e; 
+            text-decoration: none; 
+            transition: all var(--transition-speed); 
+            font-size: 0.9rem; 
+            border-radius: 10px; 
+            margin: 2px 0; 
+            font-weight: 500; 
+            transform-style: preserve-3d;
+        }
+        
+        .submenu-link:hover { 
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); 
+            color: #667eea; 
+            padding-left: 70px; 
+            transform: translateZ(10px);
+        }
+        
+        .submenu-link.active { 
+            background: var(--primary); 
+            color: white; 
+            font-weight: 600; 
+            padding-left: 70px; 
+            transform: translateZ(10px);
+        }
 
-  return `
-    <div style="width: 80mm; margin: 0 auto; background: #fff; color: #000; font-family: 'Arial', 'Helvetica', sans-serif; font-size: 12px; font-weight: bold; line-height: 1.4; padding: 12px; border: 2px solid #000;">
-      <div style="text-align: center; margin-bottom: 15px; border-bottom: 3px solid #000; padding-bottom: 8px;">
-        <h2 style="margin: 0; font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">${schoolInfo.name}</h2>
-        <div style="font-size: 11px; font-weight: bold; margin-top: 3px;">${isIncome?'INCOME VOUCHER':'EXPENSE VOUCHER'}</div>
-      </div>
-      <div style="border: 3px solid #000; padding: 8px; text-align: center; margin: 12px 0; background: #fff;">
-        <span style="font-size: 22px; font-weight: bold; letter-spacing: 2px;">${title}</span>
-      </div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 2px dashed #000; padding-bottom: 8px; font-size: 12px; font-weight: bold;">
-        <span>VOUCHER NO: ${voucherNo}</span>
-        <span>DATE: ${dateStr}</span>
-      </div>
-      ${partyBlock}
-      <table style="width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; font-weight: bold;">
-        <tr><td style="padding: 5px 0; width: 35%;">DEPARTMENT:</td><td style="padding: 5px 0; text-align: right;">${department}</td></tr>
-        <tr><td style="padding: 5px 0;">CATEGORY:</td><td style="padding: 5px 0; text-align: right;">${category}</td></tr>
-        <tr><td style="padding: 5px 0;">PAYMENT MODE:</td><td style="padding: 5px 0; text-align: right;">${mode}</td></tr>
-      </table>
-      ${financialDetails}
-      <div style="margin: 15px 0; border-top: 2px solid #000; padding-top: 8px;">
-        <div style="font-weight: bold; font-size: 12px; margin-bottom: 5px;">REMARKS:</div>
-        <div style="border-left: 4px solid #000; padding-left: 8px; font-weight: bold; font-size: 12px;">${remarks}</div>
-      </div>
-      <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: flex-end; font-weight: bold;">
-        <div>
-          <div style="font-size: 10px;">${new Date().toLocaleTimeString()}</div>
-          ${creatorLine}
+        /* Modified: Reduced padding for full-screen feel */
+        .main-content { 
+            margin-left: var(--sidebar-width); 
+            margin-top: var(--navbar-height); 
+            padding: 20px; 
+            min-height: calc(100vh - var(--navbar-height)); 
+            transform-style: preserve-3d;
+            transition: margin-left var(--transition-speed); /* Smooth transition for content */
+        }
+
+        /* New: Main content adjustment when sidebar is collapsed */
+        .main-content.sidebar-collapsed {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+        
+        .metric-card { 
+            border: none; 
+            border-radius: 20px; 
+            box-shadow: var(--shadow-light); 
+            transition: all 0.4s ease; 
+            overflow: hidden; 
+            background: white; 
+            position: relative; 
+            animation: fadeInUp 0.6s ease; 
+            transform-style: preserve-3d;
+        }
+        
+        .metric-card:hover { 
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg); 
+            box-shadow: var(--shadow-medium); 
+        }
+        
+        .metric-card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 5px; 
+            background: var(--primary); 
+        }
+        
+        .metric-card .card-body { 
+            padding: 30px; 
+        }
+
+        .generic-card-icon { 
+            width: 70px; 
+            height: 70px; 
+            border-radius: 18px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 2rem; 
+            margin-bottom: 20px; 
+            color: white; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            transition: all var(--transition-speed); 
+            transform-style: preserve-3d;
+        }
+        
+        .metric-card:hover .generic-card-icon { 
+            transform: scale(1.1) rotate(5deg) translateZ(20px); 
+        }
+
+        .metric-value { 
+            font-size: 2.3rem; 
+            font-weight: 800; 
+            color: #1a1a2e; 
+            margin: 15px 0 8px 0; 
+        }
+        
+        .metric-label { 
+            color: #6c757d; 
+            font-size: 1rem; 
+            font-weight: 600; 
+            margin-bottom: 15px; 
+        }
+        
+        .metric-change { 
+            font-size: 0.9rem; 
+            margin-top: 15px; 
+            padding: 8px 12px; 
+            border-radius: 10px; 
+            display: inline-block; 
+            font-weight: 600; 
+        }
+        
+        .metric-change.positive { 
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); 
+            color: #155724; 
+        }
+        
+        .metric-change.negative { 
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); 
+            color: #721c24; 
+        }
+        
+        .metric-change.warning { 
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); 
+            color: #856404; 
+        }
+
+        /* Modified: Generic Iframe Container Height increased for full screen */
+        .iframe-container {
+            width: 100%;
+            height: calc(100vh - 110px); /* Adjusted: 100vh - (Navbar 70px + Padding 40px) */
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            background: white;
+            animation: fadeInUp 0.5s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .activity-card { 
+            border: none; 
+            border-radius: 20px; 
+            box-shadow: var(--shadow-light); 
+            margin-top: 40px; 
+            background: white; 
+            overflow: hidden; 
+            animation: fadeInUp 0.8s ease; 
+            transform-style: preserve-3d;
+        }
+        
+        .activity-card .card-header { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 25px 30px; 
+        }
+        
+        .activity-card .card-header h5 { 
+            margin: 0; 
+            font-weight: 700; 
+            font-size: 1.3rem; 
+        }
+
+        .activity-table { 
+            margin: 0; 
+        }
+        
+        .activity-table thead th { 
+            border: none; 
+            background: #f8f9fa; 
+            color: #495057; 
+            font-weight: 700; 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            padding: 20px; 
+            letter-spacing: 0.5px; 
+        }
+        
+        .activity-table tbody td { 
+            padding: 20px; 
+            vertical-align: middle; 
+            border-top: 1px solid #f1f3f5; 
+            font-size: 0.95rem; 
+        }
+        
+        .activity-table tbody tr { 
+            transition: all var(--transition-speed); 
+            transform-style: preserve-3d;
+        }
+        
+        .activity-table tbody tr:hover { 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
+            transform: scale(1.01) translateZ(10px); 
+        }
+
+        .status-badge { 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        
+        .status-badge.success { 
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); 
+            color: #155724; 
+        }
+        
+        .status-badge.warning { 
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); 
+            color: #856404; 
+        }
+        
+        .status-badge.danger { 
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); 
+            color: #721c24; 
+        }
+
+        .clickable-card { 
+            cursor: pointer; 
+        }
+        
+        .clickable-card:hover::before { 
+            background: var(--secondary); 
+        }
+
+        .mobile-toggle { 
+            display: none; 
+            color: white; 
+            font-size: 1.5rem; 
+            cursor: pointer; 
+            transition: all var(--transition-speed); 
+        }
+        
+        .mobile-toggle:hover { 
+            color: #667eea; 
+        }
+
+        .loading-shimmer { 
+            animation: shimmer 2s infinite; 
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); 
+            background-size: 1000px 100%; 
+        }
+
+        /* ========== RESPONSIVE STYLES ========== */
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+            .sidebar-toggle-desktop { display: none; } /* Hide desktop toggle on mobile */
+            .login-container { flex-direction: column; }
+            .login-left, .login-right { padding: 50px 30px; }
+            .school-brand span { display: none; }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 15px; }
+            /* Reset main content margin when collapsed style exists but on mobile */
+            .main-content.sidebar-collapsed { margin-left: 0; }
+            .user-profile span { display: none; }
+            .metric-card { margin-bottom: 20px; }
+            .iframe-container { height: 85vh; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-wrapper" id="loginPage">
+        <div class="login-container">
+            <div class="login-left">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>St. John's English School</h2>
+                <p>Experience the future of education management. Seamlessly manage your institution with our advanced, intuitive platform designed for excellence.</p>
+            </div>
+            <div class="login-right">
+                <div class="login-header">
+                    <h3>Welcome Back!</h3>
+                    <p>Sign in to access your dashboard</p>
+                </div>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-user"></i>
+                            <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <i class="input-icon fas fa-lock"></i>
+                            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-login btn-block mt-4">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+                    </button>
+                </form>
+                <div class="login-info">
+                    <h6><i class="fas fa-info-circle mr-2"></i>St. John's Automation System</h6>
+                </div>
+            </div>
         </div>
-        <div style="text-align: center;">
-          <div style="border-top: 2px solid #000; width: 130px; padding-top: 5px; margin-top: 5px; font-size: 11px;">AUTHORISED SIGNATORY</div>
-        </div>
-      </div>
-      <div style="text-align:center; margin-top: 15px; font-size: 11px; font-weight: bold; border-top: 2px solid #000; padding-top: 8px;">
-        *** THIS IS A COMPUTER GENERATED VOUCHER ***
-      </div>
     </div>
-  `;
-}
 
-function getDashboardIncomeCSV() {
-  const today = new Date();
-  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-  const formatDate = (d) => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-  };
-  const startStr = formatDate(firstDay);
-  const endStr = formatDate(today);
-  const filterByDate = (arr) => arr.filter(i => i.Date >= startStr && i.Date <= endStr);
-  const fees = filterByDate(getExternalFeesData());
-  const incomeVouchers = filterByDate(getIncomeRecords());
-  let csv = "Type,Date,Class,Student Name,Roll No,Amount,Payment Mode,Remarks\n";
-  fees.forEach(item => {
-    csv += `"Fees","${item.Date}","${item.ClassName || ''}","${item.StudentName || ''}","-","${item.Amount}","-","-"\n`;
-  });
-  incomeVouchers.forEach(item => {
-    csv += `"Voucher","${item.Date}","${item.ClassName || ''}","${item.StudentName || ''}","${item.RollNo || ''}","${item.Amount}","${item.PaymentMode || ''}","${item.Remarks || ''}"\n`;
-  });
-  const totalIncome = fees.reduce((sum, item) => sum + item.Amount, 0) + incomeVouchers.reduce((sum, item) => sum + item.Amount, 0);
-  csv += `\n"TOTAL INCOME","${startStr} to ${endStr}","","","","${totalIncome}","",""`;
-  return csv;
-}
+    <!-- Dashboard -->
+    <div class="dashboard-wrapper" id="dashboardPage">
+        <!-- Top Navbar -->
+        <nav class="top-navbar">
+            <div class="container-fluid">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="mobile-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <div class="school-brand">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>St. John's English School</span>
+                    </div>
+                </div>
+                <div class="navbar-right">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                    </div>
+                    <div class="user-profile dropdown">
+                        <div data-toggle="dropdown">
+                            <div class="user-avatar" id="userAvatarNav">A</div>
+                            <span id="userNameNav">Admin User</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </div>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profile</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
-function getDashboardExpenseCSV() {
-  const today = new Date();
-  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-  const formatDate = (d) => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-  };
-  const startStr = formatDate(firstDay);
-  const endStr = formatDate(today);
-  const filterByDate = (arr) => arr.filter(i => i.Date >= startStr && i.Date <= endStr);
-  const salaries = filterByDate(getExternalSalaryData());
-  const expenseVouchers = filterByDate(getExpenseRecords());
-  let csv = "Type,Date,Paid To/Employee,Category,Amount,Payment Mode,Remarks,Created By\n";
-  salaries.forEach(item => {
-    csv += `"Salary","${item.Date}","${item.EmployeeName || ''}","Salary","${item.Amount}","Bank Transfer","Monthly Salary","HR Department"\n`;
-  });
-  expenseVouchers.forEach(item => {
-    csv += `"Voucher","${item.Date}","${item.PaidTo || ''}","${item.ExpenseType || ''}","${item.Amount}","${item.PaymentMode || ''}","${item.Remarks || ''}","${item.CreatedBy || ''}"\n`;
-  });
-  const totalExpense = salaries.reduce((sum, item) => sum + item.Amount, 0) + expenseVouchers.reduce((sum, item) => sum + item.Amount, 0);
-  csv += `\n"TOTAL EXPENSE","${startStr} to ${endStr}","","","","${totalExpense}","",""`;
-  return csv;
-}
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <!-- New: Desktop Toggle Arrow -->
+            <div class="sidebar-toggle-desktop" onclick="toggleSidebarDesktop()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
 
-function getDashboardBalanceCSV() {
-  const today = new Date();
-  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-  const formatDate = (d) => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-  };
-  const startStr = formatDate(firstDay);
-  const endStr = formatDate(today);
-  const filterByDate = (arr) => arr.filter(i => i.Date >= startStr && i.Date <= endStr);
-  const fees = filterByDate(getExternalFeesData());
-  const incomeVouchers = filterByDate(getIncomeRecords());
-  const salaries = filterByDate(getExternalSalaryData());
-  const expenseVouchers = filterByDate(getExpenseRecords());
-  const totalIncome = fees.reduce((sum, item) => sum + item.Amount, 0) + incomeVouchers.reduce((sum, item) => sum + item.Amount, 0);
-  const totalExpense = salaries.reduce((sum, item) => sum + item.Amount, 0) + expenseVouchers.reduce((sum, item) => sum + item.Amount, 0);
-  const netBalance = totalIncome - totalExpense;
-  let csv = "Period,Total Income,Total Expense,Net Balance,Status\n";
-  csv += `"${startStr} to ${endStr}","${totalIncome}","${totalExpense}","${netBalance}","${netBalance >= 0 ? 'Positive' : 'Negative'}"\n\n`;
-  csv += "INCOME BREAKDOWN\n";
-  csv += "Category,Count,Total Amount,Average\n";
-  const feesTotal = fees.reduce((sum, item) => sum + item.Amount, 0);
-  const incomeVoucherTotal = incomeVouchers.reduce((sum, item) => sum + item.Amount, 0);
-  csv += `"Fees Collection","${fees.length}","${feesTotal}","${fees.length > 0 ? (feesTotal / fees.length).toFixed(2) : 0}"\n`;
-  csv += `"Income Vouchers","${incomeVouchers.length}","${incomeVoucherTotal}","${incomeVouchers.length > 0 ? (incomeVoucherTotal / incomeVouchers.length).toFixed(2) : 0}"\n`;
-  csv += "\nEXPENSE BREAKDOWN\n";
-  csv += "Category,Count,Total Amount,Average\n";
-  const salaryTotal = salaries.reduce((sum, item) => sum + item.Amount, 0);
-  const expenseVoucherTotal = expenseVouchers.reduce((sum, item) => sum + item.Amount, 0);
-  csv += `"Salary Payments","${salaries.length}","${salaryTotal}","${salaries.length > 0 ? (salaryTotal / salaries.length).toFixed(2) : 0}"\n`;
-  csv += `"Expense Vouchers","${expenseVouchers.length}","${expenseVoucherTotal}","${expenseVouchers.length > 0 ? (expenseVoucherTotal / expenseVouchers.length).toFixed(2) : 0}"\n`;
-  return csv;
-}
+            <div class="user-role-badge">
+                <h6>Logged in as</h6>
+                <h5 id="userRoleDisplay">Administrator</h5>
+            </div>
+            <ul class="sidebar-menu" id="sidebarMenu">
+                <!-- Menu items will be dynamically loaded -->
+            </ul>
+        </div>
 
-function getFilteredIncomeRecords(filters) {
-  const allRecords = getIncomeRecords();
-  if (!filters || Object.keys(filters).length === 0) return allRecords;
-  return allRecords.filter(record => {
-    if (filters.department && record.Department !== filters.department) return false;
-    if (filters.incomeType && record.IncomeType !== filters.incomeType) return false;
-    if (filters.className && record.ClassName !== filters.className) return false;
-    if (filters.paymentMode && record.PaymentMode !== filters.paymentMode) return false;
-    return true;
-  });
-}
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dynamic Content Area -->
+            <div id="dynamicContent">
+                <!-- Content will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
 
-function getFilteredExpenseRecords(filters) {
-  const allRecords = getExpenseRecords();
-  if (!filters || Object.keys(filters).length === 0) return allRecords;
-  return allRecords.filter(record => {
-    if (filters.department && record.Department !== filters.department) return false;
-    if (filters.expenseType && record.ExpenseType !== filters.expenseType) return false;
-    if (filters.paidTo && record.PaidTo !== filters.paidTo) return false;
-    if (filters.paymentMode && record.PaymentMode !== filters.paymentMode) return false;
-    return true;
-  });
-}
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // User credentials and roles - UPDATED
+        const users = {
+            'Admin': { password: '4321', role: 'admin', fullName: 'Admin User' }, // Password changed to 4321
+            'Teacher': { password: '1234', role: 'teacher', fullName: 'Teacher User' },
+            'Student': { password: '1234', role: 'student', fullName: 'Student User' },
+            'Office': { password: '1234', role: 'office', fullName: 'Office User' } // Added Office user
+        };
 
-function getFilterOptions() {
-  const incomeRecords = getIncomeRecords();
-  const expenseRecords = getExpenseRecords();
-  const incomeDepartments = [...new Set(incomeRecords.map(r => r.Department).filter(Boolean))];
-  const incomeTypes = [...new Set(incomeRecords.map(r => r.IncomeType).filter(Boolean))];
-  const incomeClasses = [...new Set(incomeRecords.map(r => r.ClassName).filter(Boolean))];
-  const incomePaymentModes = [...new Set(incomeRecords.map(r => r.PaymentMode).filter(Boolean))];
-  const expenseDepartments = [...new Set(expenseRecords.map(r => r.Department).filter(Boolean))];
-  const expenseTypes = [...new Set(expenseRecords.map(r => r.ExpenseType).filter(Boolean))];
-  const paidToOptions = [...new Set(expenseRecords.map(r => r.PaidTo).filter(Boolean))];
-  const expensePaymentModes = [...new Set(expenseRecords.map(r => r.PaymentMode).filter(Boolean))];
-  return {
-    income: {
-      departments: incomeDepartments,
-      incomeTypes: incomeTypes,
-      classes: incomeClasses,
-      paymentModes: incomePaymentModes
-    },
-    expense: {
-      departments: expenseDepartments,
-      expenseTypes: expenseTypes,
-      paidToOptions: paidToOptions,
-      paymentModes: expensePaymentModes
-    }
-  };
-}
+        let currentUser = null;
+
+        // User roles and their module access - UPDATED with Office role
+        const userRoles = {
+            admin: {
+                displayName: 'Administrator',
+                modules: [
+                    { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
+                    {
+                        id: 'documents', name: 'Documents', icon: 'fas fa-file-alt', submenu: [
+                            { name: 'Warning Letter', link: '#warning-letter-dash' },
+                            { name: 'Teachers ID Card', link: '#teacher-id-card' },
+                            { name: 'Student ID Card', link: '#student-id-card' },
+                            { name: 'Escort Card', link: '#escort-card' },
+                            { name: 'Generate Salary Slip', link: '#generate-salary-slip' },
+                            { name: 'Employee Master Upload', link: '#employee-master-upload' },
+                            { name: 'Report Card', link: '#report-card' },
+                            { name: 'Offer Letter', link: '#offer-letter' }
+                        ]
+                    },
+                    {
+                        id: 'automation', name: 'Automation', icon: 'fas fa-cogs', submenu: [
+                            { name: 'Notice Automation', link: '#notice-automation' },
+                            { name: 'WhatsApp Form Link', link: '#whatsapp-link' }
+                        ]
+                    },
+                    {
+                        id: 'attendance', name: 'Attendance', icon: 'fas fa-calendar-check', submenu: [
+                            { name: 'Student Attendance', link: '#student-attendance' },
+                            { name: 'Teacher Attendance', link: '#teacher-attendance' },
+                            { name: 'Staff Attendance', link: '#staff-attendance' }
+                        ]
+                    },
+                    {
+                        id: 'academic', name: 'Academic', icon: 'fas fa-book', submenu: [
+                            // REMOVED: Class Work
+                            { name: 'Assignment Dashboard', link: '#assignment-dashboard' }, // Renamed from Home Work
+                            { name: 'Assignment Portal', link: '#assignment-portal' }
+                        ]
+                    },
+                    {
+                        id: 'finance', name: 'Finance', icon: 'fas fa-rupee-sign', submenu: [
+                            { name: 'Fees Collection', link: '#fees-collection' },
+                            { name: 'Expense Module', link: '#expense-module' }
+                        ]
+                    },
+                    { 
+                        id: 'leave', name: 'Leave Management', icon: 'fas fa-user-clock', submenu: [
+                            { name: 'Open Portal', link: '#leave-open-portal' },
+                            { name: 'Leave_Balance', link: '#leave-balance' }
+                        ]
+                    }
+                ]
+            },
+            teacher: {
+                displayName: 'Teacher',
+                modules: [
+                    { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
+                    { id: 'attendance', name: 'Student Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
+                    // REMOVED: Class Work
+                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' }, // Renamed from Home Work
+                    { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' },
+                    { id: 'leave', name: 'Leave Application', icon: 'fas fa-user-clock', link: '#leave-open-portal' }
+                ]
+            },
+            student: {
+                displayName: 'Student',
+                modules: [
+                    { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
+                    { id: 'attendance', name: 'My Attendance', icon: 'fas fa-calendar-check', link: '#student-attendance' },
+                    // REMOVED: Class Work
+                    { id: 'assignment-dash', name: 'Assignment Dashboard', icon: 'fas fa-tasks', link: '#assignment-dashboard' }, // Renamed from Home Work
+                    { id: 'assignment', name: 'Assignment Portal', icon: 'fas fa-file-upload', link: '#assignment-portal' }
+                ]
+            },
+            // NEW: Office role with access to Finance module only
+            office: {
+                displayName: 'Office Staff',
+                modules: [
+                    { id: 'dashboard', name: 'Dashboard', icon: 'fas fa-tachometer-alt', link: '#dashboard', active: true },
+                    {
+                        id: 'finance', name: 'Finance', icon: 'fas fa-rupee-sign', submenu: [
+                            { name: 'Fees Collection', link: '#fees-collection' },
+                            { name: 'Expense Module', link: '#expense-module' }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // --- DASHBOARD METRICS WITH API PLACEHOLDERS ---
+        const defaultDashboardMetrics = [
+            // Prompt 1: Student Data Placeholder
+            { iconClass: 'students', icon: 'fas fa-user-graduate', label: 'Total Students', value: 'Loading...', change: 'last month', changeClass: 'positive', color: '#667eea' },
+            // Prompt 2: Teacher Data Placeholder
+            { iconClass: 'teachers', icon: 'fas fa-chalkboard-teacher', label: 'Total Teachers', value: 'Loading...', change: 'This Month', changeClass: 'positive', color: '#f093fb' },
+            { iconClass: 'attendance', icon: 'fas fa-chart-bar', label: 'Avg. Attendance', value: '88.5%', change: '-1.5% from last week', changeClass: 'negative', color: '#4facfe' },
+            { iconClass: 'fees', icon: 'fas fa-money-check-alt', label: 'Fees Collected', value: '₹5.2L', change: 'Target: ₹7L', changeClass: 'warning', color: '#fa709a' }
+        ];
+
+        const recentActivities = [
+            { date: '2025-10-25', activity: 'New student enrolled in Class V', user: 'Admin', status: 'success' },
+            { date: '2025-10-24', activity: 'Mathematics test marks uploaded', user: 'Teacher User', status: 'success' },
+            { date: '2025-10-24', activity: 'Server maintenance scheduled', user: 'System', status: 'warning' },
+            { date: '2025-10-23', activity: 'Leave request from Teacher M. Singh', user: 'Teacher User', status: 'danger' },
+            { date: '2025-10-23', activity: 'Fees payment received from Roll No 101', user: 'Admin', status: 'success' },
+        ];
+        
+        // --- FUNCTION: FETCH LIVE DATA FROM GOOGLE SHEETS ---
+        async function fetchLiveDashboardData() {
+            const apiKey = 'AIzaSyBHM6jOSzcJzo4KEJF4KOfxrwU5Nyo_d1k';
+            
+            // Configuration for Students
+            const studentSheetId = '1-d7X5tsQzzXsj9krElPKDpFtg49jJ4cbeqrje97Ng34';
+            const studentRange = "'Student Data'!D2";
+            
+            // Configuration for Teachers
+            const teacherSheetId = '1yl7eKzpmnKJpALxWzvRQJVSHuH0ND7mSZOMeIK1NMJI';
+            const teacherRange = "'User'!D2";
+
+            const studentUrl = `https://sheets.googleapis.com/v4/spreadsheets/${studentSheetId}/values/${studentRange}?key=${apiKey}`;
+            const teacherUrl = `https://sheets.googleapis.com/v4/spreadsheets/${teacherSheetId}/values/${teacherRange}?key=${apiKey}`;
+
+            try {
+                // Fetch Student Data
+                const studentResponse = await fetch(studentUrl);
+                const studentData = await studentResponse.json();
+                
+                // Fetch Teacher Data
+                const teacherResponse = await fetch(teacherUrl);
+                const teacherData = await teacherResponse.json();
+
+                // Update Metrics Array
+                if (studentData.values && studentData.values.length > 0) {
+                    defaultDashboardMetrics[0].value = studentData.values[0][0]; // Update Student Count
+                } else {
+                    defaultDashboardMetrics[0].value = "N/A";
+                }
+
+                if (teacherData.values && teacherData.values.length > 0) {
+                    defaultDashboardMetrics[1].value = teacherData.values[0][0]; // Update Teacher Count
+                } else {
+                    defaultDashboardMetrics[1].value = "N/A";
+                }
+
+                // Refresh the Dashboard View if currently displayed (Active link check)
+                const dashboardLink = document.querySelector('a[href="#dashboard"]');
+                if (dashboardLink && dashboardLink.classList.contains('active')) {
+                    // Re-render the content
+                    const content = generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities);
+                    document.getElementById('dynamicContent').innerHTML = content;
+                }
+
+            } catch (error) {
+                console.error("Error fetching sheet data:", error);
+                defaultDashboardMetrics[0].value = "Error";
+                defaultDashboardMetrics[1].value = "Error";
+            }
+        }
+
+        // Helper function to generate generic cards HTML
+        function generateMetricCardsHtml(cardsData) {
+            let html = '<div class="row">';
+            cardsData.forEach((metric, index) => {
+                const isClickable = metric.link;
+                const cardClass = isClickable ? 'metric-card clickable-card' : 'metric-card';
+                const cardStyle = isClickable ? 'cursor: pointer;' : '';
+                const animationDelay = `animation-delay: ${index * 0.1}s;`;
+                
+                html += `
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card ${cardClass}" 
+                             style="${cardStyle} ${animationDelay}" 
+                             ${isClickable ? `onclick="window.open('${metric.link}', '_blank')"` : ''}>
+                            <div class="card-body">
+                                <div class="generic-card-icon" style="background: ${metric.color || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};">
+                                    <i class="${metric.icon}"></i>
+                                </div>
+                                <div class="metric-value">${metric.value}</div>
+                                <div class="metric-label">${metric.label}</div>
+                                ${metric.change ? `<div class="metric-change ${metric.changeClass || ''}">${metric.change}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Helper function to generate generic iframe HTML
+        function generateIframeHtml(url) {
+            return `
+                <div class="iframe-container">
+                    <iframe src="${url}"></iframe>
+                </div>
+            `;
+        }
+
+        // Helper function to generate activities table HTML
+        function generateActivitiesTableHtml(activities) {
+            let rows = '';
+            activities.forEach(activity => {
+                rows += `
+                    <tr>
+                        <td><strong>${activity.date}</strong></td>
+                        <td>${activity.activity}</td>
+                        <td>${activity.user}</td>
+                        <td><span class="status-badge ${activity.status}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</span></td>
+                    </tr>
+                `;
+            });
+
+            return `
+                <div class="card activity-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-clock mr-2"></i>Recent Activities</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table activity-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>User</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Content templates
+        const contentTemplates = {
+            '#dashboard': {
+                // Use a getter to ensure latest data is used when rendered
+                get content() { return generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities) }
+            },
+            
+            '#warning-letter-dash': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec')
+            },
+
+            '#teacher-id-card': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec')
+            },
+
+            '#student-id-card': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec')
+            },
+
+            '#escort-card': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec')
+            },
+
+            '#generate-salary-slip': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec')
+            },
+            '#employee-master-upload': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec')
+            },
+
+            '#report-card': {
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-star', label: 'Top Performer', value: 'Class 10', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
+                    { icon: 'fas fa-chart-line', label: 'Average Score', value: '78%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+                    { icon: 'fas fa-check-double', label: 'Cards Generated', value: '95%', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+                    { icon: 'fas fa-tasks', label: 'Pending Upload', value: '2 Classes', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
+                ])
+            },
+
+            '#offer-letter': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec')
+            },
+
+            '#notice-automation': {
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-bullhorn', label: 'Total Notices', value: '120', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
+                    { icon: 'fas fa-envelope', label: 'Via Email', value: '80', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+                    { icon: 'fab fa-whatsapp', label: 'Via WhatsApp', value: '40', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+                    { icon: 'fas fa-paper-plane', label: 'Schedule New', value: 'Action', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
+                ])
+            },
+            '#whatsapp-link': {
+                content: generateMetricCardsHtml([
+                    { icon: 'fab fa-whatsapp', label: 'Total Link Uses', value: '350', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+                    { icon: 'fas fa-link', label: 'Active Forms', value: '5', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+                    { icon: 'fas fa-ban', label: 'Expired Links', value: '2', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
+                    { icon: 'fas fa-qrcode', label: 'Generate QR', value: 'New', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
+                ])
+            },
+            '#student-attendance': {
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-user-check', label: 'Today Present', value: '1,150', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+                    { icon: 'fas fa-user-times', label: 'Today Absent', value: '100', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
+                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '92%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+                    { icon: 'fas fa-edit', label: 'Mark Attendance', value: 'Action', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
+                ])
+            },
+            '#teacher-attendance': {
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-user-check', label: 'Today Present', value: '70', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+                    { icon: 'fas fa-user-clock', label: 'On Leave', value: '5', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
+                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '96%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+                    { icon: 'fas fa-clock', label: 'Late Arrivals', value: '2', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }
+                ])
+            },
+            '#staff-attendance': {
+                content: generateMetricCardsHtml([
+                    { icon: 'fas fa-user-check', label: 'Today Present', value: '25', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+                    { icon: 'fas fa-user-times', label: 'On Leave', value: '1', color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
+                    { icon: 'fas fa-percent', label: 'Monthly Average', value: '99%', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+                    { icon: 'fas fa-users-cog', label: 'Total Staff', value: '26', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }
+                ])
+            },
+            
+            // Renamed from Home Work to Assignment Dashboard
+            '#assignment-dashboard': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzeSXzBw8bbz_TA98wM3Z-UN4UjNN4TfAfWMd2OdyaKYxi3omTc8wGm8Q9soc_hqRXo/exec')
+            },
+
+            '#assignment-portal': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec')
+            },
+
+            '#fees-collection': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwqZo5CtfzwFhADKet3Z3Vr6XIyPby4CHWlApfcbDnXVPXZ0jVMJYfJg9YtZtV3yTI5sg/exec')
+            },
+            
+            // UPDATED: Expense Module now loads Iframe with your key
+            '#expense-module': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycby_PW0sWz9pHJSFQAv2hPcvxuScQAtw8hngSqUUru52xy0TW4GmXtYqGBZLofa_Wg0xpA/exec')
+            },
+
+            '#leave-open-portal': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec')
+            },
+            '#leave-balance': {
+                content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec')
+            }
+        };
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (users[username] && users[username].password === password) {
+                currentUser = {
+                    username: username,
+                    role: users[username].role,
+                    fullName: users[username].fullName
+                };
+
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'block';
+
+                initializeDashboard();
+            } else {
+                alert('Invalid username or password!');
+            }
+        }
+
+        // Initialize dashboard
+        function initializeDashboard() {
+            loadSidebarMenu();
+            updateNavbar();
+            
+            // --- TRIGGER DATA FETCH ---
+            fetchLiveDashboardData();
+
+            // Find the dashboard link and load its content on initial login
+            const dashboardLink = document.querySelector('.menu-link[href="#dashboard"]');
+            if (dashboardLink) {
+                loadContent(dashboardLink);
+            }
+        }
+
+        // Load sidebar menu based on user role
+        function loadSidebarMenu() {
+            const role = userRoles[currentUser.role];
+            const menuContainer = document.getElementById('sidebarMenu');
+            const roleDisplay = document.getElementById('userRoleDisplay');
+            
+            roleDisplay.textContent = role.displayName;
+            menuContainer.innerHTML = '';
+
+            role.modules.forEach(module => {
+                const menuItem = document.createElement('li');
+                menuItem.className = 'menu-item';
+
+                if (module.submenu) {
+                    menuItem.innerHTML = `
+                        <a class="menu-link" onclick="toggleSubmenu(this)">
+                            <i class="${module.icon}"></i>
+                            <span>${module.name}</span>
+                            <i class="fas fa-chevron-down menu-arrow"></i>
+                        </a>
+                        <ul class="submenu">
+                            ${module.submenu.map(sub => `
+                                <li><a href="${sub.link}" class="submenu-link" onclick="loadContent(this)">${sub.name}</a></li>
+                            `).join('')}
+                        </ul>
+                    `;
+                } else {
+                    menuItem.innerHTML = `
+                        <a href="${module.link}" class="menu-link ${module.active ? 'active' : ''}" onclick="loadContent(this)">
+                            <i class="${module.icon}"></i>
+                            <span>${module.name}</span>
+                        </a>
+                    `;
+                }
+                menuContainer.appendChild(menuItem);
+            });
+        }
+
+        // Update Navbar display
+        function updateNavbar() {
+            const userAvatar = document.getElementById('userAvatarNav');
+            const userName = document.getElementById('userNameNav');
+            
+            if (currentUser) {
+                const initials = currentUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                userAvatar.textContent = initials;
+                userName.textContent = currentUser.fullName;
+            }
+        }
+
+        // Toggle Sidebar visibility for mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // NEW: Toggle Sidebar visibility for desktop
+        function toggleSidebarDesktop() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('sidebar-collapsed');
+        }
+
+        // Toggle Submenu visibility
+        function toggleSubmenu(element) {
+            // Prevent toggling submenu if sidebar is collapsed
+            if(document.getElementById('sidebar').classList.contains('collapsed')) return;
+
+            const submenu = element.nextElementSibling;
+            const arrow = element.querySelector('.menu-arrow');
+            
+            // Close other open submenus
+            document.querySelectorAll('.submenu.show').forEach(openSub => {
+                if (openSub !== submenu) {
+                    openSub.classList.remove('show');
+                    openSub.previousElementSibling.querySelector('.menu-arrow').classList.remove('rotated');
+                }
+            });
+            
+            submenu.classList.toggle('show');
+            arrow.classList.toggle('rotated');
+        }
+
+        // Load content based on menu link
+        function loadContent(element) {
+            // Close sidebar on mobile after clicking a link
+            document.getElementById('sidebar').classList.remove('show');
+
+            // Remove 'active' from all links and sublinks
+            document.querySelectorAll('.menu-link, .submenu-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Determine the element to mark as active
+            let activeLink = element;
+            if (element.classList.contains('submenu-link')) {
+                // Also activate the parent menu link if it's a sublink
+                activeLink = element.closest('.submenu').previousElementSibling;
+                element.classList.add('active'); // Keep submenu-link active
+            } 
+            
+            activeLink.classList.add('active'); // Activate top-level link or the menu link itself
+            
+            const hash = element.getAttribute('href');
+            const template = contentTemplates[hash];
+            const dynamicContent = document.getElementById('dynamicContent');
+
+            if (template) {
+                // Load Content
+                // Show a placeholder while content is loading
+                // Note: For dashboard, we use a getter or simple content string. 
+                // If it's the dashboard, we want to ensure it uses the latest data.
+                if (hash === '#dashboard') {
+                    dynamicContent.innerHTML = '<div class="row"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
+                    setTimeout(() => {
+                        // Use the getter from template which references the updated global array
+                        dynamicContent.innerHTML = template.content; 
+                    }, 300);
+                } else {
+                     dynamicContent.innerHTML = '<div class="row"><div class="col-12"><div class="card metric-card loading-shimmer" style="height: 200px; animation-delay: 0s;"></div></div></div>'; 
+                     setTimeout(() => {
+                        dynamicContent.innerHTML = template.content;
+                    }, 300);
+                }
+                
+            } else {
+                dynamicContent.innerHTML = '<div class="alert alert-danger">Content for this module is not yet implemented or not found.</div>';
+            }
+
+            // Prevent default hash navigation
+            if (event && element.tagName === 'A' && element.getAttribute('href').startsWith('#')) {
+                event.preventDefault();
+            }
+        }
+        
+        // Handle Logout
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('loginForm').reset();
+            window.location.hash = ''; // Clear location hash
+        }
+    </script>
+</body>
+</html>
