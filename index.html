@@ -340,10 +340,6 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3); 
         }
         /* ========== SIDEBAR ========== */
-        /*
-         * Sidebar is hidden by default (translated off-screen).
-         * It slides in when the .show class is toggled by the hamburger button.
-         */
         .sidebar {
             position: fixed; 
             top: var(--navbar-height); 
@@ -356,16 +352,13 @@
             overflow-x: hidden;
             transition: transform var(--transition-speed) ease; 
             z-index: 1020;
-            /* Hidden by default on all screen sizes */
             transform: translateX(-100%);
         }
-        /* Sidebar visible state */
         .sidebar.show { 
             transform: translateX(0); 
         }
         .sidebar::-webkit-scrollbar { width: 8px; }
         .sidebar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-        /* Overlay behind sidebar when open */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -380,7 +373,6 @@
         .sidebar-overlay.show {
             display: block;
         }
-        /* ========== HAMBURGER - visible on ALL screen sizes ========== */
         .hamburger-toggle { 
             color: white; 
             font-size: 1.5rem; 
@@ -513,7 +505,6 @@
             padding-left: 70px; 
         }
         /* ========== MAIN CONTENT ========== */
-        /* Full width always - sidebar floats over content */
         .main-content { 
             margin-left: 0;
             margin-top: var(--navbar-height); 
@@ -589,21 +580,78 @@
         .metric-change.positive { background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); color: #155724; }
         .metric-change.negative { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); color: #721c24; }
         .metric-change.warning  { background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); color: #856404; }
-        .iframe-container {
+
+        /* ---- Portal launcher (replaces broken iframe embeds) ---- */
+        .portal-launcher {
             width: 100%;
-            height: calc(100vh - 110px);
+            min-height: calc(100vh - 150px);
             border-radius: var(--border-radius);
-            overflow: hidden;
             box-shadow: var(--shadow-medium);
             background: white;
             animation: fadeInUp 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 30px;
         }
-        
-        .iframe-container iframe {
-            width: 100%;
-            height: 100%;
+        .portal-launcher-inner {
+            text-align: center;
+            max-width: 480px;
+        }
+        .portal-launcher-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 26px;
+            margin: 0 auto 25px auto;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            color: white;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.35);
+            animation: float 4s ease-in-out infinite;
+        }
+        .portal-launcher h4 {
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+        }
+        .portal-launcher p {
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        .btn-open-portal {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            border-radius: var(--border-radius);
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
             border: none;
+            font-size: 1rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
+        .btn-open-portal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        .portal-launcher-note {
+            margin-top: 22px;
+            font-size: 0.8rem;
+            color: #adb5bd;
+        }
+        .portal-launcher-note i { margin-right: 5px; }
+
         .activity-card { 
             border: none; 
             border-radius: 20px; 
@@ -678,7 +726,7 @@
             .school-brand span { display: none; }
             .user-profile span { display: none; }
             .metric-card { margin-bottom: 20px; }
-            .iframe-container { height: 85vh; }
+            .portal-launcher { min-height: 60vh; padding: 40px 20px; }
         }
     </style>
 </head>
@@ -727,7 +775,6 @@
         <nav class="top-navbar">
             <div class="container-fluid">
                 <div style="display: flex; align-items: center; gap: 20px;">
-                    <!-- Hamburger: visible on ALL screen sizes, toggles sidebar -->
                     <div class="hamburger-toggle" id="hamburgerBtn" onclick="toggleSidebar()">
                         <i class="fas fa-bars"></i>
                     </div>
@@ -767,7 +814,7 @@
             </div>
             <ul class="sidebar-menu" id="sidebarMenu"></ul>
         </div>
-        <!-- Main Content (always full width, no margin-left offset) -->
+        <!-- Main Content -->
         <div class="main-content">
             <div id="dynamicContent"></div>
         </div>
@@ -923,8 +970,40 @@
             html += '</div>';
             return html;
         }
-        function generateIframeHtml(url) {
-            return `<div class="iframe-container"><iframe src="${url}"></iframe></div>`;
+
+        /*
+         * IMPORTANT — WHY THIS REPLACES THE OLD IFRAME APPROACH:
+         * Google Apps Script web apps (script.google.com/.../exec) send the header
+         * "X-Frame-Options: SAMEORIGIN" by default. That header is controlled entirely
+         * by the Apps Script project itself (server-side), NOT by this dashboard.
+         * No amount of client-side HTML/JS can bypass it — the browser will always
+         * refuse to render it inside an <iframe> on a different origin.
+         *
+         * Permanent fix (do this once per linked Apps Script project):
+         *   function doGet() {
+         *     return HtmlService.createHtmlOutput('...')
+         *       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+         *   }
+         *
+         * Until every linked script has that line, embedding will never work — so
+         * instead of showing a broken frame, we show a clean "launcher" card that
+         * opens the portal in a new tab. This always works, regardless of headers.
+         */
+        function generatePortalHtml(url, title, description, icon) {
+            return `
+                <div class="portal-launcher">
+                    <div class="portal-launcher-inner">
+                        <div class="portal-launcher-icon"><i class="${icon || 'fas fa-external-link-alt'}"></i></div>
+                        <h4>${title || 'Open Portal'}</h4>
+                        <p>${description || 'Google does not allow this page to be embedded inside another site, so it opens in a new tab. Your dashboard stays open here.'}</p>
+                        <a class="btn-open-portal" href="${url}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i> Open ${title || 'Portal'} in New Tab
+                        </a>
+                        <div class="portal-launcher-note">
+                            <i class="fas fa-info-circle"></i>This dashboard stays open — just close the new tab when you're done
+                        </div>
+                    </div>
+                </div>`;
         }
         function generateActivitiesTableHtml(activities) {
             const rows = activities.map(a => `
@@ -947,19 +1026,19 @@
         }
         const contentTemplates = {
             '#dashboard':            { get content() { return generateMetricCardsHtml(defaultDashboardMetrics) + generateActivitiesTableHtml(recentActivities); } },
-            '#warning-letter-dash':  { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec') },
-            '#teacher-id-card':      { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec') },
-            '#student-id-card':      { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec') },
-            '#escort-card':          { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec') },
-            '#generate-salary-slip': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec') },
-            '#employee-master-upload':{ content: generateIframeHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec') },
+            '#warning-letter-dash':  { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbxFb9SVpHpJhC1AR6umbqnj3kxBDgpWh6SnUqFlGuwm8CrwHb_sAEChqaX5JKAl7ESt/exec', 'Warning Letter', 'Generate and manage student/staff warning letters.', 'fas fa-file-alt') },
+            '#teacher-id-card':      { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbwTOcaZIvf0cUZqCZa4-4L7CMu27Ct85hk2KPk1iy__drAYgBG6KraiO-qDadpMN2RY/exec', "Teachers ID Card", 'Create and print teacher identity cards.', 'fas fa-id-card') },
+            '#student-id-card':      { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbwWUezcGezklqkD6wwrnDGYvxVB5q14gikHoCzor7OyN7ju1crZWkXNNRGcSWx417ncPg/exec', "Student ID Card", 'Create and print student identity cards.', 'fas fa-id-card') },
+            '#escort-card':          { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbxR_iV7u35gdSU-Xf6tAN2BQbjbA_9Jgb8kiolg-H9WTaTAyAw1EdxO-3frrplJ2sDrRg/exec', 'Escort Card', 'Manage student escort/pickup authorization cards.', 'fas fa-id-badge') },
+            '#generate-salary-slip': { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbzMZlIUaVJPXXuZVQpe7rb0JstEGRXlpusZF8p-7tTP9NZn0ZthyW_7Ep28NGiREELI/exec', 'Generate Salary Slip', 'Generate staff salary slips for the selected period.', 'fas fa-file-invoice-dollar') },
+            '#employee-master-upload':{ content: generatePortalHtml('https://script.google.com/macros/s/AKfycbxC-P6qY1mDHwel0hQ8OsqL6TQz1iDKyh0RaCfE6gSVmtc9bfRMPJfGvGW2Wa1IWXYw/exec', 'Employee Master Upload', 'Upload and update the employee master records.', 'fas fa-upload') },
             '#report-card':          { content: generateMetricCardsHtml([
                     { icon: 'fas fa-star',       label: 'Top Performer',   value: 'Class 10',  color: 'linear-gradient(135deg,#fa709a,#fee140)' },
                     { icon: 'fas fa-chart-line', label: 'Average Score',   value: '78%',       color: 'linear-gradient(135deg,#667eea,#764ba2)' },
                     { icon: 'fas fa-check-double',label:'Cards Generated', value: '95%',       color: 'linear-gradient(135deg,#4facfe,#00f2fe)' },
                     { icon: 'fas fa-tasks',      label: 'Pending Upload',  value: '2 Classes', color: 'linear-gradient(135deg,#f093fb,#f5576c)' }
                 ]) },
-            '#offer-letter':         { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec') },
+            '#offer-letter':         { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbzg1GETRRnEyKXSwr067xXXAv3nyFdSBdwJuU57QVfNwbbfIK_mYoIFT8XF5as0NQc/exec', 'Offer Letter', 'Generate offer letters for new staff.', 'fas fa-file-signature') },
             '#notice-automation':    { content: generateMetricCardsHtml([
                     { icon: 'fas fa-bullhorn',   label: 'Total Notices', value: '120', color: 'linear-gradient(135deg,#fa709a,#fee140)' },
                     { icon: 'fas fa-envelope',   label: 'Via Email',     value: '80',  color: 'linear-gradient(135deg,#667eea,#764ba2)' },
@@ -990,12 +1069,12 @@
                     { icon: 'fas fa-percent',    label: 'Monthly Average', value: '99%', color: 'linear-gradient(135deg,#667eea,#764ba2)' },
                     { icon: 'fas fa-users-cog',  label: 'Total Staff',     value: '26',  color: 'linear-gradient(135deg,#fa709a,#fee140)' }
                 ]) },
-            '#assignment-dashboard': { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbzeSXzBw8bbz_TA98wM3Z-UN4UjNN4TfAfWMd2OdyaKYxi3omTc8wGm8Q9soc_hqRXo/exec') },
-            '#assignment-portal':    { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec') },
-            '#fees-collection':      { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwqZo5CtfzwFhADKet3Z3Vr6XIyPby4CHWlApfcbDnXVPXZ0jVMJYfJg9YtZtV3yTI5sg/exec') },
-            '#expense-module':       { content: generateIframeHtml('https://script.google.com/macros/s/AKfycby_PW0sWz9pHJSFQAv2hPcvxuScQAtw8hngSqUUru52xy0TW4GmXtYqGBZLofa_Wg0xpA/exec') },
-            '#leave-open-portal':    { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec') },
-            '#leave-balance':        { content: generateIframeHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec') }
+            '#assignment-dashboard': { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbzeSXzBw8bbz_TA98wM3Z-UN4UjNN4TfAfWMd2OdyaKYxi3omTc8wGm8Q9soc_hqRXo/exec', 'Assignment Dashboard', 'Review submitted assignments and grading status.', 'fas fa-tasks') },
+            '#assignment-portal':    { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbwGjGCIIyxxDTyda__rsZpc6SSHPNLCHnSfCeoIM3V8AEazkGl40fbM_C0pHdkGHjYG-g/exec', 'Assignment Portal', 'Upload or submit assignments.', 'fas fa-file-upload') },
+            '#fees-collection':      { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbwqZo5CtfzwFhADKet3Z3Vr6XIyPby4CHWlApfcbDnXVPXZ0jVMJYfJg9YtZtV3yTI5sg/exec', 'Fees Collection', 'Record and track student fee payments.', 'fas fa-rupee-sign') },
+            '#expense-module':       { content: generatePortalHtml('https://script.google.com/macros/s/AKfycby_PW0sWz9pHJSFQAv2hPcvxuScQAtw8hngSqUUru52xy0TW4GmXtYqGBZLofa_Wg0xpA/exec', 'Expense Module', 'Log and review institutional expenses.', 'fas fa-wallet') },
+            '#leave-open-portal':    { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbycLyILCjOSw4PIrLzgii4ds0b6irtxF98HaqgPkfjHojdqiMCZhpDrBC_WKUQJ5Fi3sw/exec', 'Leave Portal', 'Apply for or approve leave requests.', 'fas fa-user-clock') },
+            '#leave-balance':        { content: generatePortalHtml('https://script.google.com/macros/s/AKfycbwuJ_BXIrLAD2Kvzth8t80iIYUXFAfJTTLNoc390nflHVqaxVsGOLOazRlOjdPc-rmD/exec', 'Leave Balance', 'Check remaining leave balance.', 'fas fa-calendar-check') }
         };
         // ======= LOGIN =======
         function handleLogin(event) {
@@ -1015,7 +1094,6 @@
             loadSidebarMenu();
             updateNavbar();
             fetchLiveDashboardData();
-            // Load dashboard content without opening the sidebar
             const dashLink = document.querySelector('.menu-link[href="#dashboard"]');
             if (dashLink) loadContent(dashLink);
         }
@@ -1053,7 +1131,6 @@
             document.getElementById('userAvatarNav').textContent = initials;
             document.getElementById('userNameNav').textContent = currentUser.fullName;
         }
-        // Toggle sidebar + overlay (works on all screen sizes)
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('show');
             document.getElementById('sidebarOverlay').classList.toggle('show');
@@ -1071,7 +1148,6 @@
             arrow.classList.toggle('rotated');
         }
         function loadContent(element) {
-            // Close sidebar after selecting a menu item
             document.getElementById('sidebar').classList.remove('show');
             document.getElementById('sidebarOverlay').classList.remove('show');
             document.querySelectorAll('.menu-link, .submenu-link').forEach(l => l.classList.remove('active'));
